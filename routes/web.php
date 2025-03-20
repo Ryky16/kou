@@ -71,11 +71,6 @@ Route::middleware(['auth', 'role:Administrateur'])->group(function () {
 | Routes pour les tableaux de bord (par rôle)
 |--------------------------------------------------------------------------
 */
-// Route pour le tableau de bord (redirection en fonction du rôle)
-/*Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'redirectBasedOnRole'])->name('dashboard');
-});
-*/
 
 // Routes pour l'administration des utilisateurs
 Route::middleware(['auth', 'role:Administrateur'])->group(function () {
