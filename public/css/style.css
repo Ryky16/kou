@@ -262,6 +262,13 @@ hr {
     border: 1px solid rgba(255, 255, 255, 0.3); /* Ligne de séparation */
 }
 
+table {
+    width: 100%;
+}
+th, td {
+    text-align: left;
+}
+
 aside {
     height: auto;
     min-height: 100vh; /* Il prend toute la hauteur de l'écran */
@@ -285,16 +292,23 @@ aside {
     background-color: #cbd4d2;
 }
 
+/* Couleur du texte du footer du sidebar */
+.sidebar-footer {
+    color: rgb(136, 170, 131); 
+    opacity: 2;     /* Pleine visibilité */
+}
+
 /* Statistiques en ligne */
 .stat-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
     background-color: rgba(248, 245, 245, 0.534);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stat-card h2 {
@@ -307,4 +321,11 @@ aside {
     font-size: 28px;
     font-weight: bold;
     color: #333;
+}
+
+/* Effet au survol (hover) */
+.stat-card:hover {
+    transform: scale(1.05);
+    transform: translateY(-5px); /* Fait légèrement bouger la carte vers le haut */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
 }
