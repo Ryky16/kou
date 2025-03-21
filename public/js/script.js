@@ -31,3 +31,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+//sidebar
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebarLinks = document.querySelectorAll(".sidebar-link");
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            sidebarLinks.forEach(l => l.classList.remove("bg-green-600"));
+            this.classList.add("bg-green-600");
+        });
+    });
+});
