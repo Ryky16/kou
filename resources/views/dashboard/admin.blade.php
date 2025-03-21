@@ -66,7 +66,7 @@
     <!-- Titre bien placé à l'intérieur du tableau -->
     <thead class="bg-green-700 border border-gray-300 dark:border-gray-700">
         <tr>
-            <th colspan="5" class="p-4 text-center text-lg font-bold">
+            <th colspan="8" class="bg-green-100 text-lg font-bold text-center py-2">
                 📌 Suivi des Courriers
             </th>
         </tr>
