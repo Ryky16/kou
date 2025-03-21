@@ -54,6 +54,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'vite' => [
+    'manifest' => storage_path('framework/cache/assets.php'),
+],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
