@@ -250,26 +250,50 @@ body {
 
 
 /* Sidebar */
+h1 {
+    font-size: 30px; /* Augmente la taille du titre */
+    color: #1e6b759f; /* Texte blanc pour une meilleure lisibilité */
+}
+
+hr {
+    width: 100%;
+    border-width: 1px;
+    flex-grow: 2; /* Permet à la ligne de descendre naturellement */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Ligne de séparation */
+}
+
+aside {
+    height: auto;
+    min-height: 100vh; /* Il prend toute la hauteur de l'écran */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
 .sidebar-link {
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: rgb(49, 138, 89);
+    color: rgb(93, 119, 64);
     font-size: 16px;
     border-radius: 5px;
     transition: background 0.3s;
-    
 }
 
 .sidebar-link:hover {
-    background-color: #98b6ad;
+    background-color: #cbd4d2;
 }
 
-/* Statistiques */
+/* Statistiques en ligne */
 .stat-card {
-    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
     border-radius: 8px;
-    text-align: center;
+    background-color: rgba(248, 245, 245, 0.534);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -282,5 +306,5 @@ body {
 .stat-card p {
     font-size: 28px;
     font-weight: bold;
+    color: #333;
 }
-
