@@ -288,6 +288,12 @@ aside {
     transition: background 0.3s;
 }
 
+.sidebar-link.active {
+    background-color: rgba(255, 255, 255, 0.1); /* Léger contraste */
+    border-left: 4px solid #fff; /* Marqueur visuel */
+    font-weight: bold;
+}
+
 .sidebar-link:hover {
     background-color: #cbd4d2;
 }
