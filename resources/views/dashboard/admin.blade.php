@@ -1,21 +1,9 @@
 <x-app-layout>
     <div class="flex min-h-screen bg-gray-100 dark:bg-gray-900">
        
- 
-
-<button @click="sidebarOpen = !sidebarOpen"
-    class="p-2 bg-green-700 text-white rounded-md fixed top-4 left-4 z-50">
-    ☰
-</button>
-
     <!-- Sidebar ajusté en hauteur -->
         
-    <aside x-show="sidebarOpen"  x-transition:enter="transform transition ease-in-out duration-300"
-    x-transition:enter-start="-translate-x-full"
-    x-transition:enter-end="translate-x-0"
-    x-transition:leave="transform transition ease-in-out duration-300"
-    x-transition:leave-start="translate-x-0"
-    x-transition:leave-end="-translate-x-full" class="w-64 bg-green-700 text-white shadow-md p-4 flex flex-col h-full min-h-screen fixed top-0 left-0 z-40">
+    <aside x-show="sidebarOpen" class="w-64 bg-green-700 text-white shadow-md p-4 flex flex-col h-full min-h-screen">
     <div class="flex flex-col">
         <h1 class="text-xl font-bold flex items-center justify-center mb-4">
             <span class="mr-2">⚙️</span> Menu
