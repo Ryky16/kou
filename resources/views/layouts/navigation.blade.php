@@ -5,16 +5,21 @@
             <div class="flex">
                 <!-- Logo de la Mairie -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('admin.dashboard') }}">
+                    <a href="
+                        @if (Auth::user()->hasRole('Administrateur'))
+                            {{ route('admin.dashboard') }}
+                        @elseif (Auth::user()->hasRole('Secretaire_Municipal'))
+                            {{ route('secretaire.dashboard') }}
+                        @elseif (Auth::user()->hasRole('Agent'))
+                            {{ route('agent.dashboard') }}
+                        @else
+                            {{ route('home') }} <!-- Redirection par défaut si aucun rôle n'est trouvé -->
+                        @endif
+                    ">
                         <img src="/images/logo.png" alt="Logo de la Mairie" class="h-9 w-auto">
                     </a>
                 </div>
-
-
-
             </div>
-
-
 
             <!-- Menu de Profil -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
