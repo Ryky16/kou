@@ -63,43 +63,41 @@
            <!-- Titre du tableau -->
 <h2 class="text-xl text-center font-semibold text-gray-800 dark:text-gray-200 mb-4">📋 Suivi des Courriers</h2>
 
-<!-- Tableau de suivi des courriers -->
-<table class="w-full dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
+    <!--tableau de suivi des courriers-->
+    <table class="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
     <thead class="bg-blue-700">
-        <tr>
-            <th class="p-4 text-left border-r border-gray-400">Référence</th>
-            <th class="p-4 text-left border-r border-gray-400">Expéditeur</th>
-            <th class="p-4 text-left border-r border-gray-400">Destinataire</th>
-            <th class="p-4 text-left border-r border-gray-400">Statut</th>
-            <th class="p-4 text-left border-r border-gray-400">Priorité</th>
+        <tr class="border border-gray-300 dark:border-gray-700">
+            <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Référence</th>
+            <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Expéditeur</th>
+            <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Destinataire</th>
+            <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Statut</th>
+            <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Priorité</th>
             <th class="p-4 text-left">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr class="border-b border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-            <td class="p-4 border-r border-gray-400">#C010</td>
-            <td class="p-4 border-r border-gray-400">M. Faye</td>
-            <td class="p-4 border-r border-gray-400">Service Urbanisme</td>
-            <td class="p-4 border-r border-gray-400 text-yellow-600 font-semibold">⏳ En attente</td>
-            <td class="p-4 border-r border-gray-400 text-yellow-500 font-bold">🟡 Moyenne</td>
+        <tr class="border-b border-gray-300 dark:border-gray-700">
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">#C010</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">M. Faye</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">Service Urbanisme</td>
+            <td class="p-4 text-yellow-600 font-semibold  border-r border-gray-300 dark:border-gray-700">⏳ En attente</td>
+            <td class="p-4 text-yellow-500 font-bold  border-r border-gray-300 dark:border-gray-700">🟡 Moyenne</td>
             <td class="p-4">
-                <button class="px-3 py-1 bg-green-500 rounded">Affecter</button>
+                <button class="px-3 py-1 bg-green-500 rounded">Attribuer</button>
             </td>
         </tr>
-        <tr class="border-b border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-            <td class="p-4 border-r border-gray-400">#C011</td>
-            <td class="p-4 border-r border-gray-400">Mme Sagna</td>
-            <td class="p-4 border-r border-gray-400">Service Financier</td>
-            <td class="p-4 border-r border-gray-400 text-green-600 font-semibold">✔ Affecté</td>
-            <td class="p-4 border-r border-gray-400 text-green-500 font-bold">🟢 Normal</td>
-            <td class="p-4">
-                <button class="px-3 py-1 bg-gray-400 rounded" disabled>Affecté</button>
+        <tr class="border-b border-gray-300 dark:border-gray-700">
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">#C011</td>
+            <td class="p-4  border-r border-gray-300 dark:border-gray-700">Mme Sagna</td>
+            <td class="p-4  border-r border-gray-300 dark:border-gray-700">Service Financier</td>
+            <td class="p-4 text-green-600 font-semibold  border-r border-gray-300 dark:border-gray-700">✔ Affecté</td>
+            <td class="p-4 text-green-500 font-bold  border-r border-gray-300 dark:border-gray-700">🟢 Normal</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">
+                <button class="px-3 py-1 bg-gray-400 rounded" disabled>Affectation terminée</button>
             </td>
         </tr>
     </tbody>
 </table>
-
-
 
 
         </main>          
