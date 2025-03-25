@@ -112,7 +112,7 @@
                 <thead class="bg-green-700 border border-gray-300 dark:border-gray-700">
                     <tr>
                         <th colspan="5" class="p-4 text-center text-lg font-bold border border-gray-300 dark:border-gray-700">
-                            📌 Suivi des Courriers
+                        📋 Suivi des Courriers
                         </th>
                     </tr>
                     <tr class="border border-gray-300 dark:border-gray-700">

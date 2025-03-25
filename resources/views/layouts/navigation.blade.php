@@ -6,16 +6,12 @@
                 <!-- Logo de la Mairie -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('admin.dashboard') }}">
+                    <a href="{{ route('secretaire.dashboard') }}">
                         <img src="/images/logo.png" alt="Logo de la Mairie" class="h-9 w-auto">
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <!--div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    Tableau de bord
-                    </x-nav-link>
-                </div-->
+
 
             </div>
 
@@ -26,10 +22,6 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <!-- Cercle de Profil avec la Première Lettre du Nom de l'Utilisateur >
-                            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-2">
-                                <span class="text-gray-700 font-semibold">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                            </div-->
                             <div>{{ Auth::user()->name }}</div>
                         </button>
                     </x-slot>
