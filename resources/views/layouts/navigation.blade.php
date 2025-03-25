@@ -4,9 +4,8 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo de la Mairie -->
-                <div class="shrink-0 flex items-center">j'ai 
+                <div class="shrink-0 flex items-center">
                     <a href="{{ route('admin.dashboard') }}">
-                    <a href="{{ route('secretaire.dashboard') }}">
                         <img src="/images/logo.png" alt="Logo de la Mairie" class="h-9 w-auto">
                     </a>
                 </div>
