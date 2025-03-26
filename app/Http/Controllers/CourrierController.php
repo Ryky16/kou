@@ -3,62 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Courrier;
+use App\Models\CourrierLog;
+use Illuminate\Support\Facades\Auth;
 
 class CourrierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function affecter(Request $request)
     {
-       
-    }
+        $request->validate([
+            'courrier_id' => 'required|exists:courriers,id',
+            'user_id' => 'required|exists:users,id', // L'agent qui reçoit
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $courrier = Courrier::findOrFail($request->courrier_id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($courrier->statut === 'affecté') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ce courrier a déjà été affecté.'
+            ], 400);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // Mise à jour du statut et de l'affectation
+        $courrier->update([
+            'statut' => 'affecté',
+            'user_id' => $request->user_id,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Ajout de l'affectation dans le journal des logs
+        CourrierLog::create([
+            'courrier_id' => $courrier->id,
+            'user_id' => Auth::id(), // L’utilisateur qui fait l'affectation
+            'agent_id' => $request->user_id, // L’agent à qui on affecte
+            'action' => 'affectation',
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Courrier affecté avec succès !'
+        ]);
     }
 }

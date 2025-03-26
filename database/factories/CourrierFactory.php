@@ -3,31 +3,24 @@
 namespace Database\Factories;
 
 use App\Models\Courrier;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Courrier>
- */
 class CourrierFactory extends Factory
 {
     protected $model = Courrier::class;
-    
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition(): array
     {
         return [
-            'reference' => $this->faker->unique()->uuid,
+            'reference' => strtoupper($this->faker->unique()->bothify('C###')),
             'expediteur' => $this->faker->name,
             'destinataire' => $this->faker->name,
             'objet' => $this->faker->sentence,
             'contenu' => $this->faker->paragraph,
             'type' => $this->faker->randomElement(['entrant', 'sortant']),
-            'statut' => 'en_attente',
-            'user_id' => \App\Models\User::factory(),
+            'statut' => $this->faker->randomElement(['en_attente', 'traité', 'archivé']),
+            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
         ];
     }
 }

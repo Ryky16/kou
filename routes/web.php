@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware('auth')->group(function () {
+    Route::post('/courrier/affecter', [CourrierController::class, 'affecter'])->name('courrier.affecter');
     Route::resource('courriers', CourrierController::class);
     Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])->name('courriers.affecter');
 });
