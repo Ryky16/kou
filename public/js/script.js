@@ -44,3 +44,38 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+            //create.blade.php
+
+document.addEventListener("DOMContentLoaded", function() {
+    let fileInput = document.getElementById("file-input");
+    let fileList = document.getElementById("file-list");
+    let courrierForm = document.getElementById("courrier-form");
+
+    // 🎯 Gestion de l'affichage des fichiers sélectionnés
+    if (fileInput) {
+        fileInput.addEventListener("change", function() {
+            fileList.innerHTML = "";
+            for (let file of fileInput.files) {
+                let li = document.createElement("li");
+                li.textContent = file.name;
+                fileList.appendChild(li);
+            }
+        });
+    }
+
+    // 🚀 Validation du formulaire avant envoi
+    if (courrierForm) {
+        courrierForm.addEventListener("submit", function(event) {
+            let reference = document.querySelector("[name='reference_expediteur']").value.trim();
+            let objet = document.querySelector("[name='objet']").value.trim();
+            let expediteur = document.querySelector("[name='expediteur']").value.trim();
+
+            if (reference === "" || objet === "" || expediteur === "") {
+                alert("❌ Veuillez remplir tous les champs obligatoires !");
+                event.preventDefault(); // Empêcher l'envoi du formulaire
+            }
+        });
+    }
+});

@@ -83,11 +83,11 @@
             <td class="p-4 text-yellow-600 font-semibold  border-r border-gray-300 dark:border-gray-700">⏳ En attente</td>
             <td class="p-4 text-yellow-500 font-bold  border-r border-gray-300 dark:border-gray-700">🟡 Moyenne</td>
             <td class="p-4 border-r border-gray-300 dark:border-gray-700">
-            @if($courrier->statut == 'En attente') 
-                <button class="px-3 py-1 bg-green-500 rounded affecter-btn" data-id="{{ $courrier->id }}">
+             
+                <button class="px-3 py-1 bg-green-500 rounded affecter-btn">
                     Attribuer
                 </button>
-                @else
+               
             </td>
         </tr>
         <tr class="border-b border-gray-300 dark:border-gray-700">
@@ -101,7 +101,7 @@
             <button class="px-3 py-1 bg-gray-400 rounded" disabled>
                 Affectation terminée
             </button>
-        @endif
+       
             </td>
         </tr>
     </tbody>
