@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CourrierController extends Controller
 {
+    // Afficher la liste des courriers
+    public function index()
+    {
+        $courriers = Courrier::all();
+        return view('dashboard.secretaire', compact('courriers'));
+    }
+
     public function affecter(Request $request)
     {
         $request->validate([

@@ -23,13 +23,13 @@
                     </a>
                     
                     <!-- Secrétaire Municipal -->
-                    <a href="{{ route('secretaire.dashboard') }}" class="m-8 block p-10 bg-green-100 dark:bg-green-900 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 max-w-sm w-full">
+                    <!--a href="{{ route('secretaire.dashboard') }}" class="m-8 block p-10 bg-green-100 dark:bg-green-900 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 max-w-sm w-full">
                         <div class="flex justify-center items-center mb-6">
                             <i class="fas fa-file-alt text-9xl text-green-600 dark:text-green-300"></i>
                         </div>
                         <p class="font-semibold text-gray-800 dark:text-gray-200 text-2xl mb-4">Secrétaire Municipal</p>
                         <p class="text-lg text-gray-600 dark:text-gray-400">Gère les documents et les communications.</p>
-                    </a>
+                    </a-->
                     
                     <!-- Agent -->
                     <a href="{{ route('agent.dashboard') }}" class="m-8 block p-10 bg-green-100 dark:bg-green-900 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 max-w-sm w-full">

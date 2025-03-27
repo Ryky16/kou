@@ -12,7 +12,7 @@
 
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
-                        <li><a href="#" class="sidebar-link">📁 Gérer les Courriers</a></li>
+                        <li><a href="{{ route('courriers.index') }}" class="sidebar-link">📁 Gérer les Courriers</a></li>
                         <li><a href="#" class="sidebar-link">📌 Affecter un Courrier</a></li>
                         <li><a href="#" class="sidebar-link">📂 Consulter les Archives</a></li>
                         <li><a href="#" class="sidebar-link">📊 Statistiques</a></li>
@@ -75,7 +75,40 @@
             <th class="p-4 text-left">Actions</th>
         </tr>
     </thead>
+
+    
     <tbody>
+    @foreach ($courriers as $courrier)
+        <tr class="border-b border-gray-300 dark:border-gray-700">
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->reference }}</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->expediteur }}</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->destinataire }}</td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
+                {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
+            </td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700 font-bold {{ $courrier->priorite == 'Haute' ? 'text-red-500' : ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
+                {{ $courrier->priorite == 'Haute' ? '🔴 Haute' : ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') }}
+            </td>
+            <td class="p-4 border-r border-gray-300 dark:border-gray-700">
+                @if($courrier->statut == 'En attente')
+                    <form action="{{ route('courriers.affecter', $courrier->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-3 py-1 bg-green-500 rounded text-white">
+                            Attribuer
+                        </button>
+                    </form>
+                @else
+                    <button class="px-3 py-1 bg-gray-400 rounded text-white" disabled>
+                        Affectation terminée
+                    </button>
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
+
+    <!--tbody>
         <tr class="border-b border-gray-300 dark:border-gray-700">
             <td class="p-4 border-r border-gray-300 dark:border-gray-700">#C010</td>
             <td class="p-4 border-r border-gray-300 dark:border-gray-700">M. Faye</td>
@@ -104,7 +137,7 @@
        
             </td>
         </tr>
-    </tbody>
+    </tbody-->
 </table>
 
 

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Courrier;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -50,6 +51,9 @@ class DatabaseSeeder extends Seeder
             'role_id' => 3, // Agent
         ]);
     }
+
+    
+    
 }
 
 }

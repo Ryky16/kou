@@ -110,11 +110,19 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
-    Route::post('/courrier/affecter', [CourrierController::class, 'affecter'])->name('courrier.affecter');
+Route::middleware(['auth'])->group(function () {
+    // Routes pour les courriers
     Route::resource('courriers', CourrierController::class);
-    Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])->name('courriers.affecter');
+    
+    // Route pour affecter un courrier (version propre)
+    Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])
+         ->name('courriers.affecter');
+    
+    // Si vous avez besoin d'une autre route d'affectation avec un ID différent
+    Route::post('/courriers/affecter/{id}', [CourrierController::class, 'affecterCourrier'])
+         ->name('courriers.affecter.id');
 });
+
 
 /*
 |--------------------------------------------------------------------------
