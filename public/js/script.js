@@ -79,3 +79,28 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".affecter-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            let courrierId = this.getAttribute("data-id");
+
+            fetch(`/courriers/affecter/${courrierId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Courrier affecté avec succès !");
+                    location.reload(); // Rafraîchir la page pour voir les changements
+                }
+            })
+            .catch(error => console.error("Erreur:", error));
+        });
+    });
+});
