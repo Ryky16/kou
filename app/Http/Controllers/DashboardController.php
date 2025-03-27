@@ -35,7 +35,7 @@ class DashboardController extends Controller
     // Vue pour le secrétaire municipal
     public function secretaire()
     {
-        $courriers = Courrier::all(); // Récupère tous les courriers
+        $courriers = Courrier::paginate(10); //Courrier::all(); // Récupère tous les courriers
         return view('dashboard.secretaire', compact('courriers'));
     }
 

@@ -107,7 +107,7 @@
                             </td>
                             <td class="p-4 border-r border-gray-300 dark:border-gray-700">
                                 @if($courrier->statut == 'En attente')
-                                    <form action="{{ route('courriers.affecter', $courrier->id) }}" method="POST">
+                                    <form action="{{ route('courriers.affecter', ['id' => $courrier->id]) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="px-3 py-1 bg-green-500 rounded">
                                             Attribuer
@@ -122,7 +122,13 @@
                         </tr>
                     @endforeach
                 </tbody>
+
             </table>
+
+        <div class="d-flex justify-content-center mt-4">
+         {{ $courriers->links() }} <!-- Ajoute la pagination -->
+        </div>
+
         </main>          
     </div>
 </x-app-layout>
