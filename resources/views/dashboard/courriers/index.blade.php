@@ -17,7 +17,7 @@
                 button.prop("disabled", true);
 
                 $.ajax({
-                    url: "{{ route('courrier.affecter') }}",
+                    url: "{{ route('courriers.affecter') }}",
                     type: "POST",
                     data: {
                         courrier_id: courrierId

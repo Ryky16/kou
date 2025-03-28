@@ -123,12 +123,30 @@
                     @endforeach
                 </tbody>
 
-            </table>
 
-        <div class="d-flex justify-content-center mt-4">
-         {{ $courriers->links() }} <!-- Ajoute la pagination -->
-        </div>
 
+               
+        </table>
+           
+       <!-- Pagination -->
+       @if ($courriers->isNotEmpty())  
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $courriers->links('pagination::tailwind') }}
+                </div>
+            @else
+                <div class="text-center text-gray-500 dark:text-gray-400 p-4 italic">
+                    📭 Aucun courrier trouvé.
+                </div>
+            @endif
+
+            <!-- Message de succès -->
+            @if(session('success'))
+                <div class="bg-green-500 text-center p-2 mb-4 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+                               
+       
         </main>          
     </div>
 </x-app-layout>

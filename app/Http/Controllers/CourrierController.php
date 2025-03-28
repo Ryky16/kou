@@ -11,10 +11,10 @@ class CourrierController extends Controller
 {
     // Afficher la liste des courriers
     public function index()
-    {
-        $courriers = Courrier::all();
-        return view('dashboard.secretaire', compact('courriers'));
-    }
+{
+    $courriers = Courrier::paginate(10); // 10 courriers par page
+    return view('dashboard.secretaire', compact('courriers'));
+}
 
     public function affecter(Request $request)
     {

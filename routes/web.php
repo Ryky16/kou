@@ -8,9 +8,6 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Routes publiques
@@ -29,11 +26,10 @@ Route::get('/welcome', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Routes authentifiées
+| Redirection après connexion
 |--------------------------------------------------------------------------
 */
 
-// Redirection après connexion
 Route::get('/redirect-dashboard', function () {
     $user = Auth::user();
 
@@ -51,20 +47,23 @@ Route::get('/redirect-dashboard', function () {
         case 'Agent':
             return redirect()->route('agent.dashboard');
         default:
-             // Si le rôle n'est pas reconnu, rediriger vers une page d'erreur ou lancer une exception
-             abort(403, 'Rôle non reconnu.');
-           // return redirect()->route('dashboard'); // Redirection par défaut
+            // Si le rôle n'est pas reconnu, rediriger vers une page d'erreur ou lancer une exception
+            abort(403, 'Rôle non reconnu.');
     }
 })->middleware(['auth', 'verified'])->name('redirect.dashboard');
 
+/*
+|--------------------------------------------------------------------------
+| Routes pour l'administration des utilisateurs
+|--------------------------------------------------------------------------
+*/
 
-
-// Routes pour l'administration des utilisateurs
-Route::middleware(['auth', 'role:Administrateur'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard'); // Tableau de bord admin
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::put('/admin/users/{user}/update-role', [UserController::class, 'updateRole'])->name('admin.users.updateRole');
+   
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -72,20 +71,10 @@ Route::middleware(['auth', 'role:Administrateur'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-// Routes pour l'administration des utilisateurs
-Route::middleware(['auth', 'role:Administrateur'])->group(function () {
-    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::put('/admin/users/{user}/update-role', [UserController::class, 'updateRole'])->name('admin.users.updateRole');
-});
-
-
-// Routes spécifiques pour chaque rôle
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
     Route::get('/secretaire/dashboard', [DashboardController::class, 'secretaire'])->name('secretaire.dashboard');
     Route::get('/agent/dashboard', [DashboardController::class, 'agent'])->name('agent.dashboard');
 });
-
 
 // Tableau de bord par défaut (pour les rôles non gérés)
 Route::get('/dashboard', function () {
@@ -113,16 +102,15 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Routes pour les courriers
     Route::resource('courriers', CourrierController::class);
-    
-    // Route pour affecter un courrier (version propre)
+
+    // Route pour affecter un courrier
     Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])
          ->name('courriers.affecter');
-    
-    // Si vous avez besoin d'une autre route d'affectation avec un ID différent
+
+    // Route alternative pour affecter un courrier avec un ID différent
     Route::post('/courriers/affecter/{id}', [CourrierController::class, 'affecterCourrier'])
          ->name('courriers.affecter.id');
 });
-
 
 /*
 |--------------------------------------------------------------------------
