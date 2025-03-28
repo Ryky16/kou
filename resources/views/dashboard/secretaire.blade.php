@@ -131,7 +131,7 @@
        <!-- Pagination -->
        @if ($courriers->isNotEmpty())  
                 <div class="d-flex justify-content-center mt-4">
-                    {{ $courriers->links('pagination::tailwind') }}
+                    {{ $courriers->links('pagination::bootstrap-4')}}
                 </div>
             @else
                 <div class="text-center text-gray-500 dark:text-gray-400 p-4 italic">
