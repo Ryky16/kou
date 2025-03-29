@@ -4,56 +4,62 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Courrier;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-
-    /**
-     * Seed the application's database.
-     */
     public function run()
-{
-    // Vérifier et insérer les rôles si nécessaire
-    if (Role::count() == 0) {
-        Role::insert([
-            ['id' => 1, 'name' => 'Administrateur'],
-            ['id' => 2, 'name' => 'Secrétaire Municipal'],
-            ['id' => 3, 'name' => 'Agent'],
-        ]);
+    {
+        $this->seedRoles();
+        $this->seedUsers();
+        $this->seedServices();
     }
 
-    // Créer les utilisateurs seulement si l'e-mail n'existe pas
-    if (User::where('email', 'n.henripierre@gmail.com')->doesntExist()) {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'n.henripierre@gmail.com',
-            'password' => bcrypt('password@123'),
-            'role_id' => 1, // Admin
-        ]);
+    protected function seedRoles()
+    {
+        Role::firstOrCreate(['id' => 1], ['name' => 'Administrateur']);
+        Role::firstOrCreate(['id' => 2], ['name' => 'Secrétaire Municipal']);
+        Role::firstOrCreate(['id' => 3], ['name' => 'Agent']);
     }
 
-    if (User::where('email', 'secretaire@gmail.com')->doesntExist()) {
-        User::create([
-            'name' => 'Secrétaire Municipal',
-            'email' => 'secretaire@gmail.com',
-            'password' => bcrypt('password'),
-            'role_id' => 2, // Secrétaire
-        ]);
+    protected function seedUsers()
+    {
+        User::firstOrCreate(
+            ['email' => 'n.henripierre@gmail.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password@123'),
+                'role_id' => 1
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'secretaire@gmail.com'],
+            [
+                'name' => 'Secrétaire Municipal',
+                'password' => Hash::make('password'),
+                'role_id' => 2
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'agent@gmail.com'],
+            [
+                'name' => 'Agent',
+                'password' => Hash::make('password'),
+                'role_id' => 3
+            ]
+        );
+
+        // Création d'agents supplémentaires si nécessaire
+        if (User::where('role_id', 3)->count() < 5) {
+            User::factory()->count(5)->create(['role_id' => 3]);
+        }
     }
 
-    if (User::where('email', 'agent@gmail.com')->doesntExist()) {
-        User::create([
-            'name' => 'Agent',
-            'email' => 'agent@gmail.com',
-            'password' => bcrypt('password'),
-            'role_id' => 3, // Agent
-        ]);
+    protected function seedServices()
+    {
+        $this->call(ServicesTableSeeder::class);
     }
-
-    
-    
-}
-
 }

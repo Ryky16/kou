@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="flex min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true, showTable: false }">
+    <div class="flex min-h-screen bg-white" x-data="{ sidebarOpen: true, showTable: false }">
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
         <!-- Sidebar -->
-        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 bg-blue-700 text-white shadow-md p-4 flex flex-col h-full min-h-screen">
+        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 bg-white text-gray-800 shadow-md p-4 flex flex-col h-full min-h-screen border-r border-gray-200">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold flex items-center justify-center mb-4">
                     <span class="mr-2">📂</span> Menu Secrétaire
@@ -48,7 +48,7 @@
                 <span x-show="sidebarOpen">❌ Fermer le Menu</span>
             </button>
 
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-700 text-center mb-6">
                 Tableau de Bord Secrétaire Municipal
             </h1>
 
@@ -75,45 +75,47 @@
             </div>
 
             <!-- Titre du tableau -->
-            <h2 class="text-xl text-center font-semibold text-gray-800 dark:text-gray-200 mb-4">📋 Suivi des Courriers</h2>
+            <h2 class="text-xl text-center font-semibold text-gray-700 mb-4">📋 Suivi des Courriers</h2>
 
             <!-- Tableau de suivi des courriers -->
             <table 
-                class="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700"
+                class="w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-200"
                 x-show="showTable"
                 x-transition
             >
-                <thead class="bg-blue-700">
-                    <tr class="border border-gray-300 dark:border-gray-700">
-                        <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Référence</th>
-                        <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Expéditeur</th>
-                        <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Destinataire</th>
-                        <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Statut</th>
-                        <th class="p-4 text-left border-r border-gray-300 dark:border-gray-700">Priorité</th>
+                <thead class="bg-gray-100">
+                    <tr class="border border-gray-200">
+                        <th class="p-4 text-left border-r border-gray-200">Référence</th>
+                        <th class="p-4 text-left border-r border-gray-200">Expéditeur</th>
+                        <th class="p-4 text-left border-r border-gray-200">Destinataire</th>
+                        <th class="p-4 text-left border-r border-gray-200">Statut</th>
+                        <th class="p-4 text-left border-r border-gray-200">Priorité</th>
                         <th class="p-4 text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($courriers as $courrier)
-                        <tr class="border-b border-gray-300 dark:border-gray-700">
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->reference }}</td>
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->expediteur }}</td>
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700">{{ $courrier->destinataire }}</td>
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="p-4 border-r border-gray-200">{{ $courrier->reference }}</td>
+                            <td class="p-4 border-r border-gray-200">{{ $courrier->expediteur }}</td>
+                            <td class="p-4 border-r border-gray-200">{{ $courrier->destinataire }}</td>
+                            <td class="p-4 border-r border-gray-200 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
                                 {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
                             </td>
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700 font-bold {{ $courrier->priorite == 'Haute' ? 'text-red-500' : ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
+                            <td class="p-4 border-r border-gray-200 font-bold {{ $courrier->priorite == 'Haute' ? 'text-red-500' : ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
                                 {{ $courrier->priorite == 'Haute' ? '🔴 Haute' : ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') }}
                             </td>
-                            <td class="p-4 border-r border-gray-300 dark:border-gray-700">
+
+                            <td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
-                                    <form action="{{ route('courriers.affecter', ['id' => $courrier->id]) }}" method="POST">
+                                    <form action="{{ route('courriers.affecter') }}" method="POST">
                                         @csrf
                                         <button type="submit" class="px-3 py-1 bg-green-500 rounded">
                                             Attribuer
                                         </button>
                                     </form>
                                 @else
+
                                     <button class="px-3 py-1 bg-gray-400 rounded" disabled>
                                         Affectation terminée
                                     </button>
@@ -122,14 +124,10 @@
                         </tr>
                     @endforeach
                 </tbody>
+            </table>
 
-
-
-               
-        </table>
-           
-       <!-- Pagination -->
-       @if ($courriers->isNotEmpty())  
+            <!-- Pagination -->
+            @if ($courriers->isNotEmpty())  
                 <div class="d-flex justify-content-center mt-4">
                     {{ $courriers->links('pagination::bootstrap-4')}}
                 </div>
@@ -145,8 +143,6 @@
                     {{ session('success') }}
                 </div>
             @endif
-                               
-       
         </main>          
     </div>
 </x-app-layout>
