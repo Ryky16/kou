@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->seedRoles();
         $this->seedUsers();
         $this->seedServices();
+        $this->seedCourriers(); // Nouvelle ligne ajoutée
     }
 
     protected function seedRoles()
@@ -61,5 +62,10 @@ class DatabaseSeeder extends Seeder
     protected function seedServices()
     {
         $this->call(ServicesTableSeeder::class);
+    }
+
+    protected function seedCourriers()
+    {
+        $this->call(CourrierSeeder::class);
     }
 }

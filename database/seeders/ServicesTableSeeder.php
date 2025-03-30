@@ -13,6 +13,8 @@ class ServicesTableSeeder extends Seeder
         // Récupère le secrétaire municipal (role_id = 2)
         $secretaire = User::where('role_id', 2)->first();
 
+        $agent = User::where('role_id', 3)->first();
+
         // Services de base pour la mairie sénégalaise
         $services = [
             [
@@ -36,6 +38,40 @@ class ServicesTableSeeder extends Seeder
                 'email' => 'etatcivil@gmail.com',
                 'telephone' => '+221 33 765 43 21',
             ],
+            
+            [
+                'nom' => 'Secrétariat Général',
+                'description' => 'Coordination générale des services municipaux',
+                'responsable_id' => null,
+                'email' => 'secretariat.general@gmail.com',
+                'telephone' => '+221 33 987 65 40'
+            ],
+
+            [
+                'nom' => 'Service Informatique',
+                'description' => 'Gestion du parc informatique et systèmes d\'information',
+                'responsable_id' => null,
+                'email' => 'informatique.mairie@gmail.com',
+                'telephone' => '+221 33 987 65 41'
+            ],
+
+            [
+                'nom' => 'Service Communication',
+                'description' => 'Relations publiques et communication municipale',
+                'responsable_id' => null,
+                'email' => 'communication.mairie@gmail.com',
+                'telephone' => '+221 33 987 65 42'
+            ],
+
+            [
+                'nom' => 'Agents Municipaux',
+                'description' => 'Service des effectifs et ressources humaines',
+                'responsable_id' => $agent ? $agent->id : null,
+                'email' => 'rh.mairie@gmail.com',
+                'telephone' => '+221 33 987 65 43'
+            ],
+
+            
             [
                 'nom' => 'Service Finances',
                 'description' => 'Gestion budgétaire et comptabilité',
