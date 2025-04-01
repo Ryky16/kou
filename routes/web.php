@@ -104,8 +104,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
 
     // Route pour affecter un courrier
-    Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])
-         ->name('courriers.affecter');
+    /*Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])
+         ->name('courriers.affecter');*/
+         Route::post('/courriers/affecter', [AffectationController::class, 'affecter'])->name('courriers.affecter');
 
     // Route alternative pour affecter un courrier avec un ID différent
     Route::post('/courriers/affecter/{id}', [CourrierController::class, 'affecterCourrier'])
