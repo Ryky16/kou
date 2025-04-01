@@ -3,7 +3,7 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
         <!-- Sidebar -->
-        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 bg-blue-700 text-white shadow-md p-4 flex flex-col h-full min-h-screen">
+        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 text-white shadow-md p-4 flex flex-col h-full min-h-screen">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold flex items-center justify-center mb-4">
                     <span class="mr-2">📂</span> Menu Secrétaire
