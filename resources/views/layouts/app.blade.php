@@ -33,7 +33,9 @@
             <!-- Page Content -->
             <main class="bg-white">
                 {{ $slot }}
+                
             </main>
+            
         </div>
     </body>
 </html>

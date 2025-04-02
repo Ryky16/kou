@@ -18,7 +18,7 @@
                                 📁 Gérer les Courriers
                             </a>
                         </li>
-                        <li><a href="#" class="sidebar-link">📌 Affecter un Courrier</a></li>
+                        <li><a href="{{ route('affectation.index') }}" class="sidebar-link">📌 Affecter un Courrier</a></li>
                         <li><a href="#" class="sidebar-link">📂 Consulter les Archives</a></li>
                         <li><a href="#" class="sidebar-link">📊 Statistiques</a></li>
                         <li>
