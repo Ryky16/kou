@@ -4,49 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Courrier;
-use App\Models\Service;
-use App\Models\User;
+use App\Models\Document;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AffectationController extends Controller
 {
-    /**
-     * Afficher la page d'affectation des courriers.
-     */
+
     public function index()
-    {
-        $courriers = Courrier::where('statut', 'en_attente')->get(); // Récupère les courriers non affectés
-        $services = Service::all(); // Récupère tous les services
-        $agents = User::whereHas('role', function ($query) {
-            $query->where('name', 'Agent'); // Récupère uniquement les utilisateurs ayant le rôle "Agent"
-        })->get();
+{
+    return view('affectation.index'); // Vérifie que la vue existe aussi
+}
 
-        return view('affectation.index', compact('courriers', 'services', 'agents'));
-    }
-
-    /**
-     * Affecter un courrier à un agent ou un service.
-     */
     public function affecter(Request $request)
     {
+        // Vérifier si l'utilisateur est authentifié
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté.');
+        }
+
         $request->validate([
-            'courrier_id' => 'required|exists:courriers,id',
-            'service_id' => 'nullable|exists:services,id',
-            'agent_id' => 'nullable|exists:users,id',
+            'type' => 'required|string',
+            'reference_expediteur' => 'required|string|unique:courriers,reference_expediteur',
+            'objet' => 'required|string',
+            'date_reception' => 'required|date',
+            'expediteur' => 'required|string',
+            'description' => 'nullable|string',
+            'pieces_jointes.*' => 'file|max:10240', // 10 Mo max par fichier
         ]);
 
-        $courrier = Courrier::findOrFail($request->courrier_id);
+        // Création du courrier
+        $courrier = Courrier::create([
+            'type' => $request->type,
+            'reference_expediteur' => $request->reference_expediteur,
+            'objet' => $request->objet,
+            'date_reception' => $request->date_reception,
+            'expediteur' => $request->expediteur,
+            'description' => $request->description,
+            'statut' => 'en_attente',
+        ]);
 
-        if ($request->service_id) {
-            $courrier->service_id = $request->service_id;
+        // Vérification et enregistrement des fichiers joints
+        if ($request->hasFile('pieces_jointes')) {
+            foreach ($request->file('pieces_jointes') as $file) {
+                $path = $file->store('courriers', 'public');
+
+                Document::create([
+                    'courrier_id' => $courrier->id,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                ]);
+            }
         }
 
-        if ($request->agent_id) {
-            $courrier->user_id = $request->agent_id;
-        }
-
-        $courrier->statut = 'affecté';
-        $courrier->save();
-
-        return redirect()->back()->with('success', 'Courrier affecté avec succès !');
+        return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès !');
     }
 }

@@ -4,51 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Courrier;
-use App\Models\CourrierLog;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CourrierController extends Controller
 {
-    // Afficher la liste des courriers
-    public function index()
-{
-    $courriers = Courrier::paginate(10); // 10 courriers par page
-    return view('dashboard.secretaire', compact('courriers'));
-}
-
-    public function affecter(Request $request)
+    public function create()
     {
-        $request->validate([
-            'courrier_id' => 'required|exists:courriers,id',
-            'user_id' => 'required|exists:users,id', // L'agent qui reçoit
-        ]);
+        // Récupérer les agents disponibles
+        $agents = User::where('role_id', 2)->get(); // Exemple : rôle_id = 2 pour les agents
 
-        $courrier = Courrier::findOrFail($request->courrier_id);
+        return view('courriers.create', compact('agents'));
+    }
 
-        if ($courrier->statut === 'affecté') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ce courrier a déjà été affecté.'
-            ], 400);
+    public function store(Request $request)
+    {
+        // Vérifier si l'utilisateur est connecté
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté.');
         }
 
-        // Mise à jour du statut et de l'affectation
-        $courrier->update([
-            'statut' => 'affecté',
-            'user_id' => $request->user_id,
+        $request->validate([
+            'type' => 'required|string',
+            'reference_expediteur' => 'required|string|unique:courriers,reference_expediteur',
+            'objet' => 'required|string',
+            'date_reception' => 'required|date',
+            'expediteur' => 'required|string',
+            'description' => 'nullable|string',
         ]);
 
-        // Ajout de l'affectation dans le journal des logs
-        CourrierLog::create([
-            'courrier_id' => $courrier->id,
-            'user_id' => Auth::id(), // L’utilisateur qui fait l'affectation
-            'agent_id' => $request->user_id, // L’agent à qui on affecte
-            'action' => 'affectation',
+        // Création du courrier
+        Courrier::create([
+            'type' => $request->type,
+            'reference_expediteur' => $request->reference_expediteur,
+            'objet' => $request->objet,
+            'date_reception' => $request->date_reception,
+            'expediteur' => $request->expediteur,
+            'description' => $request->description,
+            'expediteur_id' => Auth::id(), // Vérifie bien que l'utilisateur est connecté
+            'statut' => 'en_attente',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Courrier affecté avec succès !'
-        ]);
+        return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès !');
     }
 }

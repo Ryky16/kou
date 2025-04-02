@@ -77,9 +77,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // Tableau de bord par défaut (pour les rôles non gérés)
-Route::get('/dashboard', function () {
+/*Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+*/
 
 /*
 |--------------------------------------------------------------------------
@@ -100,32 +101,14 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth'])->group(function () {
+    // Routes pour l'affectation des courriers
+    Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
+    Route::post('/affectation/affecter', [AffectationController::class, 'affecter'])->name('affectation.affecter');
 
-    /*Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
-Route::post('/affecter-courrier', [AffectationController::class, 'affecter'])->name('affectation.affecter');*/
-
-    // Routes pour les courriers
-//Route::resource('courriers', CourrierController::class);
-
-    // Route pour affecter un courrier
-    /*Route::post('/courriers/{courrier}/affecter', [AffectationController::class, 'affecter'])
-         ->name('courriers.affecter');*/
-        // Route::post('/courriers/affecter', [AffectationController::class, 'affecter'])->name('courriers.affecter');
-
-    // Route alternative pour affecter un courrier avec un ID différent
-   /* Route::post('/courriers/affecter/{id}', [CourrierController::class, 'affecterCourrier'])
-         ->name('courriers.affecter.id');*/
-
-    
-         Route::middleware(['auth'])->group(function () {
-            Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
-            Route::post('/affectation', [AffectationController::class, 'affecter'])->name('courriers.affecter');
-        });
-
-        Route::middleware(['auth'])->group(function () {
-            Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
-            Route::post('/affectation/affecter', [AffectationController::class, 'affecter'])->name('affectation.affecter');
-        });
+    // Routes pour la gestion des courriers
+    Route::get('/courriers', [CourrierController::class, 'index'])->name('courriers.index');
+    Route::get('/courriers/create', [CourrierController::class, 'create'])->name('courriers.create');
+    Route::post('/courriers/store', [CourrierController::class, 'store'])->name('courriers.store');
 });
 
 /*
