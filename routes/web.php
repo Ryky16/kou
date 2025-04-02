@@ -100,7 +100,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {   
     // Routes pour l'affectation des courriers
     Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
     Route::post('/affectation/affecter', [AffectationController::class, 'affecter'])->name('affectation.affecter');

@@ -22,7 +22,7 @@
                         <td class="p-4">{{ $courrier->reference }}</td>
                         <td class="p-4">{{ $courrier->expediteur }}</td>
                         <td class="p-4">
-                            <form action="{{ route('courriers.affecter') }}" method="POST">
+                            <form action="{{ route('affectation.affecter') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="courrier_id" value="{{ $courrier->id }}">
                                 <select name="agent_id" class="border p-2 rounded">
