@@ -1,44 +1,80 @@
 <x-app-layout>
-    <div class="p-6">
-        <h1 class="text-2xl font-bold mb-4">📌 Affecter un Courrier</h1>
+    <div class="container">
+        <h2 class="mb-4">📌 Affecter un Courrier</h2>
 
-        @if(session('success'))
-            <div class="bg-green-500 text-white p-3 mb-4 rounded">
-                {{ session('success') }}
+        {{-- Formulaire pour affecter un courrier --}}
+        <div class="card">
+            <div class="card-header bg-primary">
+                ✉️ Nouveau Courrier à Affecter
             </div>
-        @endif
+            <div class="card-body">
+                <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="reference_expediteur" class="fw-bold">Référence du courrier</label>
+                            <input type="text" name="reference_expediteur" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="expediteur" class="fw-bold">Expéditeur</label>
+                            <select name="expediteur_id" class="form-control" required>
+                                <option value="">Sélectionner un expéditeur</option>
+                                @foreach ($expediteurs as $expediteur)
+                                    <option value="{{ $expediteur->id }}">{{ $expediteur->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="destinataire" class="fw-bold">Destinataire</label>
+                            <select name="destinataire_id" class="form-control" required>
+                                <option value="">Sélectionner un destinataire</option>
+                                @foreach ($destinataires as $destinataire)
+                                    <option value="{{ $destinataire->id }}">{{ $destinataire->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-            <thead class="bg-gray-100">
-                <tr class="border border-gray-200">
-                    <th class="p-4">Référence</th>
-                    <th class="p-4">Expéditeur</th>
-                    <th class="p-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($courriers as $courrier)
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                        <td class="p-4">{{ $courrier->reference }}</td>
-                        <td class="p-4">{{ $courrier->expediteur }}</td>
-                        <td class="p-4">
-                            <form action="{{ route('affectation.affecter') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="courrier_id" value="{{ $courrier->id }}">
-                                <select name="agent_id" class="border p-2 rounded">
-                                    <option value="">Sélectionner un agent</option>
-                                    @foreach($agents as $agent)
-                                        <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                                    @endforeach
-                                </select>
-                                <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded">
-                                    Affecter
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="objet" class="fw-bold">Objet du courrier</label>
+                            <input type="text" name="objet" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="type" class="fw-bold">Type de courrier</label>
+                            <select name="type" class="form-control">
+                                <option value="entrant">Entrant</option>
+                                <option value="sortant">Sortant</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="description" class="fw-bold">Contenu</label>
+                            <textarea name="description" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="pieces_jointes" class="fw-bold">📂 Ajouter des pièces jointes</label>
+                            <input type="file" name="pieces_jointes[]" class="form-control" multiple>
+                            <small class="text-muted">Formats acceptés : PDF, Word, Excel, Images</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="priorite" class="fw-bold">Priorité</label>
+                            <select name="priorite" class="form-control">
+                                <option value="basse">Basse</option>
+                                <option value="normale" selected>Normale</option>
+                                <option value="élevée">Élevée</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-4 w-100">📩 Envoyer le courrier</button>
+                </form>
+            </div>
+        </div>
     </div>
 </x-app-layout>

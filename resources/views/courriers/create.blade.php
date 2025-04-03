@@ -4,7 +4,7 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Créer un nouveau courrier</h2>
 
-                <form action="{{ route('affectation.affecter') }}" method="POST" enctype="multipart/form-data" class="mt-6" id="courrier-form">
+                <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data" class="mt-6" id="courrier-form">
                     @csrf
 
                     <!-- Type de courrier -->

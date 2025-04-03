@@ -43,4 +43,10 @@ class Courrier extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    // Relation avec les documents
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }
