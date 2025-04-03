@@ -1,111 +1,125 @@
 <x-app-layout>
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
-        <div class="w-full max-w-4xl bg-white shadow-lg rounded-lg p-8">
-            <h2 class="text-4xl font-bold text-green-700 text-center mb-8">
-                📌 Affecter un Courrier
-            </h2>
+        <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-center text-green-700 mb-4">📌 Affecter un Courrier</h2>
+            <p class="text-sm text-center text-gray-600 mb-6">Remplissez les informations pour affecter un courrier</p>
 
             {{-- Formulaire pour affecter un courrier --}}
-            <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                {{-- Référence du courrier --}}
-                <div class="flex flex-col">
-                    <label for="reference_expediteur" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-hashtag"></i> Référence :
+                <!-- Référence -->
+                <div class="mb-4">
+                    <label for="reference_expediteur" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">🔖</span> Référence
                     </label>
-                    <input type="text" name="reference_expediteur" id="reference_expediteur" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" 
-                        placeholder="Entrez la référence du courrier" required>
+                    <div class="relative">
+                        <input type="text" id="reference_expediteur" name="reference_expediteur" required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Entrez la référence du courrier">
+                    </div>
                 </div>
 
-                {{-- Expéditeur --}}
-                <div class="flex flex-col">
-                    <label for="expediteur_id" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-user"></i> Expéditeur :
+                <!-- Expéditeur -->
+                <div class="mb-4">
+                    <label for="expediteur_id" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">👤</span> Expéditeur
                     </label>
-                    <select name="expediteur_id" id="expediteur_id" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" required>
-                        <option value="">Sélectionner un expéditeur</option>
-                        @foreach ($expediteurs as $expediteur)
-                            <option value="{{ $expediteur->id }}">{{ $expediteur->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <select id="expediteur_id" name="expediteur_id" required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            <option value="">Sélectionner un expéditeur</option>
+                            @foreach ($expediteurs as $expediteur)
+                                <option value="{{ $expediteur->id }}">{{ $expediteur->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Destinataire --}}
-                <div class="flex flex-col">
-                    <label for="destinataire_id" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-user-check"></i> Destinataire :
+                <!-- Destinataire -->
+                <div class="mb-4">
+                    <label for="destinataire_id" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📬</span> Destinataire
                     </label>
-                    <select name="destinataire_id" id="destinataire_id" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" required>
-                        <option value="">Sélectionner un destinataire</option>
-                        @foreach ($destinataires as $destinataire)
-                            <option value="{{ $destinataire->id }}">{{ $destinataire->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <select id="destinataire_id" name="destinataire_id" required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            <option value="">Sélectionner un destinataire</option>
+                            @foreach ($destinataires as $destinataire)
+                                <option value="{{ $destinataire->id }}">{{ $destinataire->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Objet du courrier --}}
-                <div class="flex flex-col">
-                    <label for="objet" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-file-alt"></i> Objet :
+                <!-- Objet -->
+                <div class="mb-4">
+                    <label for="objet" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📝</span> Objet
                     </label>
-                    <input type="text" name="objet" id="objet" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" 
-                        placeholder="Entrez l'objet du courrier" required>
+                    <div class="relative">
+                        <input type="text" id="objet" name="objet" required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Entrez l'objet du courrier">
+                    </div>
                 </div>
 
-                {{-- Type de courrier --}}
-                <div class="flex flex-col">
-                    <label for="type" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-exchange-alt"></i> Type :
+                <!-- Type -->
+                <div class="mb-4">
+                    <label for="type" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">🔄</span> Type
                     </label>
-                    <select name="type" id="type" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        <option value="entrant">Entrant</option>
-                        <option value="sortant">Sortant</option>
-                    </select>
+                    <div class="relative">
+                        <select id="type" name="type" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            <option value="entrant">Entrant</option>
+                            <option value="sortant">Sortant</option>
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Contenu --}}
-                <div class="flex flex-col">
-                    <label for="description" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-align-left"></i> Contenu :
+                <!-- Contenu -->
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">✍️</span> Contenu
                     </label>
-                    <textarea name="description" id="description" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" 
-                        rows="4" placeholder="Entrez le contenu du courrier"></textarea>
+                    <div class="relative">
+                        <textarea id="description" name="description" rows="4" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Entrez le contenu du courrier"></textarea>
+                    </div>
                 </div>
 
-                {{-- Pièces jointes --}}
-                <div class="flex flex-col">
-                    <label for="pieces_jointes" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-paperclip"></i> Ajouter des pièces jointes :
+                <!-- Pièces jointes -->
+                <div class="mb-4">
+                    <label for="pieces_jointes" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📎</span> Ajouter des pièces jointes
                     </label>
-                    <input type="file" name="pieces_jointes[]" id="pieces_jointes" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none" 
-                        multiple>
+                    <div class="relative">
+                        <input type="file" id="pieces_jointes" name="pieces_jointes[]" multiple 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                    </div>
                     <small class="text-gray-500">Formats acceptés : PDF, Word, Excel, Images</small>
                 </div>
 
-                {{-- Priorité --}}
-                <div class="flex flex-col">
-                    <label for="priorite" class="text-green-700 font-medium mb-2">
-                        <i class="fas fa-exclamation-circle"></i> Priorité :
+                <!-- Priorité -->
+                <div class="mb-4">
+                    <label for="priorite" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">⚡</span> Priorité
                     </label>
-                    <select name="priorite" id="priorite" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        <option value="basse">Basse</option>
-                        <option value="normale" selected>Normale</option>
-                        <option value="élevée">Élevée</option>
-                    </select>
+                    <div class="relative">
+                        <select id="priorite" name="priorite" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            <option value="basse">Basse</option>
+                            <option value="normale" selected>Normale</option>
+                            <option value="élevée">Élevée</option>
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Bouton d'envoi --}}
+                <!-- Bouton d'envoi -->
                 <button type="submit" 
-                    class="w-full bg-green-600 font-semibold rounded-lg px-4 py-2 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                    class="w-full bg-black py-3 rounded-lg font-semibold text-lg hover:bg-gray-800 hover:scale-105 transition-transform duration-300">
                     📩 Envoyer le courrier
                 </button>
             </form>
