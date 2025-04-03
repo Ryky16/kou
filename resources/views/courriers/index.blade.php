@@ -39,7 +39,7 @@
                             @endforelse
                         </td>
                         <td class="border px-4 py-2">
-                            <a href="{{ route('courriers.affecter', $courrier->id) }}" class="px-3 py-1 bg-blue-600 rounded">
+                            <a href="{{ route('courriers.create', $courrier->id) }}" class="px-3 py-1 bg-blue-600 rounded">
                                 🔄 Affecter
                             </a>
                         </td>
