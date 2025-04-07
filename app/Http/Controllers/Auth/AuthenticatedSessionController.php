@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         // Régénérer la session
-        $request->session()->regenerate();
+        session()->regenerate();
 
         // Récupérer l'utilisateur authentifié avec son rôle
         $user = Auth::user();
