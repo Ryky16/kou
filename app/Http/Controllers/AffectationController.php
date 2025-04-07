@@ -8,6 +8,8 @@ use App\Models\Document;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Affectation;
+
 
 class AffectationController extends Controller
 {
@@ -78,5 +80,11 @@ class AffectationController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
         }
+
+        Affectation::create([
+            'courrier_id' => $courrier->id,
+            'user_id' => $request->destinataire_id, // supposant que tu as ce champ dans le formulaire
+            'statut' => 'non_lu',
+        ]);
     }
 }

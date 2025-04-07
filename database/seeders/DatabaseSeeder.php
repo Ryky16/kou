@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->seedUsers();
         $this->seedServices();
         $this->seedCourriers(); // Nouvelle ligne ajoutée
+        $this->seedAffectations();
+
     }
 
     protected function seedRoles()
@@ -67,5 +69,10 @@ class DatabaseSeeder extends Seeder
     protected function seedCourriers()
     {
         $this->call(CourrierSeeder::class);
+    }
+
+    protected function seedAffectations()
+    {
+        $this->call(AffectationSeeder::class);
     }
 }
