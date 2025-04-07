@@ -2742,3 +2742,12 @@ select {
     color: rgb(209 213 219 / var(--tw-text-opacity, 1));
   }
 }
+
+/*
+.btn-custom {
+  border: 2px solid #374151 !important;
+}
+
+.btn-custom:hover {
+  border-color: #4b5563 !important;
+}*/
