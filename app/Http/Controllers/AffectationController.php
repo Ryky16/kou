@@ -4,89 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Courrier;
-use App\Models\Document;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Service;
 use App\Models\Affectation;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AffectationController extends Controller
 {
-    public function index()
+    /**
+     * Affiche le formulaire d’affectation d’un courrier
+     */
+    public function create(Courrier $courrier)
     {
-        // Récupérer les expéditeurs (par exemple, les utilisateurs ayant un rôle spécifique)
-        $expediteurs = User::whereHas('role', function ($query) {
-            $query->where('name', 'Expéditeur');
-        })->get();
+        $services = Service::all(); // On récupère les services disponibles
 
-        // Récupérer les destinataires (par exemple, les agents ou autres utilisateurs)
-        $destinataires = User::whereHas('role', function ($query) {
-            $query->where('name', 'Agent');
-        })->get();
+         // Récupérer les utilisateurs ayant le rôle "Agent"
+    $agents = User::whereHas('role', function ($query) {
+        $query->where('name', 'Agent');
+    })->get();
 
-        // Récupérer les courriers
-        $courriers = Courrier::all();
-
-        // Transmettre les données à la vue
-        return view('affectation.index', compact('expediteurs', 'destinataires', 'courriers'));
+        return view('affectation.create', compact('courrier', 'service'));
     }
 
-    public function affecter(Request $request)
+    /**
+     * Enregistre une affectation
+     */
+    public function store(Request $request)
     {
-        // Vérifier si l'utilisateur est authentifié
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vous devez être connecté.');
-        }
-
-        // Validation des données du formulaire
         $request->validate([
-            /*'type' => 'required|string',
-            'reference_expediteur' => 'required|string|unique:courriers,reference_expediteur',
-            'objet' => 'required|string',
-            'date_reception' => 'required|date',
-            'expediteur' => 'required|string',
-            'description' => 'nullable|string',
-            'pieces_jointes.*' => 'file|max:10240',*/ // 10 Mo max par fichier
-        
+            'courrier_id' => 'required|exists:courriers,id',
+            'service_id' => 'required|exists:services,id',
+            'observation' => 'nullable|string|max:1000',
         ]);
 
         try {
-            // Création du courrier
-            $courrier = Courrier::create([
-                'type' => $request->type,
-                'reference_expediteur' => $request->reference_expediteur,
-                'objet' => $request->objet,
-                'date_reception' => $request->date_reception,
-                'expediteur' => $request->expediteur,
-                'description' => $request->description,
-                'statut' => 'en_attente',
+            Affectation::create([
+                'courrier_id' => $request->courrier_id,
+                'service_id' => $request->service_id,
+                'observation' => $request->observation,
+                'statut' => 'non_lu',
+                'created_by' => Auth::id(),
             ]);
 
-            // Vérification et enregistrement des fichiers joints
-            if ($request->hasFile('pieces_jointes')) {
-                foreach ($request->file('pieces_jointes') as $file) {
-                    $path = $file->store('courriers', 'public');
-
-                    Document::create([
-                        'courrier_id' => $courrier->id,
-                        'file_name' => $file->getClientOriginalName(),
-                        'file_path' => $path,
-                    ]);
-                }
-            }
-
-            Affectation::create([
-            'courrier_id' => $courrier->id,
-            'user_id' => $request->destinataire_id, // supposant que tu as ce champ dans le formulaire
-            'statut' => 'non_lu',
-        ]);
-
-            return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès !');
+            return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès !');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
+            return back()->with('error', '❌ Erreur lors de l\'affectation : ' . $e->getMessage());
         }
-
-       
     }
 }

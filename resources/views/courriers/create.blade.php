@@ -8,10 +8,26 @@
             <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
+                 <!-- Type de courrier -->
+                 <div class="mb-4">
+                    <label for="type" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">🔄</span> Type de courrier
+                    </label>
+                    <div class="relative">
+                        <select id="type" name="type" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            <option value="entrant">Entrant</option>
+                            <option value="sortant">Sortant</option>
+                            <!--option value="Rapport">Rapport</option>
+                            <option value="Autre">Autre</option-->
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Type de courrier -->
                 <div class="mb-4">
                     <label for="type" class="block text-gray-700 font-bold flex items-center">
-                        <span class="mr-2">🔄</span> Type de courrier
+                        <span class="mr-2">🌿</span> Nature du courrier
                     </label>
                     <div class="relative">
                         <select id="type" name="type" 

@@ -12,6 +12,7 @@ class Affectation extends Model
     protected $fillable = [
         'courrier_id',
         'user_id',
+        'service_id',
         'statut',
     ];
 

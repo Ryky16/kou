@@ -13,14 +13,16 @@
 
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
+                    <li>
+                            <a href="{{ route('courriers.create') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
+                        </li>
+
                         <li>
                             <a href="#" class="sidebar-link" @click.prevent="showTable = !showTable">
                                 📁 Gérer les Courriers
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('courriers.create') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
-                        </li>
+                        
                         <li><a href="#" class="sidebar-link">📂 Consulter les Archives</a></li>
                         <li><a href="#" class="sidebar-link">📊 Statistiques</a></li>
                         <li>
@@ -112,14 +114,14 @@
                                     ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
                                 }}
                             </td>
-                            <td class="p-4">
+                            <td class="p-4  border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', ['courrier_id' => $courrier->id]) }}" 
-                                       class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">
-                                        Attribuer
+                                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
+                                       ➕ Affecter
                                     </a>
                                 @else
-                                    <button class="px-3 py-1 bg-gray-400 text-white rounded" disabled>
+                                    <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
                                         Affectation terminée
                                     </button>
                                 @endif
