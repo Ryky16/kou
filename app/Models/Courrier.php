@@ -34,6 +34,11 @@ class Courrier extends Model
         return $this->belongsTo(User::class, 'destinataire_id');
     }
 
+    public function affectation()
+{
+    return $this->hasOne(Affectation::class);
+}
+
     public function service()
     {
         return $this->belongsTo(Service::class);

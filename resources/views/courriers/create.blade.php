@@ -1,72 +1,108 @@
 <x-app-layout>
-    <div class="py-12">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Créer un nouveau courrier</h2>
+    <div class="flex items-center justify-center min-h-screen bg-gray-200">
+        <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-center text-green-700 mb-6">📌 Créer un Nouveau Courrier</h2>
+            <p class="text-sm text-center text-gray-600 mb-6">Remplissez les informations pour créer un nouveau courrier</p>
 
-                <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data" class="mt-6" id="courrier-form">
-                    @csrf
+            {{-- Formulaire pour créer un courrier --}}
+            <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                    <!-- Type de courrier -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Type de courrier :</label>
-                        <select name="type" class="w-full p-2 border rounded">
+                <!-- Type de courrier -->
+                <div class="mb-4">
+                    <label for="type" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">🔄</span> Type de courrier
+                    </label>
+                    <div class="relative">
+                        <select id="type" name="type" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                             <option value="Lettre Officielle">Lettre Officielle</option>
                             <option value="Note de service">Note de service</option>
                             <option value="Rapport">Rapport</option>
                             <option value="Autre">Autre</option>
                         </select>
                     </div>
+                </div>
 
-                    <!-- Référence expéditeur -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Référence expéditeur :</label>
-                        <input type="text" name="reference_expediteur" class="w-full p-2 border rounded" placeholder="Ex : REF-2025-001">
+                <!-- Référence expéditeur -->
+                <div class="mb-4">
+                    <label for="reference_expediteur" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">🔖</span> Référence expéditeur
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="reference_expediteur" name="reference_expediteur" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Ex : REF-2025-001" required>
                     </div>
+                </div>
 
-                    <!-- Objet -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Objet :</label>
-                        <input type="text" name="objet" class="w-full p-2 border rounded" placeholder="Ex : Demande de documents">
+                <!-- Objet -->
+                <div class="mb-4">
+                    <label for="objet" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📝</span> Objet
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="objet" name="objet" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Ex : Demande de documents" required>
                     </div>
+                </div>
 
-                    <!-- Ajout des pièces jointes -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Ajouter des pièces jointes :</label>
-                        <input type="file" name="pieces_jointes[]" multiple class="w-full p-2 border rounded" id="file-input">
-                        <ul id="file-list" class="mt-2 text-sm text-gray-600"></ul>
+                <!-- Pièces jointes -->
+                <div class="mb-4">
+                    <label for="pieces_jointes" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📎</span> Ajouter des pièces jointes
+                    </label>
+                    <div class="relative">
+                        <input type="file" id="pieces_jointes" name="pieces_jointes[]" multiple 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                     </div>
+                    <small class="text-gray-500">Formats acceptés : PDF, Word, Excel, Images</small>
+                </div>
 
-                    <!-- Date réception -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Reçu le :</label>
-                        <input type="date" name="date_reception" class="w-full p-2 border rounded">
+                <!-- Date réception -->
+                <div class="mb-4">
+                    <label for="date_reception" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📅</span> Reçu le
+                    </label>
+                    <div class="relative">
+                        <input type="date" id="date_reception" name="date_reception" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                     </div>
+                </div>
 
-                    <!-- Expéditeur/Destinataire -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Expéditeur/Destinataire :</label>
-                        <input type="text" name="expediteur" class="w-full p-2 border rounded" placeholder="Ex : Mairie de Ziguinchor">
+                <!-- Expéditeur/Destinataire -->
+                <div class="mb-4">
+                    <label for="expediteur" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">👤</span> Expéditeur/Destinataire
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="expediteur" name="expediteur" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Ex : Mairie de Ziguinchor" required>
                     </div>
+                </div>
 
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-300 font-semibold">Description du courrier :</label>
-                        <textarea name="description" class="w-full p-2 border rounded" rows="5" placeholder="Décrivez brièvement le courrier..."></textarea>
+                <!-- Description -->
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">✍️</span> Description du courrier
+                    </label>
+                    <div class="relative">
+                        <textarea id="description" name="description" rows="4" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            placeholder="Décrivez brièvement le courrier..."></textarea>
                     </div>
+                </div>
 
-                    <!-- Bouton de soumission -->
-                    <div class="mt-6">
-                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
-                            ✅ Ajouter le courrier
-                        </button>
-                    </div>
+                <!-- Bouton de soumission -->
+                <button type="submit" 
+                    class="w-full bg-green-600 py-3 rounded-lg font-semibold text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300">
+                    ✅ Ajouter le courrier
+                </button>
 
-                </form>
-            </div>
+            </form>
+            <script src="https://cdn.tailwindcss.com"></script>
         </div>
     </div>
-
-    <!-- Inclusion du fichier JavaScript -->
-    <script src="{{ asset('js/script.js') }}"></script>
 </x-app-layout>

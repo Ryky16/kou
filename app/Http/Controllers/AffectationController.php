@@ -76,15 +76,17 @@ class AffectationController extends Controller
                 }
             }
 
+            Affectation::create([
+            'courrier_id' => $courrier->id,
+            'user_id' => $request->destinataire_id, // supposant que tu as ce champ dans le formulaire
+            'statut' => 'non_lu',
+        ]);
+
             return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès !');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
         }
 
-        Affectation::create([
-            'courrier_id' => $courrier->id,
-            'user_id' => $request->destinataire_id, // supposant que tu as ce champ dans le formulaire
-            'statut' => 'non_lu',
-        ]);
+       
     }
 }
