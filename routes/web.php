@@ -111,7 +111,7 @@ Route::middleware(['auth'])->group(function () {
     // Routes pour la gestion des courriers
     Route::get('/courriers', [CourrierController::class, 'index'])->name('courriers.index');
     Route::get('/courriers/create', [CourrierController::class, 'create'])->name('courriers.create');
-    Route::post('/courriers/store', [CourrierController::class, 'store'])->name('courriers.store');
+    Route::post('/courriers', [CourrierController::class, 'store'])->name('courriers.store');
 });
 
 /*

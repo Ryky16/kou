@@ -10,17 +10,24 @@ class Courrier extends Model
     use HasFactory;
 
     protected $fillable = [
+        'type',
+        'nature', // Ajout de la colonne "nature"
         'reference',
-        'expediteur_id', // Clé étrangère
-        'destinataire_id', // Clé étrangère
-        'service_id', // Clé étrangère
-        'created_by', // Clé étrangère
         'objet',
         'contenu',
-        'type',
+        'date_reception',
+        'expediteur_id', // Clé étrangère
+        'destinataire_id', // Clé étrangère
         'statut',
         'priorite',
-        'date_reception'
+        'service_id', // Clé étrangère
+        'created_by', // Clé étrangère
+    ];
+
+    protected $dates = [
+        'date_reception',
+        'created_at',
+        'updated_at'
     ];
 
     // Relations
@@ -35,9 +42,9 @@ class Courrier extends Model
     }
 
     public function affectation()
-{
-    return $this->hasOne(Affectation::class);
-}
+    {
+        return $this->hasOne(Affectation::class);
+    }
 
     public function service()
     {

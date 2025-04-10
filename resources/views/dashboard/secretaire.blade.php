@@ -101,8 +101,8 @@
                     @forelse ($courriers as $courrier)
                         <tr class="border-b border-gray-200 hover:bg-gray-50">
                             <td class="p-4">{{ $courrier->reference }}</td>
-                            <td class="p-4">{{ $courrier->expediteur }}</td>
-                            <td class="p-4">{{ $courrier->destinataire }}</td>
+                            <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td> <!-- Affiche le nom de l'expéditeur -->
+                            <td class="p-4">{{ $courrier->destinataire->name ?? 'N/A' }}</td> <!-- Affiche le nom du destinataire -->
                             <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
                                 {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
                             </td>
@@ -114,7 +114,7 @@
                                     ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
                                 }}
                             </td>
-                            <td class="p-4  border-r border-gray-200">
+                            <td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', ['courrier_id' => $courrier->id]) }}" 
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">

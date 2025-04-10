@@ -21,6 +21,7 @@ class CourrierSeeder extends Seeder
             // 1. Courrier entrant (expéditeur externe)
             Courrier::create([
                 'reference' => 'EXT-' . now()->format('YmdHis'),
+                'nature' => 'Lettre Officielle',
                 'objet' => 'Demande de permis de construire',
                 'contenu' => 'Projet de construction maison',
                 'type' => 'entrant',
@@ -36,6 +37,7 @@ class CourrierSeeder extends Seeder
             // 2. Courrier interne
             Courrier::create([
                 'reference' => 'MAIRIE-' . now()->format('YmdHis'),
+                'nature' => 'Lettre Officielle',
                 'objet' => 'Demande de matériel',
                 'contenu' => 'Commande de fournitures',
                 'type' => 'interne',
@@ -51,6 +53,7 @@ class CourrierSeeder extends Seeder
             // 3. Courrier sortant
             Courrier::create([
                 'reference' => 'SORT-' . now()->format('YmdHis'),
+                'nature' => 'Lettre Officielle',
                 'objet' => 'Réponse à demande',
                 'contenu' => 'Accord de subvention',
                 'type' => 'sortant',

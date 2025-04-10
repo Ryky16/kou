@@ -1,4 +1,15 @@
 <x-app-layout>
+
+@if($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="flex items-center justify-center min-h-screen bg-gray-200">
         <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold text-center text-green-700 mb-6">📌 Créer un Nouveau Courrier</h2>
@@ -8,8 +19,8 @@
             <form action="{{ route('courriers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                 <!-- Type de courrier -->
-                 <div class="mb-4">
+                <!-- Type de courrier -->
+                <div class="mb-4">
                     <label for="type" class="block text-gray-700 font-bold flex items-center">
                         <span class="mr-2">🔄</span> Type de courrier
                     </label>
@@ -18,19 +29,18 @@
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                             <option value="entrant">Entrant</option>
                             <option value="sortant">Sortant</option>
-                            <!--option value="Rapport">Rapport</option>
-                            <option value="Autre">Autre</option-->
+                            <option value="interne">Interne</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Type de courrier -->
+                <!-- Nature du courrier -->
                 <div class="mb-4">
-                    <label for="type" class="block text-gray-700 font-bold flex items-center">
+                    <label for="nature" class="block text-gray-700 font-bold flex items-center">
                         <span class="mr-2">🌿</span> Nature du courrier
                     </label>
                     <div class="relative">
-                        <select id="type" name="type" 
+                        <select id="nature" name="nature" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                             <option value="Lettre Officielle">Lettre Officielle</option>
                             <option value="Note de service">Note de service</option>
@@ -42,11 +52,11 @@
 
                 <!-- Référence expéditeur -->
                 <div class="mb-4">
-                    <label for="reference_expediteur" class="block text-gray-700 font-bold flex items-center">
+                    <label for="reference" class="block text-gray-700 font-bold flex items-center">
                         <span class="mr-2">🔖</span> Référence expéditeur
                     </label>
                     <div class="relative">
-                        <input type="text" id="reference_expediteur" name="reference_expediteur" 
+                        <input type="text" id="reference" name="reference" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                             placeholder="Ex : REF-2025-001" required>
                     </div>
@@ -87,13 +97,13 @@
                     </div>
                 </div>
 
-                <!-- Expéditeur/Destinataire -->
+                <!-- Expéditeur -->
                 <div class="mb-4">
-                    <label for="expediteur" class="block text-gray-700 font-bold flex items-center">
-                        <span class="mr-2">👤</span> Expéditeur/Destinataire
+                    <label for="expediteur_id" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">👤</span> Expéditeur
                     </label>
                     <div class="relative">
-                        <input type="text" id="expediteur" name="expediteur" 
+                        <input type="text" id="expediteur_id" name="expediteur_id" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                             placeholder="Ex : Mairie de Ziguinchor" required>
                     </div>
@@ -116,7 +126,6 @@
                     class="w-full bg-green-600 py-3 rounded-lg font-semibold text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300">
                     ✅ Ajouter le courrier
                 </button>
-
             </form>
             <script src="https://cdn.tailwindcss.com"></script>
         </div>
