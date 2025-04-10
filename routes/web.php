@@ -114,6 +114,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/courriers', [CourrierController::class, 'store'])->name('courriers.store');
 });
 
+Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class, 'download'])
+    ->name('pieces-jointes.download')
+    ->middleware('can:download,pieceJointe');
+
 /*
 |--------------------------------------------------------------------------
 | Routes d'authentification (générées par Laravel Breeze/Jetstream)

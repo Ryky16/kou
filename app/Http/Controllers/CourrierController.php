@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Courrier;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PieceJointe;
+use Illuminate\Support\Facades\Storage;
 
 class CourrierController extends Controller
 {
+    public function download(PieceJointe $pieceJointe)
+    {
+        // Vérifie automatiquement les permissions via la politique
+        $filePath = Storage::disk('public')->path($pieceJointe->chemin);
+        return response()->download($filePath, $pieceJointe->nom_original);
+    }
+
     public function create()
     {
         // Récupérer les agents disponibles
@@ -37,7 +46,8 @@ class CourrierController extends Controller
             'date_reception' => 'required|date',
             'expediteur' => 'required|string',
             'description' => 'nullable|string',
-            'pieces_jointes.*' => 'file|mimes:pdf,docx,jpg,png|max:2048'
+            'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,txt,ppt,pptx,odt,ods,rtf,zip,rar',
+        'pieces_jointes' => 'max:5',//'pieces_jointes.*' => 'file|mimes:pdf,docx,jpg,png|max:2048'
         ]);
 
         try {
@@ -57,13 +67,26 @@ class CourrierController extends Controller
             // Gérer les pièces jointes
             if ($request->hasFile('pieces_jointes')) {
                 foreach ($request->file('pieces_jointes') as $file) {
-                    $path = $file->store('courriers', 'public');
-                    $courrier->documents()->create([
+                    $path = $file->store('pieces_jointes', 'public');
+                    /*$courrier->documents()->create([
                         'file_path' => $path,
-                        'file_name' => $file->getClientOriginalName(),
+                        'file_name' => $file->getClientOriginalName(),*/
+
+                    PieceJointe::create([
+                        'chemin' => $path,
+                        'nom_original' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getMimeType(),
+                        'taille' => $file->getSize(),
+                        'courrier_id' => $courrier->id
                     ]);
                 }
             }
+
+            
+            
+            return redirect()->route('courriers.index')
+            ->with('success', 'Courrier créé avec succès!');
+
 
             // Redirigez vers le tableau de suivi avec un message de succès
             return redirect()->route('secretaire.dashboard')->with('success', 'Courrier ajouté avec succès !');

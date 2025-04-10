@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Courrier extends Model
 {
@@ -29,6 +31,20 @@ class Courrier extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($courrier) {
+            // Supprime les fichiers physiques avant de supprimer le courrier
+            foreach ($courrier->piecesJointes as $piece) {
+                Storage::disk('public')->delete($piece->chemin);
+                $piece->delete();
+            }
+        });
+    }
+
 
     // Relations
     public function expediteur()
@@ -57,8 +73,8 @@ class Courrier extends Model
     }
 
     // Relation avec les documents
-    public function documents()
+    public function piecesJointes()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(PieceJointe::class);
     }
 }
