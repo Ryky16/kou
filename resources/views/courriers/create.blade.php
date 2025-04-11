@@ -128,7 +128,7 @@
                 <!-- Bouton de soumission -->
                 <button type="submit" 
                     class="w-full bg-green-600 py-3 rounded-lg font-semibold text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300">
-                    ✅ Ajouter le courrier
+                    ✅ Ajouter un courrier
                 </button>
             </form>
             <script src="https://cdn.tailwindcss.com"></script>
