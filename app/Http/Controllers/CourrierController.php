@@ -44,10 +44,9 @@ class CourrierController extends Controller
             'reference' => 'required|string|unique:courriers,reference',
             'objet' => 'required|string',
             'date_reception' => 'required|date',
-            'expediteur' => 'required|string',
+            'expediteur_id' => 'required|exists:users,id', // Validation pour l'expéditeur
             'description' => 'nullable|string',
-            'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,txt,ppt,pptx,odt,ods,rtf,zip,rar',
-            'pieces_jointes' => 'max:5',
+            'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png,gif',
         ]);
 
         try {
