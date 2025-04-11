@@ -45,6 +45,7 @@ class CourrierController extends Controller
             'objet' => 'required|string',
             'date_reception' => 'required|date',
             'expediteur_id' => 'required|exists:users,id',
+            'destinataire_id' => 'nullable|string', // Peut être un agent, un service ou autre
             'description' => 'nullable|string',
             'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png', // Max 10MB, formats autorisés
         ]);
@@ -58,7 +59,8 @@ class CourrierController extends Controller
                 'objet' => $validated['objet'],
                 'contenu' => $validated['description'] ?? null,
                 'date_reception' => $validated['date_reception'],
-                'expediteur_id' => Auth::id(), // L'utilisateur connecté est l'expéditeur
+                'expediteur_id' => $validated['expediteur_id'],
+                'destinataire_id' => $validated['destinataire_id'] ?? null,
                 'statut' => 'En attente', // Par défaut
                 'priorite' => 'moyenne', // Par défaut
             ]);

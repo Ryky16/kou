@@ -113,6 +113,26 @@
                     </div>
                 </div>
 
+                <!-- Destinataire -->
+                <div class="mb-4">
+                    <label for="destinataire_id" class="block text-gray-700 font-bold flex items-center">
+                        <span class="mr-2">📤</span> Destinataire
+                    </label>
+                    <div class="relative">
+                        <select id="destinataire_id" name="destinataire_id" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">-- Sélectionnez un destinataire --</option>
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                            @endforeach
+                            @foreach($services as $service)
+                                <option value="service_{{ $service->id }}">Service : {{ $service->nom }}</option>
+                            @endforeach
+                            <option value="autre">Autre administration</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Description -->
                 <div class="mb-4">
                     <label for="description" class="block text-gray-700 font-bold flex items-center">
