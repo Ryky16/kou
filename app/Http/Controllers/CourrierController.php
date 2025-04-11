@@ -47,7 +47,7 @@ class CourrierController extends Controller
             'expediteur' => 'required|string',
             'description' => 'nullable|string',
             'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,txt,ppt,pptx,odt,ods,rtf,zip,rar',
-        'pieces_jointes' => 'max:5',//'pieces_jointes.*' => 'file|mimes:pdf,docx,jpg,png|max:2048'
+            'pieces_jointes' => 'max:5',
         ]);
 
         try {
@@ -68,10 +68,6 @@ class CourrierController extends Controller
             if ($request->hasFile('pieces_jointes')) {
                 foreach ($request->file('pieces_jointes') as $file) {
                     $path = $file->store('pieces_jointes', 'public');
-                    /*$courrier->documents()->create([
-                        'file_path' => $path,
-                        'file_name' => $file->getClientOriginalName(),*/
-
                     PieceJointe::create([
                         'chemin' => $path,
                         'nom_original' => $file->getClientOriginalName(),
@@ -82,11 +78,8 @@ class CourrierController extends Controller
                 }
             }
 
-            
-            
             return redirect()->route('courriers.index')
-            ->with('success', 'Courrier créé avec succès!');
-
+                ->with('success', 'Courrier créé avec succès!');
 
             // Redirigez vers le tableau de suivi avec un message de succès
             return redirect()->route('secretaire.dashboard')->with('success', 'Courrier ajouté avec succès !');
