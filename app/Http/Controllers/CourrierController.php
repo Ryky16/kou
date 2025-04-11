@@ -26,8 +26,11 @@ class CourrierController extends Controller
         $agents = User::whereHas('role', function ($query) {
             $query->where('name', 'Agent');
         })->get();
+
+        // Récupérer les services disponibles
+    $services = \App\Models\Service::all(); // Assurez-vous que le modèle Service existe
         
-        return view('courriers.create', compact('agents'));
+        return view('courriers.create', compact('agents', 'services'));
     }
 
     public function store(Request $request)
