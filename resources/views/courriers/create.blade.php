@@ -103,9 +103,13 @@
                         <span class="mr-2">👤</span> Expéditeur
                     </label>
                     <div class="relative">
-                        <input type="text" id="expediteur_id" name="expediteur_id" 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
-                            placeholder="Ex : Mairie de Ziguinchor" required>
+                        <select id="expediteur_id" name="expediteur_id" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
+                            <option value="">-- Sélectionnez un expéditeur --</option>
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
