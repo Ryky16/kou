@@ -18,6 +18,15 @@ class CourrierController extends Controller
         return response()->download($filePath, $pieceJointe->nom_original);
     }
 
+    public function index()
+    {
+        // Récupérer tous les courriers
+        $courriers = Courrier::with(['expediteur', 'destinataire'])->orderBy('created_at', 'desc')->get();
+
+        // Retourner la vue avec les courriers
+        return view('courriers.index', compact('courriers'));
+    }
+                    
     public function create()
     {
         // Récupérer les agents disponibles
@@ -37,7 +46,7 @@ class CourrierController extends Controller
     {
         // Vérifiez si l'utilisateur est connecté
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vous devez être connecté.');
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour ajouter un courrier.');
         }
 
         // Validez les données du formulaire
@@ -48,9 +57,11 @@ class CourrierController extends Controller
             'objet' => 'required|string',
             'date_reception' => 'required|date',
             'expediteur_id' => 'required|exists:users,id',
-            'destinataire_id' => 'nullable|string', // Peut être un agent, un service ou autre
+            'destinataire_id' => 'nullable|string',
             'description' => 'nullable|string',
-            'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png', // Max 10MB, formats autorisés
+            'statut' => 'nullable|string|in:brouillon,envoyé,traité', // Validation stricte pour statut
+            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+            'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
         try {
@@ -64,8 +75,9 @@ class CourrierController extends Controller
                 'date_reception' => $validated['date_reception'],
                 'expediteur_id' => $validated['expediteur_id'],
                 'destinataire_id' => $validated['destinataire_id'] ?? null,
-                'statut' => 'En attente', // Par défaut
-                'priorite' => 'moyenne', // Par défaut
+                'statut' => $validated['statut'] ?? 'brouillon', // Valeur par défaut
+                'priorite' => $validated['priorite'] ?? 'moyenne', // Valeur par défaut
+                'created_by' => Auth::id(), // Ajoutez l'utilisateur connecté
             ]);
 
             // Gérer les pièces jointes
@@ -82,14 +94,11 @@ class CourrierController extends Controller
                 }
             }
 
-            return redirect()->route('courriers.index')
-                ->with('success', 'Courrier créé avec succès!');
-
-            // Redirigez vers le tableau de suivi avec un message de succès
-            return redirect()->route('secretaire.dashboard')->with('success', 'Courrier ajouté avec succès !');
+            // Redirigez avec un message de succès
+            return redirect()->route('courriers.index')->with('success', 'Courrier ajouté avec succès !');
         } catch (\Exception $e) {
-            // En cas d'erreur, retournez au formulaire avec un message d'erreur
-            return back()->with('error', 'Erreur lors de la création du courrier : ' . $e->getMessage());
+            // Retournez au formulaire avec un message d'erreur
+            return back()->with('error', 'Erreur lors de l\'ajout du courrier : ' . $e->getMessage());
         }
     }
 }

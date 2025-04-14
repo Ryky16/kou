@@ -75,6 +75,6 @@ class Courrier extends Model
     // Relation avec les documents
     public function piecesJointes()
     {
-        return $this->hasMany(PieceJointe::class);
+        return $this->hasMany(PieceJointe::class, 'courrier_id');
     }
 }

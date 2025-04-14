@@ -9,7 +9,7 @@
             <span class="mr-2">{{ $piece->icone() }}</span>
             <a href="{{ route('pieces-jointes.download', $piece) }}" 
                class="text-blue-600 hover:underline"
-               title="Télécharger ({{ round($piece->taille/1024) }} Ko) - {{ strtoupper(pathinfo($piece->nom_original, PATHINFO_EXTENSION)) }}">
+               title="Télécharger ({{ round($piece->taille / 1024, 2) }} Ko) - {{ strtoupper(pathinfo($piece->nom_original, PATHINFO_EXTENSION)) }}">
                {{ $piece->nom_original }}
             </a>
         </li>
