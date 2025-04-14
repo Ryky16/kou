@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <div class="container mx-auto mt-8">
         <!-- Titre de la page -->
