@@ -1,19 +1,22 @@
 <x-app-layout>
     <div class="container mx-auto mt-8">
-        <!-- Titre de la page -->
+        <!-- En-tête : Titre, Bouton de retour et Bouton "Ajouter un courrier" -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-green-700">📄 Liste des courriers</h1>
-            <a href="{{ route('courriers.create') }}" 
-               class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
-                ➕ Ajouter un courrier
-            </a>
-        </div>
-
-        <!-- Bouton de retour -->
-        <div class="mb-4">
+            <!-- Bouton de retour -->
             <a href="javascript:history.back()" 
                class="text-blue-600 hover:underline flex items-center">
                 ⬅️ Retour
+            </a>
+
+            <!-- Titre centré -->
+            <h1 class="text-3xl font-bold text-green-700 text-center flex-1">
+                📄 Liste des courriers
+            </h1>
+
+            <!-- Bouton "Ajouter un courrier" -->
+            <a href="{{ route('courriers.create') }}" 
+               class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                ➕ Ajouter un courrier
             </a>
         </div>
 
@@ -86,7 +89,8 @@
                     @endforelse
                 </tbody>
             </table>
-            <script src="https://cdn.tailwindcss.com"></script>
+
         </div>
     </div>
+    <script src="https://cdn.tailwindcss.com"></script>
 </x-app-layout>
