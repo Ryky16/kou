@@ -116,10 +116,14 @@
                     </label>
                     <div class="relative">
                         <select id="expediteur_id" name="expediteur_id" 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
-                            <option value="">-- Sélectionnez un expéditeur --</option>
-                            @foreach($agents as $agent)
-                                <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            required
+                            disabled>
+                            @foreach($secretaires as $secretaire)
+                            <option value="{{ $secretaire->id }}" 
+                            {{ auth()->id() == $secretaire->id ? 'selected' : '' }}>
+                                {{ $secretaire->name }}
+                        </option>
                             @endforeach
                         </select>
                     </div>
@@ -144,6 +148,20 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- Email du destinataire externe -->
+                <div class="mb-4" id="email-destinataire" style="display: none;">
+                    <label for="email_destinataire" class="block text-gray-700 font-blod flex items-center">
+                        <span class="mr-2">📧</span> Email du destinataire
+                    </label>
+                <div class="relative">
+                    <input type="email" id="email_destinataire" name="email_destinataire"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
+                    placeholder="Ex : exemple@gmail.com">
+                </div>
+                </div>
+
+
 
                 <!-- Statut -->
                 <div class="mb-4">
@@ -194,6 +212,7 @@
                 </button>
             </form>
             <script src="https://cdn.tailwindcss.com"></script>
+            <script src="{{ asset('js/script.js') }}"></script>
         </div>
     </div>
 </x-app-layout>

@@ -104,3 +104,18 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const destinataireSelect = document.getElementById('destinataire_id');
+    const emailField = document.getElementById('email-destinataire');
+
+    if(destinataireSelect) {
+        destinataireSelect.addEventListener('change', function(){
+            if(this.value === 'autre' || this.value.startsWith('service_')){
+                emailField.style.display = 'block';
+            } else {
+                emailField.style.display = 'none';
+            }
+        });
+    }
+});
