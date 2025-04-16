@@ -42,6 +42,10 @@ class DashboardController extends Controller
     // Vue pour l'agent
     public function agent()
     {
-        return view('dashboard.agent'); // Chemin correct
+        // Récupérer les courriers depuis la base de données
+        $courriers = Courrier::with(['expediteur', 'destinataire'])->orderBy('created_at', 'desc')->paginate(10);
+
+        // Retourner la vue avec les courriers
+        return view('dashboard.agent', compact('courriers'));
     }
 }
