@@ -135,6 +135,17 @@
                         <span class="mr-2">👤</span> Expéditeur
                     </label>
                     <div class="relative">
+                        <select id="expediteur_id" name="expediteur_id" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
+                            required
+                            disabled>
+                            @foreach($secretaires as $secretaire)
+                            <option value="{{ $secretaire->id }}" 
+                            {{ auth()->id() == $secretaire->id ? 'selected' : '' }}>
+                                {{ $secretaire->name }}
+                        </option>
+                            @endforeach
+                        </select>
                         <input type="text" id="expediteur_id" name="expediteur_id" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                             value="Secrétaire Municipal" readonly>
@@ -159,18 +170,6 @@
                             @endforeach
                             <option value="autre">Autre administration</option>
                         </select>
-                    </div>
-                </div>
-
-                <!-- Email du destinataire externe -->
-                <div class="mb-4" id="email-destinataire" style="display: none;">
-                    <label for="email_destinataire" class="block text-gray-700 font-bold flex items-center">
-                        <span class="mr-2">📧</span> Email du destinataire
-                    </label>
-                    <div class="relative">
-                        <input type="email" id="email_destinataire" name="email_destinataire" 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
-                            placeholder="Ex : destinataire@exemple.com">
                     </div>
                 </div>
 
