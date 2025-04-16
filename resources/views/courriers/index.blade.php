@@ -40,6 +40,7 @@
                             <th class="border px-4 py-2 text-left">Référence</th>
                             <th class="border px-4 py-2 text-left">Objet</th>
                             <th class="border px-4 py-2 text-left">Expéditeur</th>
+                            <th class="border px-4 py-2 text-left">Destinataire</th>
                             <th class="border px-4 py-2 text-left">Statut</th>
                             <th class="border px-4 py-2 text-left">Pièces jointes</th>
                             <th class="border px-4 py-2 text-left">Actions</th>
@@ -48,24 +49,40 @@
                     <tbody>
                         @forelse($courriers as $courrier)
                             <tr class="hover:bg-gray-50">
+                                <!-- Référence -->
                                 <td class="border px-4 py-2">{{ $courrier->reference }}</td>
+
+                                <!-- Objet -->
                                 <td class="border px-4 py-2">{{ $courrier->objet }}</td>
+
+                                <!-- Expéditeur -->
                                 <td class="border px-4 py-2">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
+
+                                <!-- Destinataire -->
+                                <td class="border px-4 py-2">{{ $courrier->destinataire->name ?? 'N/A' }}</td>
+
+                                <!-- Statut -->
                                 <td class="border px-4 py-2">
                                     <span class="px-2 py-1 text-white rounded 
                                         {{ $courrier->statut == 'brouillon' ? 'bg-yellow-500' : ($courrier->statut == 'envoyé' ? 'bg-blue-500' : 'bg-green-500') }}">
                                         {{ ucfirst($courrier->statut) }}
                                     </span>
                                 </td>
+
+                                <!-- Pièces jointes -->
                                 <td class="border px-4 py-2">
                                     @forelse($courrier->piecesJointes as $piece)
-                                        <a href="{{ route('pieces-jointes.download', $piece) }}" class="text-blue-500 hover:underline block">
+                                        <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                                           target="_blank" 
+                                           class="text-blue-500 hover:underline block">
                                             📥 {{ $piece->nom_original }}
                                         </a>
                                     @empty
                                         <span class="text-gray-500 italic">Aucun document</span>
                                     @endforelse
                                 </td>
+
+                                <!-- Actions -->
                                 <td class="border px-4 py-2">
                                     <a href="{{ route('affectation.create', $courrier->id) }}" 
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
@@ -75,15 +92,15 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-gray-500 italic py-4">
+                                <td colspan="7" class="text-center text-gray-500 italic py-4">
                                     📭 Aucun courrier trouvé.
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+                <script src="https://cdn.tailwindcss.com"></script>
             </div>
-            <script src="https://cdn.tailwindcss.com"></script>
         </div>
     </div>
 </x-app-layout>

@@ -57,6 +57,12 @@ class Courrier extends Model
         return $this->belongsTo(User::class, 'destinataire_id');
     }
 
+    // Relation avec les documents
+    public function piecesJointes()
+    {
+        return $this->hasMany(PieceJointe::class, 'courrier_id');
+    }
+
     public function affectation()
     {
         return $this->hasOne(Affectation::class);
@@ -72,9 +78,4 @@ class Courrier extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // Relation avec les documents
-    public function piecesJointes()
-    {
-        return $this->hasMany(PieceJointe::class, 'courrier_id');
-    }
 }
