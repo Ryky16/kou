@@ -10,6 +10,7 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class CourrierController extends Controller
 {
@@ -64,22 +65,12 @@ class CourrierController extends Controller
             'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
+        DB::beginTransaction();
+
         try {
-            // Traitement spécial pour les destinataires
-            $destinataireId = null;
-            $emailDestinataire = null;
-
-            if ($validated['destinataire_id'] === 'autre') {
-                $emailDestinataire = $validated['email_destinataire'];
-            } elseif (strpos($validated['destinataire_id'], 'service_') === 0) {
-                $serviceId = str_replace('service_', '', $validated['destinataire_id']);
-                $destinataireId = $serviceId;
-                // Ici vous devriez peut-être utiliser un champ service_id si votre modèle est conçu ainsi
-            } else {
-                // C'est un ID d'utilisateur normal
-                $destinataireId = $validated['destinataire_id'];
-            }
-
+            // Traitement du destinataire
+            $destinataireData = $this->processDestinataire($validated['destinataire_id']);
+            
             // Création du courrier
             $courrierData = [
                 'type' => $validated['type'],
@@ -94,12 +85,14 @@ class CourrierController extends Controller
                 'created_by' => Auth::id(),
             ];
 
-            // Ajout des champs conditionnels
-            if ($destinataireId !== null) {
-                $courrierData['destinataire_id'] = $destinataireId;
-            }
-            if ($emailDestinataire !== null) {
-                $courrierData['email_destinataire'] = $emailDestinataire;
+            // Gestion des différents types de destinataires
+            if ($validated['destinataire_id'] === 'autre') {
+                $courrierData['email_destinataire'] = $validated['email_destinataire'];
+            } elseif (str_starts_with($validated['destinataire_id'], 'service_')) {
+                $serviceId = str_replace('service_', '', $validated['destinataire_id']);
+                $courrierData['service_id'] = $serviceId;
+            } else {
+                $courrierData['destinataire_id'] = $validated['destinataire_id'];
             }
 
             $courrier = Courrier::create($courrierData);
@@ -118,12 +111,40 @@ class CourrierController extends Controller
                 }
             }
 
+            DB::commit();
+
             return redirect()->route('courriers.index')
                 ->with('success', 'Courrier ajouté avec succès !');
 
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
             return back()->withInput()
-                ->with('error', 'Erreur lors de l\'ajout du courrier : ' . $e->getMessage());
+                ->with('error', 'Erreur de base de données: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()
+                ->with('error', 'Erreur lors de l\'ajout du courrier: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Vérifie que le destinataire existe
+     */
+    protected function processDestinataire($destinataireInput)
+    {
+        if ($destinataireInput === 'autre') {
+            return; // Pas de vérification pour les destinataires externes
+        }
+
+        if (str_starts_with($destinataireInput, 'service_')) {
+            $serviceId = str_replace('service_', '', $destinataireInput);
+            if (!Service::find($serviceId)) {
+                throw new \Exception("Le service sélectionné n'existe pas");
+            }
+        } else {
+            if (!User::find($destinataireInput)) {
+                throw new \Exception("Le destinataire sélectionné n'existe pas");
+            }
         }
     }
 }
