@@ -35,6 +35,7 @@ return new class extends Migration
             
             // Traçabilité
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->string('email_destinataire')->nullable();
             $table->timestamps();
         });
     }
