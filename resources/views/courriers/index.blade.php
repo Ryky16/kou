@@ -59,7 +59,17 @@
                                 <td class="border px-4 py-2">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
 
                                 <!-- Destinataire -->
-                                <td class="border px-4 py-2">{{ $courrier->destinataire->name ?? 'N/A' }}</td>
+                                <td class="border px-4 py-2">
+                                    @if($courrier->destinataire)
+                                        {{ $courrier->destinataire->name }}
+                                    @elseif($courrier->service)
+                                        {{ $courrier->service->nom }}
+                                    @elseif($courrier->email_destinataire)
+                                        {{ $courrier->email_destinataire }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
 
                                 <!-- Statut -->
                                 <td class="border px-4 py-2">

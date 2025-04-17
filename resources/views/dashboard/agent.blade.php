@@ -88,48 +88,30 @@
                 <thead class="bg-gray-100">
                     <tr class="border border-gray-200">
                         <th class="p-4 text-left">Référence</th>
-                        <th class="p-4 text-left">Objet</th>
                         <th class="p-4 text-left">Expéditeur</th>
                         <th class="p-4 text-left">Destinataire</th>
                         <th class="p-4 text-left">Statut</th>
-                        <th class="p-4 text-left">Pièces jointes</th>
+                        <th class="p-4 text-left">Priorité</th>
                         <th class="p-4 text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($courriers as $courrier)
                         <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <!-- Référence -->
                             <td class="p-4">{{ $courrier->reference }}</td>
-
-                            <!-- Objet -->
-                            <td class="p-4">{{ $courrier->objet }}</td>
-
-                            <!-- Expéditeur -->
                             <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
-
-                            <!-- Destinataire -->
                             <td class="p-4">{{ $courrier->destinataire->name ?? 'N/A' }}</td>
-
-                            <!-- Statut -->
                             <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
                                 {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
                             </td>
-
-                            <!-- Pièces jointes -->
-                            <td class="p-4">
-                                @forelse($courrier->piecesJointes as $piece)
-                                    <a href="{{ asset('storage/' . $piece->chemin) }}" 
-                                       target="_blank" 
-                                       class="text-blue-500 hover:underline">
-                                        📥 {{ $piece->nom_original }}
-                                    </a><br>
-                                @empty
-                                    <span class="text-gray-500 italic">Aucun document</span>
-                                @endforelse
+                            <td class="p-4 font-bold {{ 
+                                $courrier->priorite == 'Haute' ? 'text-red-500' : 
+                                ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
+                                {{ 
+                                    $courrier->priorite == 'Haute' ? '🔴 Haute' : 
+                                    ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
+                                }}
                             </td>
-
-                            <!-- Actions -->
                             <td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', ['courrier_id' => $courrier->id]) }}" 
@@ -145,7 +127,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-gray-500 p-4 italic">
+                            <td colspan="6" class="text-center text-gray-500 p-4 italic">
                                 📭 Aucun courrier trouvé.
                             </td>
                         </tr>

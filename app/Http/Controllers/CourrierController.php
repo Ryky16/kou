@@ -68,10 +68,7 @@ class CourrierController extends Controller
         DB::beginTransaction();
 
         try {
-            // Traitement du destinataire
-            $destinataireData = $this->processDestinataire($validated['destinataire_id']);
-            
-            // Création du courrier
+            // Création des données du courrier
             $courrierData = [
                 'type' => $validated['type'],
                 'nature' => $validated['nature'] ?? null,
@@ -95,6 +92,7 @@ class CourrierController extends Controller
                 $courrierData['destinataire_id'] = $validated['destinataire_id'];
             }
 
+            // Enregistrement du courrier
             $courrier = Courrier::create($courrierData);
 
             // Gestion des pièces jointes
@@ -116,10 +114,6 @@ class CourrierController extends Controller
             return redirect()->route('courriers.index')
                 ->with('success', 'Courrier ajouté avec succès !');
 
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollBack();
-            return back()->withInput()
-                ->with('error', 'Erreur de base de données: ' . $e->getMessage());
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()
