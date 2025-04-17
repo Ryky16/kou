@@ -109,13 +109,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const destinataireSelect = document.getElementById('destinataire_id');
     const emailField = document.getElementById('email-destinataire');
 
-    if (destinataireSelect) {
+    if (destinataireSelect && emailField) {
         destinataireSelect.addEventListener('change', function() {
-            if (this.value === 'autre' || this.value.startsWith('service_')) {
+            // Afficher seulement si "autre administration" est sélectionné
+            if (this.value === 'autre') {
                 emailField.style.display = 'block';
             } else {
                 emailField.style.display = 'none';
             }
         });
+        
+        // Déclencher l'événement au chargement pour l'état initial
+        destinataireSelect.dispatchEvent(new Event('change'));
     }
 });

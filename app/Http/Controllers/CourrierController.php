@@ -22,7 +22,7 @@ class CourrierController extends Controller
 
     public function index()
     {
-        $courriers = Courrier::with(['expediteur', 'destinataire'])
+        $courriers = Courrier::with(['expediteur', 'destinataire', 'service'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -92,6 +92,7 @@ class CourrierController extends Controller
                 $courrierData['destinataire_id'] = $validated['destinataire_id'];
             }
 
+           
             // Enregistrement du courrier
             $courrier = Courrier::create($courrierData);
 

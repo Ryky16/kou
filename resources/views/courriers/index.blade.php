@@ -60,15 +60,15 @@
 
                                 <!-- Destinataire -->
                                 <td class="border px-4 py-2">
-                                    @if($courrier->destinataire)
-                                        {{ $courrier->destinataire->name }}
-                                    @elseif($courrier->service)
-                                        {{ $courrier->service->nom }}
-                                    @elseif($courrier->email_destinataire)
-                                        {{ $courrier->email_destinataire }}
-                                    @else
-                                        N/A
-                                    @endif
+                                @if($courrier->destinataire)
+        {{ $courrier->destinataire->name }}
+    @elseif($courrier->email_destinataire)
+        {{ $courrier->email_destinaitaire }} 
+    @elseif($courrier->service_id)
+        {{ App\Models\Service::find($courrier->service_id)->nom ?? 'N/A' }} 
+    @else
+        N/A
+    @endif
                                 </td>
 
                                 <!-- Statut -->
