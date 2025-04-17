@@ -64,9 +64,9 @@
        optional($courrier->service)->nom ?? 
        $courrier->email_destinataire ?? 
        'Non spécifié' }}
-    @if($courrier->destinataire)(Agent)
-    @elseif($courrier->service)(Service)
-    @elseif($courrier->email_destinataire)(Externe)
+    @if($courrier->destinataire)
+    @elseif($courrier->service)
+    @elseif($courrier->email_destinataire)
     @endif
                                 </td>
 
