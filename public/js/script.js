@@ -111,15 +111,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (destinataireSelect && emailField) {
         destinataireSelect.addEventListener('change', function() {
-            // Afficher seulement si "autre administration" est sélectionné
+            // Afficher seulement pour "autre administration"
             if (this.value === 'autre') {
                 emailField.style.display = 'block';
+                // Rendre le champ obligatoire
+                document.getElementById('email_destinataire').required = true;
             } else {
                 emailField.style.display = 'none';
+                document.getElementById('email_destinataire').required = false;
             }
         });
         
-        // Déclencher l'événement au chargement pour l'état initial
+        // Déclencher au chargement
         destinataireSelect.dispatchEvent(new Event('change'));
     }
 });

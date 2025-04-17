@@ -20,6 +20,7 @@ class Courrier extends Model
         'date_reception',
         'expediteur_id', // Clé étrangère
         'destinataire_id', // Clé étrangère
+         'email_destinataire',
         'statut',
         'priorite',
         'service_id', // Clé étrangère

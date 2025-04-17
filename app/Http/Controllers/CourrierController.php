@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 
+
 class CourrierController extends Controller
 {
     public function download(PieceJointe $pieceJointe)
@@ -69,28 +70,32 @@ class CourrierController extends Controller
 
         try {
             // Création des données du courrier
-            $courrierData = [
+              $courrierData = [
                 'type' => $validated['type'],
-                'nature' => $validated['nature'] ?? null,
+                'nature' => $validated['nature'],
                 'reference' => $validated['reference'],
                 'objet' => $validated['objet'],
-                'contenu' => $validated['description'] ?? null,
+                'contenu' => $validated['description'],
                 'date_reception' => $validated['date_reception'],
                 'expediteur_id' => Auth::id(),
                 'statut' => $validated['statut'] ?? 'brouillon',
                 'priorite' => $validated['priorite'] ?? 'moyenne',
                 'created_by' => Auth::id(),
+                // Initialiser tous les champs de destinataire à null
+                'destinataire_id' => null,
+                'service_id' => null,
+                'email_destinataire' => null
             ];
-
-            // Gestion des différents types de destinataires
+    
+            // Gestion spécifique du destinataire
             if ($validated['destinataire_id'] === 'autre') {
                 $courrierData['email_destinataire'] = $validated['email_destinataire'];
             } elseif (str_starts_with($validated['destinataire_id'], 'service_')) {
-                $serviceId = str_replace('service_', '', $validated['destinataire_id']);
-                $courrierData['service_id'] = $serviceId;
+                $courrierData['service_id'] = str_replace('service_', '', $validated['destinataire_id']);
             } else {
                 $courrierData['destinataire_id'] = $validated['destinataire_id'];
             }
+    
 
            
             // Enregistrement du courrier
