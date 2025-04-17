@@ -60,14 +60,13 @@
 
                                 <!-- Destinataire -->
                                 <td class="border px-4 py-2">
-                                @if($courrier->destinataire)
-        {{ $courrier->destinataire->name }}
-    @elseif($courrier->email_destinataire)
-        {{ $courrier->email_destinaitaire }} 
-    @elseif($courrier->service_id)
-        {{ App\Models\Service::find($courrier->service_id)->nom ?? 'N/A' }} 
-    @else
-        N/A
+                                {{ optional($courrier->destinataire)->name ?? 
+       optional($courrier->service)->nom ?? 
+       $courrier->email_destinataire ?? 
+       'Non spécifié' }}
+    @if($courrier->destinataire)(Agent)
+    @elseif($courrier->service)(Service)
+    @elseif($courrier->email_destinataire)(Externe)
     @endif
                                 </td>
 
