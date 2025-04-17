@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                         <li>
-                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📋 Ajouter des Courriers</a>
+                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter des Courriers</a>
                         </li>
                         <li>
                             <a href="#" class="sidebar-link" @click.prevent="showTable = !showTable">
@@ -24,7 +24,7 @@
                         <li><a href="#" class="sidebar-link">📂 Consulter les Archives</a></li>
                         <li><a href="#" class="sidebar-link">📊 Statistiques</a></li>
                         <li>
-                            <a href="#" class="sidebar-link flex items-center justify-between">
+                            <a href="#" class="sidebar-link flex items-center justify-between">      
                                 🔔 Notifications
                                 <span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">3</span>
                             </a>
