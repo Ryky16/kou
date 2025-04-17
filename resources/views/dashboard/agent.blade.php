@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                         <li>
-                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📋 Liste des Courriers</a>
+                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📋 Ajouter des Courriers</a>
                         </li>
                         <li>
                             <a href="#" class="sidebar-link" @click.prevent="showTable = !showTable">
@@ -98,20 +98,41 @@
                 <tbody>
                     @forelse ($courriers as $courrier)
                         <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <!-- Référence -->
                             <td class="p-4">{{ $courrier->reference }}</td>
+
+                            <!-- Expéditeur -->
                             <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
-                            <td class="p-4">{{ $courrier->destinataire->name ?? 'N/A' }}</td>
+
+                            <!-- Destinataire -->
+                            <td class="p-4">
+                                @if($courrier->destinataire)
+                                    {{ $courrier->destinataire->name }}
+                                @elseif($courrier->service)
+                                    {{ $courrier->service->nom }}
+                                @elseif($courrier->email_destinataire)
+                                    {{ $courrier->email_destinataire }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+
+                            <!-- Statut -->
                             <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
                                 {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
                             </td>
+
+                            <!-- Priorité -->
                             <td class="p-4 font-bold {{ 
-                                $courrier->priorite == 'Haute' ? 'text-red-500' : 
-                                ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
+                                $courrier->priorite == 'haute' ? 'text-red-500' : 
+                                ($courrier->priorite == 'moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
                                 {{ 
-                                    $courrier->priorite == 'Haute' ? '🔴 Haute' : 
-                                    ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
+                                    $courrier->priorite == 'haute' ? '🔴 Haute' : 
+                                    ($courrier->priorite == 'moyenne' ? '🟡 Moyenne' : '🟢 Basse') 
                                 }}
                             </td>
+
+                            <!-- Actions -->
                             <td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', ['courrier_id' => $courrier->id]) }}" 
