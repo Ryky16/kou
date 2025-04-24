@@ -101,7 +101,7 @@
                 <!-- Date réception -->
                 <div class="mb-4">
                     <label for="date_reception" class="block text-gray-700 font-bold flex items-center">
-                        <span class="mr-2">📅</span> Reçu le
+                        <span class="mr-2">📅</span> Ajouter le
                     </label>
                     <div class="relative">
                         <input type="date" id="date_reception" name="date_reception" 

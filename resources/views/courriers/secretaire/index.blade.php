@@ -93,12 +93,10 @@
 
                                 <!-- Actions -->
                                 <td class="border px-4 py-2">
-                                
                                     <a href="{{ route('affectation.create', $courrier->id) }}" 
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                         🔄 Affecter
                                     </a>
-                               
                                 </td>
                             </tr>
                         @empty
