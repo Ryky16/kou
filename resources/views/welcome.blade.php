@@ -14,38 +14,35 @@
     <!-- Pour les polices -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-@include('layouts.loading-overlay')
+<body class="bg-gray-100 font-roboto">
 
-
-<body>
-
-
-    <header class="header">
-        <div class="container">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo Mairie Ziguinchor" class="logo">
+    <!-- Header -->
+    <header class="header bg-green-700 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo Mairie Ziguinchor" class="logo w-16 h-16">
             <nav>
-           
-
-                <ul class="menu">
-                    <li><a href="{{ route('bienvenue') }}" class="menu-item">Accueil</a></li>
-                    <li><a href="{{ route('login') }}" class="menu-item">Se connecter</a></li>
-                    <li><a href="{{ route('register') }}" class="menu-item">S'inscrire</a></li>
+                <ul class="menu flex space-x-4">
+                    <li><a href="{{ route('bienvenue') }}" class="menu-item hover:text-gray-300">Accueil</a></li>
+                    <li><a href="{{ route('login') }}" class="menu-item hover:text-gray-300">Se connecter</a></li>
+                    <li><a href="{{ route('register') }}" class="menu-item hover:text-gray-300">S'inscrire</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main class="main">
-        <h1 class="title">Gestion des Courriers</h1>
-        <p class="description">Une solution moderne et efficace pour gérer les courriers entrants et sortants de la Mairie de Ziguinchor</p>
+    <!-- Main -->
+    <main class="main text-center py-16">
+        <h1 class="title text-4xl font-bold text-green-700 mb-4">Gestion des Courriers</h1>
+        <p class="description text-lg text-gray-600 mb-8">Une solution moderne et efficace pour gérer les courriers entrants et sortants de la Mairie de Ziguinchor</p>
 
-        <div class="buttons">
-            <a href="{{ route('login') }}" class="btn"> 🚀 Se connecter</a>
-            <a href="{{ route('register') }}" class="btn"> ➕ S'inscrire</a>
+        <div class="buttons flex justify-center space-x-4">
+            <a href="{{ route('login') }}" class="btn bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">🚀 Se connecter</a>
+            <a href="{{ route('register') }}" class="btn bg-gray-200 text-green-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition">➕ S'inscrire</a>
         </div>
     </main>
 
-    <footer class="footer">
+    <!-- Footer -->
+    <footer class="footer bg-gray-800 text-white py-4 text-center">
         <p>&copy; 2025 Mairie de Ziguinchor - Tous droits réservés</p>
     </footer>
 </body>

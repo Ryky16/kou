@@ -48,15 +48,14 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Votre middleware personnalisé pour les rôles
-        //'auth' => \App\Http\Middleware\Authenticate::class, // Pour vérifier l'authentification
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class, // Pour vérifier l'authentification
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class, // Pour l'authentification basique
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class, // Pour définir les en-têtes de cache
         'can' => \Illuminate\Auth\Middleware\Authorize::class, // Pour vérifier les autorisations
-    //    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class, // Pour rediriger les utilisateurs authentifiés
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class ?? null, // Pour rediriger les utilisateurs authentifiés
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class, // Pour confirmer le mot de passe
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class, // Pour valider les signatures des URLs
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class, // Pour limiter les requêtes
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class, // Pour vérifier l'email
-        
     ];
 }

@@ -33,12 +33,10 @@ Route::get('/welcome', function () {
 Route::get('/redirect-dashboard', function () {
     $user = Auth::user();
 
-    // Si l'utilisateur n'est pas connecté, rediriger vers la page de bienvenue
     if (!$user) {
         return redirect()->route('bienvenue');
     }
 
-    // Redirection en fonction du rôle de l'utilisateur
     switch ($user->role->name) {
         case 'Administrateur':
             return redirect()->route('admin.dashboard');
@@ -47,7 +45,6 @@ Route::get('/redirect-dashboard', function () {
         case 'Agent':
             return redirect()->route('agent.dashboard');
         default:
-            // Si le rôle n'est pas reconnu, rediriger vers une page d'erreur ou lancer une exception
             abort(403, 'Rôle non reconnu.');
     }
 })->middleware(['auth', 'verified'])->name('redirect.dashboard');
@@ -62,7 +59,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard'); // Tableau de bord admin
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::put('/admin/users/{user}/update-role', [UserController::class, 'updateRole'])->name('admin.users.updateRole');
-   
 });
 
 /*
@@ -75,12 +71,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/secretaire/dashboard', [DashboardController::class, 'secretaire'])->name('secretaire.dashboard');
     Route::get('/agent/dashboard', [DashboardController::class, 'agent'])->name('agent.dashboard');
 });
-
-// Tableau de bord par défaut (pour les rôles non gérés)
-/*Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-*/
 
 /*
 |--------------------------------------------------------------------------
@@ -100,20 +90,21 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->group(function () {   
+Route::middleware(['auth'])->group(function () {
     // Routes pour l'affectation des courriers
     Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
     Route::post('/affectation/affecter', [AffectationController::class, 'affecter'])->name('affectation.affecter');
     Route::get('/affectation/create/{courrier}', [AffectationController::class, 'create'])->name('affectation.create');
     Route::post('/affectation/store', [AffectationController::class, 'store'])->name('affectation.store');
 
-
     // Routes pour la gestion des courriers
     Route::get('/courriers', [CourrierController::class, 'index'])->name('courriers.index');
     Route::get('/courriers/create', [CourrierController::class, 'create'])->name('courriers.create');
+    Route::post('/courriers/envoyer', [CourrierController::class, 'envoyer'])->name('courriers.envoyer');
     Route::post('/courriers', [CourrierController::class, 'store'])->name('courriers.store');
 });
 
+// Téléchargement des pièces jointes
 Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class, 'download'])
     ->name('pieces-jointes.download')
     ->middleware('can:download,pieceJointe');

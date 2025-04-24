@@ -56,7 +56,7 @@ class AuthenticatedSessionController extends Controller
             case Role::Secretaire_Municipal:
                 return redirect()->intended(route('secretaire.dashboard'))->with('success', 'Connexion réussie.');
             case Role::Agent:
-                return redirect()->intended(route('agent.dashboard'))->with('success', 'Connexion réussie.');
+                return redirect()->intended(route('agent.dashboard'))->with('success', 'Connexion réussie.');               
             default:
                 return redirect()->intended(route('dashboard'))->with('error', 'Rôle non reconnu.');
         }

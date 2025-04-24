@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                         <li>
-                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter des Courriers</a>
+                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter un Courriers</a>
                         </li>
                         <li>
                             <a href="#" class="sidebar-link" @click.prevent="showTable = !showTable">

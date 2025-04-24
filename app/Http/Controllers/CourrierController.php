@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 
-
 class CourrierController extends Controller
 {
     public function download(PieceJointe $pieceJointe)
@@ -23,11 +22,19 @@ class CourrierController extends Controller
 
     public function index()
     {
-        $courriers = Courrier::with(['expediteur', 'destinataire', 'service'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+       $user = Auth::user();
+    $query = Courrier::with(['expediteur', 'destinataire', 'service'])->orderBy('created_at', 'desc');
 
-        return view('courriers.index', compact('courriers'));
+    // Si on veut que le secrétaire ne voie que certains courriers
+    if ($user->hasRole('secretaire')) {
+        $query->where('statut', 'envoyé'); // ou toute autre condition
+    }
+
+    $courriers = $query->get();
+
+    // Afficher la vue correspondante
+    return view($user->hasRole('secretaire') ? 'courriers.secretaire.index' : 'courriers.agent.index', compact('courriers'));
+    
     }
                     
     public function create()
