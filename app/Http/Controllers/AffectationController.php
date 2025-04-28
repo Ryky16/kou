@@ -23,7 +23,7 @@ class AffectationController extends Controller
         $query->where('name', 'Agent');
     })->get();
 
-        return view('affectation.create', compact('courrier', 'service'));
+        return view('affectation.create', compact('courrier', 'services', 'agents'));
     }
 
     /**
