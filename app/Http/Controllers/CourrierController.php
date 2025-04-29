@@ -22,19 +22,8 @@ class CourrierController extends Controller
 
     public function index()
     {
-       $user = Auth::user();
-    $query = Courrier::with(['expediteur', 'destinataire', 'service'])->orderBy('created_at', 'desc');
-
-    // Si on veut que le secrétaire ne voie que certains courriers
-    if ($user->hasRole('secretaire')) {
-        $query->where('statut', 'En attente'); // ou toute autre condition
-    }
-
-    $courriers = $query->get();
-
-    // Afficher la vue correspondante
-    return view($user->hasRole('secretaire') ? 'courriers.secretaire.index' : 'courriers.agent.index', compact('courriers'));
-    
+        $courriers = Courrier::with(['expediteur', 'destinataire', 'service'])->get();
+        dd($courriers); // Vérifiez les relations et les données ici
     }
         
     

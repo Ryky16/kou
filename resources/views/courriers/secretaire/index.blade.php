@@ -40,7 +40,7 @@
                             <th class="border px-4 py-2 text-left">Référence</th>
                             <th class="border px-4 py-2 text-left">Objet</th>
                             <th class="border px-4 py-2 text-left">Expéditeur</th>
-                            <th bclass="border px-4 py-2 text-left">Destinataire</th>
+                            <th class="border px-4 py-2 text-left">Destinataire</th>
                             <th class="border px-4 py-2 text-left">Statut</th>
                             <th class="border px-4 py-2 text-left">Pièces jointes</th>
                             <th class="border px-4 py-2 text-left">Actions</th>
@@ -60,14 +60,10 @@
 
                                 <!-- Destinataire -->
                                 <td class="border px-4 py-2">
-                                {{ optional($courrier->destinataire)->name ?? 
-       optional($courrier->service)->nom ?? 
-       $courrier->email_destinataire ?? 
-       'Non spécifié' }}
-    @if($courrier->destinataire)
-    @elseif($courrier->service)
-    @elseif($courrier->email_destinataire)
-    @endif
+                                    {{ optional($courrier->destinataire)->name ?? 
+                                       optional($courrier->service)->nom ?? 
+                                       $courrier->email_destinataire ?? 
+                                       'Non spécifié' }}
                                 </td>
 
                                 <!-- Statut -->
@@ -93,10 +89,16 @@
 
                                 <!-- Actions -->
                                 <td class="border px-4 py-2">
-                                    <a href="{{ route('affectation.create', $courrier->id) }}" 
-                                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                        🔄 Affecter
-                                    </a>
+                                    @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'En attente')
+                                        <a href="{{ route('affectation.create', $courrier->id) }}" 
+                                           class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                            🔄 Affecter
+                                        </a>
+                                    @else
+                                        <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
+                                            Affectation terminée
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

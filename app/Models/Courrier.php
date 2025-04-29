@@ -12,19 +12,18 @@ class Courrier extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
-        'nature', // Ajout de la colonne "nature"
         'reference',
+        'expediteur_id',
+        'destinataire_id',
+        'service_id',
         'objet',
         'contenu',
-        'date_reception',
-        'expediteur_id', // Clé étrangère
-        'destinataire_id', // Clé étrangère
-         'email_destinataire',
+        'type',
         'statut',
         'priorite',
-        'service_id', // Clé étrangère
-        'created_by', // Clé étrangère
+        'date_reception',
+        'created_by',
+        'email_destinataire',
     ];
 
     protected $dates = [
@@ -46,13 +45,13 @@ class Courrier extends Model
         });
     }
 
-
-    // Relations
+    // Relation avec l'expéditeur
     public function expediteur()
     {
         return $this->belongsTo(User::class, 'expediteur_id');
     }
 
+    // Relation avec le destinataire
     public function destinataire()
     {
         return $this->belongsTo(User::class, 'destinataire_id');
@@ -69,6 +68,7 @@ class Courrier extends Model
         return $this->hasOne(Affectation::class);
     }
 
+    // Relation avec le service
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');

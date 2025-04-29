@@ -38,6 +38,6 @@ class User extends Authenticatable
      // Méthode pour vérifier le rôle de l'utilisateur
      public function hasRole($role)
      {
-         return $this->role->name === $role;
+         return $this->role && $this->role->name === $role;
      }
 }
