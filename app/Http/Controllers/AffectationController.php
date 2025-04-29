@@ -52,3 +52,4 @@ class AffectationController extends Controller
         }
     }
 }
+ 
