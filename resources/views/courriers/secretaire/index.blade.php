@@ -40,7 +40,7 @@
                             <th class="border px-4 py-2 text-left">Référence</th>
                             <th class="border px-4 py-2 text-left">Objet</th>
                             <th class="border px-4 py-2 text-left">Expéditeur</th>
-                            <th class="border px-4 py-2 text-left">Destinataire</th>
+                            <th bclass="border px-4 py-2 text-left">Destinataire</th>
                             <th class="border px-4 py-2 text-left">Statut</th>
                             <th class="border px-4 py-2 text-left">Pièces jointes</th>
                             <th class="border px-4 py-2 text-left">Actions</th>

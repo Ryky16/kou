@@ -27,7 +27,7 @@ class CourrierController extends Controller
 
     // Si on veut que le secrétaire ne voie que certains courriers
     if ($user->hasRole('secretaire')) {
-        $query->where('statut', 'envoyé'); // ou toute autre condition
+        $query->where('statut', 'En attente'); // ou toute autre condition
     }
 
     $courriers = $query->get();
@@ -36,7 +36,21 @@ class CourrierController extends Controller
     return view($user->hasRole('secretaire') ? 'courriers.secretaire.index' : 'courriers.agent.index', compact('courriers'));
     
     }
-                    
+        
+    
+public function envoyer(Request $request)
+{
+    $request->validate([
+        'courrier_id' => 'required|exists:courriers,id',
+    ]);
+
+    $courrier = Courrier::findOrFail($request->courrier_id);
+    $courrier->statut = 'envoyé';
+    $courrier->save();
+
+    return redirect()->back()->with('success', 'Le courrier a été envoyé avec succès.');
+}
+
     public function create()
     {
         $secretaires = User::whereHas('role', function($query) {
