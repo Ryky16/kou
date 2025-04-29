@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                     <li>
-                            <a href="{{ route('courriers.create') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
+                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
                         </li>
 
                         <li>
