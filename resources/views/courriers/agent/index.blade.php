@@ -94,7 +94,7 @@
                                         <input type="hidden" name="courrier_id" value="{{ $courrier->id }}">
                                         <button type="submit" 
                                                 class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                                                🔄 Affecter
+                                                🔄 Envoyer
                                         </button>
                                     </form>
                                 </td>

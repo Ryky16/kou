@@ -34,7 +34,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-
      // Méthode pour vérifier le rôle de l'utilisateur
      public function hasRole($role)
      {

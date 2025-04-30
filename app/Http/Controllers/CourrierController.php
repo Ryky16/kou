@@ -22,27 +22,41 @@ class CourrierController extends Controller
 
     public function index()
     {
-        $courriers = Courrier::with(['expediteur', 'destinataire', 'service'])->get();
-        dd($courriers); // Vérifiez les relations et les données ici
+        $user = Auth::user();
+
+        // Récupérer les courriers en fonction du rôle de l'utilisateur
+        $query = Courrier::with(['expediteur', 'destinataire', 'service'])->orderBy('created_at', 'desc');
+
+        if ($user->hasRole('Secretaire_Municipal')) {
+            // Le secrétaire municipal voit uniquement les courriers en brouillon
+            $query->where('statut', 'brouillon');
+        } elseif ($user->hasRole('Agent')) {
+            // L'agent voit les courriers qui lui sont affectés
+            $query->where('destinataire_id', $user->id);
+        }
+
+        $courriers = $query->get();
+
+        // Afficher la vue correspondante
+        return view($user->hasRole('Secretaire_Municipal') ? 'courriers.secretaire.index' : 'courriers.agent.index', compact('courriers'));
     }
-        
-    
-public function envoyer(Request $request)
-{
-    $request->validate([
-        'courrier_id' => 'required|exists:courriers,id',
-    ]);
 
-    $courrier = Courrier::findOrFail($request->courrier_id);
-    $courrier->statut = 'envoyé';
-    $courrier->save();
+    public function envoyer(Request $request)
+    {
+        $request->validate([
+            'courrier_id' => 'required|exists:courriers,id',
+        ]);
 
-    return redirect()->back()->with('success', 'Le courrier a été envoyé avec succès.');
-}
+        $courrier = Courrier::findOrFail($request->courrier_id);
+        $courrier->statut = 'envoyé';
+        $courrier->save();
+
+        return redirect()->back()->with('success', 'Le courrier a été envoyé avec succès.');
+    }
 
     public function create()
     {
-        $secretaires = User::whereHas('role', function($query) {
+        $secretaires = User::whereHas('role', function ($query) {
             $query->where('name', 'Secretaire_Municipal');
         })->get();
 
@@ -80,7 +94,7 @@ public function envoyer(Request $request)
 
         try {
             // Création des données du courrier
-              $courrierData = [
+            $courrierData = [
                 'type' => $validated['type'],
                 'nature' => $validated['nature'],
                 'reference' => $validated['reference'],
@@ -91,12 +105,11 @@ public function envoyer(Request $request)
                 'statut' => $validated['statut'] ?? 'brouillon',
                 'priorite' => $validated['priorite'] ?? 'moyenne',
                 'created_by' => Auth::id(),
-                // Initialiser tous les champs de destinataire à null
                 'destinataire_id' => null,
                 'service_id' => null,
-                'email_destinataire' => null
+                'email_destinataire' => null,
             ];
-    
+
             // Gestion spécifique du destinataire
             if ($validated['destinataire_id'] === 'autre') {
                 $courrierData['email_destinataire'] = $validated['email_destinataire'];
@@ -105,9 +118,7 @@ public function envoyer(Request $request)
             } else {
                 $courrierData['destinataire_id'] = $validated['destinataire_id'];
             }
-    
 
-           
             // Enregistrement du courrier
             $courrier = Courrier::create($courrierData);
 
@@ -120,7 +131,7 @@ public function envoyer(Request $request)
                         'nom_original' => $file->getClientOriginalName(),
                         'mime_type' => $file->getMimeType(),
                         'taille' => $file->getSize(),
-                        'courrier_id' => $courrier->id
+                        'courrier_id' => $courrier->id,
                     ]);
                 }
             }
@@ -129,32 +140,10 @@ public function envoyer(Request $request)
 
             return redirect()->route('courriers.index')
                 ->with('success', 'Courrier ajouté avec succès !');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()
                 ->with('error', 'Erreur lors de l\'ajout du courrier: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Vérifie que le destinataire existe
-     */
-    protected function processDestinataire($destinataireInput)
-    {
-        if ($destinataireInput === 'autre') {
-            return; // Pas de vérification pour les destinataires externes
-        }
-
-        if (str_starts_with($destinataireInput, 'service_')) {
-            $serviceId = str_replace('service_', '', $destinataireInput);
-            if (!Service::find($serviceId)) {
-                throw new \Exception("Le service sélectionné n'existe pas");
-            }
-        } else {
-            if (!User::find($destinataireInput)) {
-                throw new \Exception("Le destinataire sélectionné n'existe pas");
-            }
         }
     }
 }

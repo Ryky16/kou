@@ -89,12 +89,12 @@
 
                                 <!-- Actions -->
                                 <td class="border px-4 py-2">
-                                    @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'En attente')
+                                    @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
                                         <a href="{{ route('affectation.create', $courrier->id) }}" 
                                            class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                             🔄 Affecter
                                         </a>
-                                    @else
+                                    @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'Affecté')
                                         <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
                                             Affectation terminée
                                         </button>
