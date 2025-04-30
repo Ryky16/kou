@@ -89,12 +89,30 @@
 
                                 <!-- Actions -->
                                 <td class="border px-4 py-2">
+                                    <!-- Bouton Envoyer -->
                                     <form action="{{ route('courriers.envoyer') }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="courrier_id" value="{{ $courrier->id }}">
                                         <button type="submit" 
                                                 class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition">
                                                 🔄 Envoyer
+                                        </button>
+                                    </form>
+
+                                    <!-- Bouton Modifier -->
+                                    <a href="{{ route('courriers.edit', $courrier->id) }}" 
+                                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                        ✏️ Modifier
+                                    </a>
+
+                                    <!-- Bouton Supprimer -->
+                                    <form action="{{ route('courriers.destroy', $courrier->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                                class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?')">
+                                                🗑️ Supprimer
                                         </button>
                                     </form>
                                 </td>

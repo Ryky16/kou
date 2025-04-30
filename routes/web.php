@@ -103,6 +103,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/courriers/create', [CourrierController::class, 'create'])->name('courriers.create');
     Route::post('/courriers/envoyer', [CourrierController::class, 'envoyer'])->name('courriers.envoyer');
     Route::post('/courriers', [CourrierController::class, 'store'])->name('courriers.store');
+    Route::get('/courriers/{courrier}/edit', [CourrierController::class, 'edit'])->name('courriers.edit');
+    Route::patch('/courriers/{courrier}', [CourrierController::class, 'update'])->name('courriers.update');
+    Route::delete('/courriers/{courrier}', [CourrierController::class, 'destroy'])->name('courriers.destroy');
 });
 
 // Téléchargement des pièces jointes

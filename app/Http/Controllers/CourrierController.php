@@ -28,16 +28,13 @@ class CourrierController extends Controller
         $query = Courrier::with(['expediteur', 'destinataire', 'service'])->orderBy('created_at', 'desc');
 
         if ($user->hasRole('Secretaire_Municipal')) {
-            // Le secrétaire municipal voit uniquement les courriers en brouillon
             $query->where('statut', 'brouillon');
         } elseif ($user->hasRole('Agent')) {
-            // L'agent voit les courriers qui lui sont affectés
-            $query->where('destinataire_id', $user->id);
+            $query->where('expediteur_id', $user->id); // L'agent voit les courriers qu'il a ajoutés
         }
 
         $courriers = $query->get();
 
-        // Afficher la vue correspondante
         return view($user->hasRole('Secretaire_Municipal') ? 'courriers.secretaire.index' : 'courriers.agent.index', compact('courriers'));
     }
 
@@ -48,10 +45,21 @@ class CourrierController extends Controller
         ]);
 
         $courrier = Courrier::findOrFail($request->courrier_id);
-        $courrier->statut = 'envoyé';
-        $courrier->save();
 
-        return redirect()->back()->with('success', 'Le courrier a été envoyé avec succès.');
+        // Envoyer uniquement au secrétaire municipal
+        $secretaire = User::whereHas('role', function ($query) {
+            $query->where('name', 'Secretaire_Municipal');
+        })->first();
+
+        if ($secretaire) {
+            $courrier->destinataire_id = $secretaire->id;
+            $courrier->statut = 'envoyé';
+            $courrier->save();
+
+            return redirect()->back()->with('success', 'Le courrier a été envoyé au secrétaire municipal avec succès.');
+        }
+
+        return redirect()->back()->with('error', 'Aucun secrétaire municipal trouvé.');
     }
 
     public function create()
@@ -145,5 +153,48 @@ class CourrierController extends Controller
             return back()->withInput()
                 ->with('error', 'Erreur lors de l\'ajout du courrier: ' . $e->getMessage());
         }
+    }
+
+    public function edit(Courrier $courrier)
+    {
+        // Vérifier que l'utilisateur est l'expéditeur
+        if ($courrier->expediteur_id !== Auth::id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
+        }
+
+        $services = Service::all();
+        return view('courriers.edit', compact('courrier', 'services'));
+    }
+
+    public function update(Request $request, Courrier $courrier)
+    {
+        // Vérifier que l'utilisateur est l'expéditeur
+        if ($courrier->expediteur_id !== Auth::id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
+        }
+
+        $validated = $request->validate([
+            'objet' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+        ]);
+
+        $courrier->update($validated);
+
+        return redirect()->route('courriers.index')
+            ->with('success', 'Courrier modifié avec succès.');
+    }
+
+    public function destroy(Courrier $courrier)
+    {
+        // Vérifier que l'utilisateur est l'expéditeur
+        if ($courrier->expediteur_id !== Auth::id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à supprimer ce courrier.');
+        }
+
+        $courrier->delete();
+
+        return redirect()->route('courriers.index')
+            ->with('success', 'Courrier supprimé avec succès.');
     }
 }
