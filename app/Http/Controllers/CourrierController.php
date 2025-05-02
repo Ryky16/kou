@@ -27,6 +27,12 @@ class CourrierController extends Controller
         // Récupérer tous les courriers pour les deux rôles
         $query = Courrier::with(['expediteur', 'destinataire', 'service'])->orderBy('created_at', 'desc');
 
+        // Si l'utilisateur est un secrétaire municipal, il voit tous les courriers
+        if ($user->hasRole('Secretaire_Municipal')) {
+            $courriers = $query->get();
+            return view('courriers.secretaire.index', compact('courriers'));
+        }
+
         // Si l'utilisateur est un agent, il voit les courriers qu'il a ajoutés ou qui lui sont affectés
         if ($user->hasRole('Agent')) {
             $query->where(function ($q) use ($user) {
@@ -34,15 +40,7 @@ class CourrierController extends Controller
                   ->orWhere('destinataire_id', $user->id) // Courriers affectés à l'agent
                   ->orWhereNull('destinataire_id'); // Courriers non affectés (ajoutés par le secrétaire municipal)
             });
-        }
-
-        // Si l'utilisateur est un secrétaire municipal, il voit tous les courriers
-        $courriers = $query->get();
-
-        // Vérifier si l'utilisateur est un agent ou un secrétaire municipal
-        if ($user->hasRole('Secretaire_Municipal')) {
-            return view('courriers.secretaire.index', compact('courriers'));
-        } elseif ($user->hasRole('Agent')) {
+            $courriers = $query->get();
             return view('courriers.agent.index', compact('courriers'));
         }
     }

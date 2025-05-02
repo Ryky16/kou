@@ -114,6 +114,7 @@
                                     ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
                                 }}
                             </td>
+                            <!-- Actions -->
                             <td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', $courrier->id) }}" 
