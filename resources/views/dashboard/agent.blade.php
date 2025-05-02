@@ -3,7 +3,7 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
         <!-- Sidebar -->
-        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 text-white shadow-md p-4 flex flex-col h-full min-h-screen bg-blue-800">
+        <aside :class="sidebarOpen ? 'block' : 'hidden'" class="w-64 text-white shadow-md p-4 flex flex-col h-full min-h-screen">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold flex items-center justify-center mb-4">
                     <span class="mr-2">📂</span> Menu Agent
@@ -133,17 +133,23 @@
                             </td>
 
                             <!-- Actions -->
-                            <td class="p-4 border-r border-gray-200">
-                                @if($courrier->statut == 'En attente')
-                                    <a href="{{ route('affectation.create', ['courrier_id' => $courrier->id]) }}" 
-                                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
-                                       ➕ Affecter
-                                    </a>
-                                @else
-                                    <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
-                                        Affectation terminée
+                            <td class="border px-4 py-2">
+                                <!-- Bouton Modifier -->
+                                <a href="{{ route('courriers.edit', $courrier->id) }}" 
+                                   class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                    ✏️ Modifier
+                                </a>
+
+                                <!-- Bouton Supprimer -->
+                                <form action="{{ route('courriers.destroy', $courrier->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?')">
+                                            🗑️ Supprimer
                                     </button>
-                                @endif
+                                </form>
                             </td>
                         </tr>
                     @empty
@@ -160,6 +166,7 @@
             <div class="mt-6">
                 {{ $courriers->links('pagination::bootstrap-4') }}
             </div>
+            <script src="https://cdn.tailwindcss.com"></script>
         </main>
     </div>
 </x-app-layout>

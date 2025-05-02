@@ -90,14 +90,14 @@
                                 <!-- Actions -->
                                 <td class="border px-4 py-2">
                                     <!-- Bouton Envoyer -->
-                                    <form action="{{ route('courriers.envoyer') }}" method="POST" class="inline">
+                                    <!--form action="{{ route('courriers.envoyer') }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="courrier_id" value="{{ $courrier->id }}">
                                         <button type="submit" 
                                                 class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition">
                                                 🔄 Envoyer
                                         </button>
-                                    </form>
+                                    </form-->
 
                                     <!-- Bouton Modifier -->
                                     <a href="{{ route('courriers.edit', $courrier->id) }}" 
