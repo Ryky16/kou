@@ -166,8 +166,10 @@ class CourrierController extends Controller
 
     public function edit(Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
-        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
+        $user = Auth::user();
+
+        // Vérifier que l'utilisateur est l'expéditeur, le destinataire ou un agent
+        if ($courrier->expediteur_id !== $user->id && $courrier->destinataire_id !== $user->id && !$user->hasRole('Agent')) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
         }
 
@@ -177,8 +179,10 @@ class CourrierController extends Controller
 
     public function update(Request $request, Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
-        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
+        $user = Auth::user();
+
+        // Vérifier que l'utilisateur est l'expéditeur, le destinataire ou un agent
+        if ($courrier->expediteur_id !== $user->id && $courrier->destinataire_id !== $user->id && !$user->hasRole('Agent')) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
         }
 
@@ -196,8 +200,10 @@ class CourrierController extends Controller
 
     public function destroy(Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
-        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
+        $user = Auth::user();
+
+        // Vérifier que l'utilisateur est l'expéditeur, le destinataire ou un agent
+        if ($courrier->expediteur_id !== $user->id && $courrier->destinataire_id !== $user->id && !$user->hasRole('Agent')) {
             abort(403, 'Vous n\'êtes pas autorisé à supprimer ce courrier.');
         }
 
