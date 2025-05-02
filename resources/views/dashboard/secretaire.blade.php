@@ -94,6 +94,7 @@
                         <th class="p-4 text-left">Destinataire</th>
                         <th class="p-4 text-left">Statut</th>
                         <th class="p-4 text-left">Priorité</th>
+                        <th class="p-4 text-left">Pièces jointes</th>
                         <th class="p-4 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -102,7 +103,17 @@
                         <tr class="border-b border-gray-200 hover:bg-gray-50">
                             <td class="p-4">{{ $courrier->reference }}</td>
                             <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td> <!-- Affiche le nom de l'expéditeur -->
-                            <td class="p-4">{{ $courrier->destinataire->name ?? 'N/A' }}</td> <!-- Affiche le nom du destinataire -->
+                            <td class="p-4">
+                                @if($courrier->destinataire)
+                                    {{ $courrier->destinataire->name }}
+                                @elseif($courrier->service)
+                                    {{ $courrier->service->nom }}
+                                @elseif($courrier->email_destinataire)
+                                    {{ $courrier->email_destinataire }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
                                 {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
                             </td>
@@ -113,6 +124,18 @@
                                     $courrier->priorite == 'Haute' ? '🔴 Haute' : 
                                     ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
                                 }}
+                            </td>
+                            <!-- Pièces jointes -->
+                            <td class="p-4">
+                                @forelse($courrier->piecesJointes as $piece)
+                                    <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                                       target="_blank" 
+                                       class="text-blue-500 hover:underline block">
+                                        📥 {{ $piece->nom_original }}
+                                    </a>
+                                @empty
+                                    <span class="text-gray-500 italic">Aucun document</span>
+                                @endforelse
                             </td>
                             <!-- Actions -->
                             <td class="p-4 border-r border-gray-200">
