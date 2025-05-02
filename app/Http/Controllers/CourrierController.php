@@ -30,8 +30,9 @@ class CourrierController extends Controller
         // Si l'utilisateur est un agent, il voit les courriers qu'il a ajoutés ou qui lui sont affectés
         if ($user->hasRole('Agent')) {
             $query->where(function ($q) use ($user) {
-                $q->where('expediteur_id', $user->id)
-                  ->orWhere('destinataire_id', $user->id);
+                $q->where('expediteur_id', $user->id) // Courriers ajoutés par l'agent
+                  ->orWhere('destinataire_id', $user->id) // Courriers affectés à l'agent
+                  ->orWhereNull('destinataire_id'); // Courriers non affectés (ajoutés par le secrétaire municipal)
             });
         }
 
@@ -165,8 +166,8 @@ class CourrierController extends Controller
 
     public function edit(Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur
-        if ($courrier->expediteur_id !== Auth::id()) {
+        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
+        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
         }
 
@@ -176,8 +177,8 @@ class CourrierController extends Controller
 
     public function update(Request $request, Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur
-        if ($courrier->expediteur_id !== Auth::id()) {
+        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
+        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
         }
 
@@ -195,8 +196,8 @@ class CourrierController extends Controller
 
     public function destroy(Courrier $courrier)
     {
-        // Vérifier que l'utilisateur est l'expéditeur
-        if ($courrier->expediteur_id !== Auth::id()) {
+        // Vérifier que l'utilisateur est l'expéditeur ou le destinataire
+        if ($courrier->expediteur_id !== Auth::id() && $courrier->destinataire_id !== Auth::id()) {
             abort(403, 'Vous n\'êtes pas autorisé à supprimer ce courrier.');
         }
 
