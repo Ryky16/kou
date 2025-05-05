@@ -93,9 +93,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Routes pour l'affectation des courriers
     Route::get('/affectation', [AffectationController::class, 'index'])->name('affectation.index');
-    Route::get('/affectation/create/{courrier}', [AffectationController::class, 'create'])->name('affectation.create');
+    Route::get('/affectation/{courrier}/create', [AffectationController::class, 'create'])->name('affectation.create');
     Route::post('/affectation/affecter', [AffectationController::class, 'affecter'])->name('affectation.affecter');
-
     Route::post('/affectation/store', [AffectationController::class, 'store'])->name('affectation.store');
 
     // Routes pour la gestion des courriers
