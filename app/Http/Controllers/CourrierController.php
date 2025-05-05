@@ -30,7 +30,7 @@ class CourrierController extends Controller
         // Si l'utilisateur est un secrétaire municipal, il voit tous les courriers
         if ($user->hasRole('Secretaire_Municipal')) {
             $courriers = $query->get();
-            return view('courriers.secretaire.index', compact('courriers'));
+            return view('courriers.secretaire.index', compact('courrier'));
         }
 
         // Si l'utilisateur est un agent, il voit les courriers qu'il a ajoutés ou qui lui sont affectés
