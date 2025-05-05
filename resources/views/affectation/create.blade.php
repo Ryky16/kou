@@ -2,17 +2,19 @@
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
         <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
             <!-- Titre principal -->
-            <h2 class="text-3xl font-bold text-center text-green-700 mb-6">📤 Affecter un Courrier</h2>
+            <h2 class="text-3xl font-bold text-center text-green-700 mb-6">
+               <!-- Bouton Retour à gauche -->
+            <a href="javascript:history.back()" 
+                   class="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                    ⬅️ Retour
+                </a> 
+            📤 Affecter un Courrier</h2>
             <p class="text-sm text-center text-gray-600 mb-6">
                 Remplissez les informations ci-dessous pour affecter ce courrier à un destinataire.
             </p>
 
-            <!-- Bouton Retour à gauche -->
-            <a href="javascript:history.back()" 
-                   class="text-blue-600 hover:underline text-sm flex items-center gap-1">
-                    ⬅️ Retour
-                </a>
-                
+            
+
             <!-- Message d'erreur -->
             @if(session('error'))
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
