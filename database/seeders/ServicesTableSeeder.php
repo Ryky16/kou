@@ -25,7 +25,7 @@ class ServicesTableSeeder extends Seeder
                 'telephone' => '+221 33 987 65 43', // Format Sénégal
             ],
             [
-                'nom' => 'Service Urbanisme',
+                'nom' => 'Services Techniques Communaux',
                 'description' => 'Gestion des permis de construire et documents d\'urbanisme',
                 'responsable_id' => null,
                 'email' => 'urbanisme@gmail.com',
