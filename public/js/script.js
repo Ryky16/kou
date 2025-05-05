@@ -132,5 +132,4 @@ document.getElementById('destinataire_type').addEventListener('change', function
     const type = this.value;
     document.getElementById('agent_field').style.display = type === 'agent' ? 'block' : 'none';
     document.getElementById('service_field').style.display = type === 'service' ? 'block' : 'none';
-    document.getElementById('email_field').style.display = type === 'email' ? 'block' : 'none';
 });

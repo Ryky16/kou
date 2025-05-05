@@ -33,7 +33,7 @@ class AffectationController extends Controller
             'courrier_id' => 'required|exists:courriers,id',
             'destinataire_type' => 'required|in:agent,service,email',
             'destinataire_id' => 'nullable|integer',
-            'email_destinataire' => 'nullable|email|required_if:destinataire_type,email',
+            'email_destinataire' => 'required|email', // Exiger l'adresse e-mail
             'observation' => 'nullable|string|max:1000',
         ]);
 
@@ -44,17 +44,15 @@ class AffectationController extends Controller
             if ($request->destinataire_type === 'agent') {
                 $courrier->destinataire_id = $request->destinataire_id;
                 $courrier->service_id = null;
-                $courrier->email_destinataire = null;
             } elseif ($request->destinataire_type === 'service') {
                 $courrier->service_id = $request->destinataire_id;
                 $courrier->destinataire_id = null;
-                $courrier->email_destinataire = null;
-            } elseif ($request->destinataire_type === 'email') {
-                $courrier->email_destinataire = $request->email_destinataire;
+            } else {
                 $courrier->destinataire_id = null;
                 $courrier->service_id = null;
             }
 
+            $courrier->email_destinataire = $request->email_destinataire; // Ajouter l'adresse e-mail
             $courrier->statut = 'Affecté'; // Mettre à jour le statut
             $courrier->save();
 
@@ -67,7 +65,7 @@ class AffectationController extends Controller
                 'observation' => $request->observation,
             ]);
 
-            return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès !');
+            return redirect()->route('courriers.index')->with('success', '✅ Le courrier a été affecté avec succès à l\'adresse e-mail : ' . $request->email_destinataire);
         } catch (\Exception $e) {
             return back()->with('error', '❌ Erreur lors de l\'affectation : ' . $e->getMessage());
         }
