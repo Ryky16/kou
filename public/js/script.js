@@ -127,9 +127,48 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// Gestion dynamique des champs en fonction du type de destinataire
-document.getElementById('destinataire_type').addEventListener('change', function () {
-    const type = this.value;
-    document.getElementById('agent_field').style.display = type === 'agent' ? 'block' : 'none';
-    document.getElementById('service_field').style.display = type === 'service' ? 'block' : 'none';
+document.addEventListener('DOMContentLoaded', function () {
+    const destinataireType = document.getElementById('destinataire_type');
+    const agentField = document.getElementById('agent_field');
+    const serviceField = document.getElementById('service_field');
+    const emailField = document.getElementById('email_field');
+    const emailInput = document.getElementById('email_destinataire');
+    const agentSelect = document.getElementById('destinataire_id_agent');
+
+    destinataireType.addEventListener('change', function () {
+        const type = this.value;
+
+        // Afficher ou masquer les champs en fonction du type de destinataire
+        if (type === 'agent') {
+            agentField.style.display = 'block';
+            serviceField.style.display = 'none';
+            emailField.style.display = 'block';
+            emailInput.required = true;
+        } else if (type === 'service') {
+            agentField.style.display = 'none';
+            serviceField.style.display = 'block';
+            emailField.style.display = 'block';
+            emailInput.required = true;
+        } else if (type === 'email') {
+            agentField.style.display = 'none';
+            serviceField.style.display = 'none';
+            emailField.style.display = 'block';
+            emailInput.required = true;
+        } else {
+            agentField.style.display = 'none';
+            serviceField.style.display = 'none';
+            emailField.style.display = 'none';
+            emailInput.required = false;
+        }
+    });
+
+    // Afficher l'adresse e-mail de l'agent sélectionné
+    if (agentSelect) {
+        agentSelect.addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const email = selectedOption.getAttribute('data-email');
+            emailInput.value = email || '';
+        });
+    }
 });
+

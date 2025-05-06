@@ -34,6 +34,7 @@ class AffectationController extends Controller
         $request->validate([
             'courrier_id' => 'required|exists:courriers,id',
             'destinataire_type' => 'required|in:agent,service,email',
+            'destinataire_id' => 'nullable|integer',
             'email_destinataire' => 'required|email', // Adresse e-mail obligatoire
             'observation' => 'nullable|string|max:1000',
         ]);
@@ -41,28 +42,24 @@ class AffectationController extends Controller
         try {
             $courrier = Courrier::findOrFail($request->courrier_id);
 
-            // Affecter le courrier
-            if ($request->destinataire_type === 'service') {
-                $courrier->service_id = $request->destinataire_id;
-            }
-
+            // Affecter l'adresse e-mail au courrier
             $courrier->email_destinataire = $request->email_destinataire;
-            $courrier->statut = 'Affecté'; // Mise à jour du statut
+            $courrier->statut = 'Affecté'; // Mettre à jour le statut
             $courrier->save();
 
             // Enregistrer l'affectation
             Affectation::create([
                 'courrier_id' => $courrier->id,
-                'user_id' => null, // Pas d'utilisateur direct pour les services ou e-mails
+                'user_id' => $request->destinataire_id ?? null,
                 'statut' => 'non_lu',
                 'created_by' => Auth::id(),
                 'observation' => $request->observation,
             ]);
 
-            // Envoyer un e-mail au destinataire
-            Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
+            // Simuler l'envoi d'un e-mail (vous pouvez utiliser Laravel Mail ici)
+            // Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
 
-            return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès et envoyé par e-mail !');
+            return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
             return back()->with('error', '❌ Erreur lors de l\'affectation : ' . $e->getMessage());
         }
