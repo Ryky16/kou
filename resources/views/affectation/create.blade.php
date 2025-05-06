@@ -3,24 +3,16 @@
         <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
             <!-- Titre principal -->
             <h2 class="text-3xl font-bold text-center text-green-700 mb-6">
-              <!-- Bouton Retour à gauche -->
-              <a href="javascript:history.back()" 
-                   class="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                <a href="javascript:history.back()" class="text-blue-600 hover:underline text-sm flex items-center gap-1">
                     ⬅️ Retour
-                </a>
-                    📤 Affecter un Courrier
+                </a> 
+                📤 Affecter un Courrier
             </h2>
             <p class="text-sm text-center text-gray-600 mb-6">
                 Remplissez les informations ci-dessous pour affecter ce courrier à un destinataire.
             </p>
 
-            <!-- Message de confirmation ou d'erreur -->
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-
+            <!-- Message d'erreur -->
             @if(session('error'))
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                     {{ session('error') }}
@@ -43,22 +35,10 @@
                 <div>
                     <label for="destinataire_type" class="block text-sm font-medium text-gray-700">Type de destinataire</label>
                     <select id="destinataire_type" name="destinataire_type" 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
                         <option value="">-- Sélectionnez un type --</option>
-                        <option value="agent">Agent</option>
-                        <option value="service">Service</option>
-                        <option value="email">Partenaire</option>
-                    </select>
-                </div>
-
-                <!-- Liste des agents -->
-                <div id="agent_field" style="display: none;">
-                    <label for="destinataire_id_agent" class="block text-sm font-medium text-gray-700">Agent</label>
-                    <select id="destinataire_id_agent" name="destinataire_id" 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
-                        @foreach($agents as $agent)
-                            <option value="{{ $agent->id }}">{{ $agent->name }} ({{ $agent->email }})</option>
-                        @endforeach
+                        <option value="service">Services</option>
+                        <option value="email">Partenaires</option>
                     </select>
                 </div>
 
@@ -74,8 +54,10 @@
                 </div>
 
                 <!-- Adresse e-mail -->
-                <div>
-                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
+                <div id="email_field">
+                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">
+                        Adresse e-mail du destinataire
+                    </label>
                     <input type="email" id="email_destinataire" name="email_destinataire" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                            placeholder="Ex : destinataire@gmail.com" required>
@@ -100,5 +82,11 @@
         </div>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/script.js') }}"></script>       
+    <script src="{{ asset('js/script.js') }}"></script>      
 </x-app-layout>
+
+
+
+
+
+     
