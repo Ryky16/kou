@@ -56,8 +56,8 @@ class AffectationController extends Controller
                 'observation' => $request->observation,
             ]);
 
-            // Simuler l'envoi d'un e-mail (vous pouvez utiliser Laravel Mail ici)
-            // Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
+            // Envoyer un e-mail au destinataire
+            Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
 
             return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
