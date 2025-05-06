@@ -75,7 +75,7 @@
 
                 <!-- Adresse e-mail -->
                 <div>
-                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
+                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Partenaire</label>
                     <input type="email" id="email_destinataire" name="email_destinataire" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                            placeholder="Ex : destinataire@gmail.com" required>
@@ -93,7 +93,7 @@
                 <div class="flex justify-center">
                     <button type="submit" 
                             class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                        ✅ Affecter
+                            📩 Envoyer
                     </button>
                 </div>
             </form>
