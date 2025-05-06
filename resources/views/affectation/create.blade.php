@@ -47,7 +47,7 @@
                         <option value="">-- Sélectionnez un type --</option>
                         <option value="agent">Agent</option>
                         <option value="service">Service</option>
-                        <option value="email">Adresse e-mail</option>
+                        <option value="email">Partenaire</option>
                     </select>
                 </div>
 
@@ -75,7 +75,7 @@
 
                 <!-- Adresse e-mail -->
                 <div>
-                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Partenaire</label>
+                    <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
                     <input type="email" id="email_destinataire" name="email_destinataire" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
                            placeholder="Ex : destinataire@gmail.com" required>
