@@ -100,5 +100,5 @@
         </div>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>       
 </x-app-layout>
