@@ -46,6 +46,18 @@
                 </div>
 
                 <!-- Liste des agents -->
+                <!--div id="agent_field" style="display: none;">
+                    <label for="destinataire_id_agent" class="block text-sm font-medium text-gray-700">Agents</label>
+                    <select id="destinataire_id_agent" name="destinataire_id" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                        <option value="">-- Sélectionnez un agent --</option>
+                        @foreach($agents as $agent)
+                            <option value="{{ $agent->id }}" data-email="{{ $agent->email }}">{{ $agent->name }}</option>
+                        @endforeach
+                    </select>
+                </div-->
+
+                <!-- Liste des agents -->
                 <div id="agent_field" style="display: none;">
                     <label for="destinataire_id_agent" class="block text-sm font-medium text-gray-700">Agents</label>
                     <select id="destinataire_id_agent" name="destinataire_id" 
@@ -57,12 +69,24 @@
                     </select>
                 </div>
 
+                <!-- Liste des services -->
+                <div id="service_field" style="display: none;">
+                    <label for="destinataire_id_service" class="block text-sm font-medium text-gray-700">Services</label>
+                    <select id="destinataire_id_service" name="destinataire_id" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                        <option value="">-- Sélectionnez un service --</option>
+                        @foreach($services as $service)
+                            <option value="{{ $service->id }}">{{ $service->nom }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Adresse e-mail -->
                 <div id="email_field" style="display: none;">
                     <label for="email_destinataire" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
                     <input type="email" id="email_destinataire" name="email_destinataire" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
-                           placeholder="Ex : destinataire@gmail.com" readonly>
+                           placeholder="Ex : destinataire@gmail.com">
                 </div>
 
                 <!-- Observation -->
