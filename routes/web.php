@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +112,26 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class, 'download'])
     ->name('pieces-jointes.download')
     ->middleware('can:download,pieceJointe');
+
+/*
+|--------------------------------------------------------------------------
+| Route pour tester l'envoi d'e-mails
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/test-email', function () {
+    $details = [
+        'title' => 'Test Email from Laravel',
+        'body' => 'Ceci est un e-mail de test envoyé depuis Laravel.'
+    ];
+
+    Mail::raw($details['body'], function ($message) use ($details) {
+        $message->to('r.rykydiatta@gmail.com') // Remplacez par l'adresse e-mail du destinataire
+                ->subject($details['title']);
+    });
+
+    return 'Email envoyé avec succès !';
+});
 
 /*
 |--------------------------------------------------------------------------
