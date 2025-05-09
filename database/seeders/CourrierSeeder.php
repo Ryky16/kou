@@ -27,7 +27,7 @@ class CourrierSeeder extends Seeder
                 'type' => 'entrant',
                 'expediteur_id' => $secretaire->id, // Modifié: ne peut pas être null
                 'destinataire_id' => $agent->id,
-                'service_id' => $services->where('nom', 'Service Urbanisme')->first()->id,
+                'service_id' => $services->where('nom', 'Services Techniques Communaux')->first()->id,
                 'statut' => 'envoyé', // Modifié: doit être 'brouillon', 'envoyé' ou 'traité'
                 'priorite' => 'moyenne', // Modifié: doit être 'basse', 'moyenne' ou 'haute'
                 'date_reception' => now(),
