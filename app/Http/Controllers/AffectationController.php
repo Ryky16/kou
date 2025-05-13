@@ -56,8 +56,19 @@ class AffectationController extends Controller
                 'observation' => $request->observation,
             ]);
 
-            // Envoyer un e-mail au destinataire
-            Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
+            // Envoyer un e-mail au 
+            $details=['title'=> 'Nouveau courrier Affecté',
+                      'body' => "Un nouveau courrier vous a été affecté.
+                      \n\nRéférence : {$courrier->reference}\nObjet : {$courrier->objet}\n\nMerci de vérifier votre 
+                      boîte de réception pour plus de détails."];
+            
+            Mail::raw($details['body'], function($message)use($details,$request)
+                        {$message->to($request->email_destinataire)
+                                ->subject($details['title']);
+
+                        });
+
+            //Mail::to($request->email_destinataire)->send(new CourrierAffecte($courrier));
 
             return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
