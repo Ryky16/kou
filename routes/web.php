@@ -115,23 +115,23 @@ Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class,
 
 /*
 |--------------------------------------------------------------------------
-| Route pour tester l'envoi d'e-mails
+| Route pour tester l'envoi d'e-mails (désactivée)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/test-email', function () {
-    $details = [
-        'title' => 'Test Email from Laravel',
-        'body' => 'Ceci est un e-mail de test envoyé depuis Laravel.'
-    ];
+// Route::get('/test-email', function () {
+//     $details = [
+//         'title' => 'Test Email from Laravel',
+//         'body' => 'Ceci est un e-mail de test envoyé depuis Laravel.'
+//     ];
 
-    Mail::raw($details['body'], function ($message) use ($details) {
-        $message->to('r.rykydiatta@gmail.com') // Remplacez par l'adresse e-mail du destinataire
-                ->subject($details['title']);
-    });
+//     Mail::raw($details['body'], function ($message) use ($details) {
+//         $message->to('r.rykydiatta@gmail.com') // Remplacez par l'adresse e-mail du destinataire
+//                 ->subject($details['title']);
+//     });
 
-    return 'Email envoyé avec succès !';
-});
+//     return 'Email envoyé avec succès !';
+// });
 
 /*
 |--------------------------------------------------------------------------
