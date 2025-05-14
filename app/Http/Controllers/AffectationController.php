@@ -71,7 +71,7 @@ class AffectationController extends Controller
             return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
             // Journaliser l'erreur
-            \Log::error('Erreur lors de l\'affectation : ' . $e->getMessage());
+            Log::error('Erreur lors de l\'affectation : ' . $e->getMessage());
 
             return back()->with('error', '❌ Une erreur est survenue : ' . $e->getMessage());
         }
