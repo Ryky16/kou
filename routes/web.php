@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/courriers/{courrier}', [CourrierController::class, 'update'])->name('courriers.update');
     Route::delete('/courriers/{courrier}', [CourrierController::class, 'destroy'])->name('courriers.destroy');
     Route::post('/courriers/envoyer', [CourrierController::class, 'envoyer'])->name('courriers.envoyer');
+    Route::post('/courriers/{courrier}/affecter', [CourrierController::class, 'affecter'])->name('courriers.affecter');
 });
 
 // Téléchargement des pièces jointes

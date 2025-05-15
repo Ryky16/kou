@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class CourrierController extends Controller
 {
@@ -209,5 +211,39 @@ class CourrierController extends Controller
 
         return redirect()->route('courriers.index')
             ->with('success', 'Courrier supprimé avec succès.');
+    }
+
+    public function affecter(Courrier $courrier)
+    {
+        try {
+            // Vérifier si le courrier a une adresse e-mail de destinataire
+            if (!$courrier->email_destinataire) {
+                return back()->with('error', '❌ Ce courrier n\'a pas d\'adresse e-mail de destinataire.');
+            }
+
+            // Envoyer l'e-mail avec les pièces jointes
+            Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
+                $message->to($courrier->email_destinataire)
+                        ->subject('📩 Nouveau Courrier Affecté');
+
+                foreach ($courrier->piecesJointes as $pieceJointe) {
+                    $message->attach(storage_path('app/public/' . $pieceJointe->chemin), [
+                        'as' => $pieceJointe->nom_original,
+                        'mime' => $pieceJointe->mime_type,
+                    ]);
+                }
+            });
+
+            // Mettre à jour le statut du courrier
+            $courrier->statut = 'Affecté';
+            $courrier->save();
+
+            return back()->with('success', '✅ Courrier affecté avec succès à ' . $courrier->email_destinataire);
+        } catch (\Exception $e) {
+            // Journaliser l'erreur
+            Log::error('Erreur lors de l\'affectation : ' . $e->getMessage());
+
+            return back()->with('error', '❌ Une erreur est survenue : ' . $e->getMessage());
+        }
     }
 }
