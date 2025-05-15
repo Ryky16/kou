@@ -158,7 +158,9 @@
             </optgroup>
             
             <!-- Option externe -->
-            <option value="autre">Autre administration</option>
+             <optgroup label="Externe">
+            <option value="autre">Partenaires</option>
+            </optgroup>
         </select>
     </div>
 </div>
@@ -220,7 +222,7 @@
                 <!-- Bouton de soumission -->
                 <button type="submit" 
                     class="w-full bg-green-600 py-3 rounded-lg font-semibold text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300">
-                    ✅ Ajouter un courrier
+                    ✅ Ajouter le courrier
                 </button>
             </form>
             <script src="https://cdn.tailwindcss.com"></script>

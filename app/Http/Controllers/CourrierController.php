@@ -222,7 +222,7 @@ class CourrierController extends Controller
             }
 
             // Envoyer l'e-mail avec les pièces jointes
-            Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
+            /*Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
                 $message->to($courrier->email_destinataire)
                         ->subject('📩 Nouveau Courrier Affecté');
 
@@ -233,6 +233,20 @@ class CourrierController extends Controller
                     ]);
                 }
             });
+*/
+
+            Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
+    $message->to($courrier->email_destinataire)
+            ->subject('📩 Courrier Affecté - Réf : ' . $courrier->reference);
+
+    foreach ($courrier->piecesJointes as $pieceJointe) {
+        $message->attach(storage_path('app/public/' . $pieceJointe->chemin), [
+            'as' => $pieceJointe->nom_original,
+            'mime' => $pieceJointe->mime_type,
+        ]);
+    }
+});
+
 
             // Mettre à jour le statut du courrier
             $courrier->statut = 'Affecté';

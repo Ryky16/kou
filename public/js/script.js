@@ -181,6 +181,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const selectDestinataire = document.getElementById('destinataire_id');
+    const emailField = document.getElementById('email-destinataire');
+
+    selectDestinataire.addEventListener('change', function () {
+        const value = this.value;
+        // Affiche le champ email pour tout type de destinataire sélectionné (agent, service ou partenaire)
+        if (value && value !== '') {
+            emailField.style.display = 'block';
+        } else {
+            emailField.style.display = 'none';
+        }
+    });
+});
+
 
 
 
