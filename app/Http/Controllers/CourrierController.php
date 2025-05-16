@@ -177,24 +177,43 @@ class CourrierController extends Controller
         return view('courriers.edit', compact('courrier', 'services'));
     }
 
-    public function update(Request $request, Courrier $courrier)
+    public function update(Request $request, $id)
     {
-        $user = Auth::user();
+        $courrier = Courrier::findOrFail($id);
 
-        // Vérifier que l'utilisateur est l'expéditeur, le destinataire ou un agent
-        if ($courrier->expediteur_id !== $user->id && $courrier->destinataire_id !== $user->id && !$user->hasRole('Agent')) {
-            abort(403, 'Vous n\'êtes pas autorisé à modifier ce courrier.');
-        }
-
-        $validated = $request->validate([
-            'objet' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+        $request->validate([
+            'type' => 'required',
+            'nature' => 'required',
+            'reference' => 'required',
+            'objet' => 'required',
+            'description' => 'required',
+            'date_reception' => 'nullable|date',
+            'priorite' => 'required',
+            'pieces_jointes.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:10240',
         ]);
 
-        $courrier->update($validated);
+        $courrier->update([
+            'type' => $request->type,
+            'nature' => $request->nature,
+            'reference' => $request->reference,
+            'objet' => $request->objet,
+            'contenu' => $request->description,
+            'date_reception' => $request->date_reception,
+            'priorite' => $request->priorite,
+        ]);
 
-        return redirect()->route('courriers.index')
+        // Ajout de nouvelles pièces jointes
+        if ($request->hasFile('pieces_jointes')) {
+            foreach ($request->file('pieces_jointes') as $file) {
+                $chemin = $file->store('pieces_jointes', 'public');
+                $courrier->piecesJointes()->create([
+                    'nom_original' => $file->getClientOriginalName(),
+                    'chemin' => $chemin,
+                ]);
+            }
+        }
+
+        return redirect()->route('courriers.edit', $courrier->id)
             ->with('success', 'Courrier modifié avec succès.');
     }
 
@@ -222,9 +241,9 @@ class CourrierController extends Controller
             }
 
             // Envoyer l'e-mail avec les pièces jointes
-            /*Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
+            Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
                 $message->to($courrier->email_destinataire)
-                        ->subject('📩 Nouveau Courrier Affecté');
+                        ->subject('📩 Courrier Affecté - Réf : ' . $courrier->reference);
 
                 foreach ($courrier->piecesJointes as $pieceJointe) {
                     $message->attach(storage_path('app/public/' . $pieceJointe->chemin), [
@@ -233,20 +252,6 @@ class CourrierController extends Controller
                     ]);
                 }
             });
-*/
-
-            Mail::send('emails.courrier_affecte', compact('courrier'), function ($message) use ($courrier) {
-    $message->to($courrier->email_destinataire)
-            ->subject('📩 Courrier Affecté - Réf : ' . $courrier->reference);
-
-    foreach ($courrier->piecesJointes as $pieceJointe) {
-        $message->attach(storage_path('app/public/' . $pieceJointe->chemin), [
-            'as' => $pieceJointe->nom_original,
-            'mime' => $pieceJointe->mime_type,
-        ]);
-    }
-});
-
 
             // Mettre à jour le statut du courrier
             $courrier->statut = 'Affecté';

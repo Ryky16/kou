@@ -5,6 +5,7 @@ use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PieceJointeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -113,6 +114,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class, 'download'])
     ->name('pieces-jointes.download')
     ->middleware('can:download,pieceJointe');
+
+// Suppression des pièces jointes
+Route::delete('/pieces-jointes/{pieceJointe}', [PieceJointeController::class, 'destroy'])->name('pieces_jointes.destroy');
 
 /*
 |--------------------------------------------------------------------------
