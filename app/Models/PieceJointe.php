@@ -21,9 +21,9 @@ class PieceJointe extends Model
         'taille' => 'integer'
     ];
 
-    public function courrier(): BelongsTo
+    public function courrier()
     {
-        return $this->belongsTo(Courrier::class);
+        return $this->belongsTo(\App\Models\Courrier::class);
     }
 
     // Méthode utilitaire pour l'URL publique

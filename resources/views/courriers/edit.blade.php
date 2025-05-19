@@ -92,11 +92,18 @@
                                 <a href="{{ asset('storage/' . $piece->chemin) }}" target="_blank" class="text-blue-500 hover:underline">
                                     📥 {{ $piece->nom_original }}
                                 </a>
-                                <!-- Option de suppression d'une pièce jointe -->
-                                <form action="{{ route('pieces_jointes.destroy', $piece->id) }}" method="POST" onsubmit="return confirm('Supprimer cette pièce jointe ?');" style="display:inline;">
+                                <!-- Remplacer la pièce jointe -->
+                                <form action="{{ route('pieces_jointes.update', $piece->id) }}" method="POST" enctype="multipart/form-data" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <!--input type="file" name="nouvelle_piece" required style="display:inline-block; width:180px;"-->
+                                    <!--button type="submit" class="text-green-600 hover:underline text-xs">Remplacer</button-->
+                                </form>
+                                <!-- Supprimer la pièce jointe -->
+                                <form action="{{ route('pieces_jointes.destroy', $piece->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline text-xs">Supprimer</button>
+                                    <button type="submit" class="text-red-600 hover:underline text-xs" onclick="return confirm('Supprimer cette pièce jointe ?')">Supprimer</button>
                                 </form>
                             </div>
                         @empty
@@ -111,8 +118,7 @@
                         <span class="mr-2">📎</span> Ajouter des pièces jointes
                     </label>
                     <div class="relative">
-                        <input type="file" id="pieces_jointes" name="pieces_jointes[]" multiple 
-                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
+                        <input type="file" id="pieces_jointes" name="pieces_jointes[]" multiple>
                     </div>
                     <small class="text-gray-500">Formats acceptés : PDF, Word, Excel, Images</small>
                 </div>

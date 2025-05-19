@@ -115,7 +115,9 @@ Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class,
     ->name('pieces-jointes.download')
     ->middleware('can:download,pieceJointe');
 
-// Suppression des pièces jointes
+// Pour remplacer une pièce jointe
+Route::patch('/pieces-jointes/{pieceJointe}', [PieceJointeController::class, 'update'])->name('pieces_jointes.update');
+// Pour supprimer une pièce jointe
 Route::delete('/pieces-jointes/{pieceJointe}', [PieceJointeController::class, 'destroy'])->name('pieces_jointes.destroy');
 
 /*

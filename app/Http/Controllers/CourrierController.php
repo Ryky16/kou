@@ -179,7 +179,7 @@ class CourrierController extends Controller
 
     public function update(Request $request, $id)
     {
-        $courrier = Courrier::findOrFail($id);
+        $courrier = \App\Models\Courrier::findOrFail($id);
 
         $request->validate([
             'type' => 'required',
@@ -209,6 +209,8 @@ class CourrierController extends Controller
                 $courrier->piecesJointes()->create([
                     'nom_original' => $file->getClientOriginalName(),
                     'chemin' => $chemin,
+                    'mime_type' => $file->getClientMimeType(),
+                    'taille' => $file->getSize(),
                 ]);
             }
         }

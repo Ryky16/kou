@@ -60,7 +60,7 @@ class Courrier extends Model
     // Relation avec les documents
     public function piecesJointes()
     {
-        return $this->hasMany(PieceJointe::class, 'courrier_id');
+        return $this->hasMany(\App\Models\PieceJointe::class);
     }
 
     public function affectation()
@@ -80,3 +80,4 @@ class Courrier extends Model
     }
 
 }
+
