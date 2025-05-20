@@ -215,7 +215,8 @@ class CourrierController extends Controller
             }
         }
 
-        return redirect()->route('courriers.edit', $courrier->id)
+        // Redirection vers le dashboard agent après modification
+        return redirect()->route('agent.dashboard')
             ->with('success', 'Courrier modifié avec succès.');
     }
 
