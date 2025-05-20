@@ -220,18 +220,13 @@ class CourrierController extends Controller
             ->with('success', 'Courrier modifié avec succès.');
     }
 
-    public function destroy(Courrier $courrier)
+    public function destroy($id)
     {
-        $user = Auth::user();
-
-        // Vérifier que l'utilisateur est l'expéditeur, le destinataire ou un agent
-        if ($courrier->expediteur_id !== $user->id && $courrier->destinataire_id !== $user->id && !$user->hasRole('Agent')) {
-            abort(403, 'Vous n\'êtes pas autorisé à supprimer ce courrier.');
-        }
-
+        $courrier = \App\Models\Courrier::findOrFail($id);
         $courrier->delete();
 
-        return redirect()->route('courriers.index')
+        // Redirige vers le dashboard agent avec un message de succès
+        return redirect()->route('agent.dashboard')
             ->with('success', 'Courrier supprimé avec succès.');
     }
 
