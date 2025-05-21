@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\CourrierNotification;
 
 class CourrierController extends Controller
 {
@@ -152,6 +153,13 @@ class CourrierController extends Controller
                     ]);
                 }
             }
+
+            // Notifier l'agent concerné
+            $agent = User::whereHas('role', fn($q) => $q->where('name', 'Agent'))->first();
+            $secretaire = User::whereHas('role', fn($q) => $q->where('name', 'Secretaire_Municipal'))->first();
+
+            if ($agent) $agent->notify(new CourrierNotification($courrier));
+            if ($secretaire) $secretaire->notify(new CourrierNotification($courrier));
 
             DB::commit();
 

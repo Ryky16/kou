@@ -26,7 +26,10 @@
                         <li>
                             <a href="#" class="sidebar-link flex items-center justify-between">      
                                 🔔 Notifications
-                                <span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">3</span>
+                                <span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">
+    {{ $notifications->count() }}
+</span>
+                                <!--span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">3</span-->
                             </a>
                         </li>
                         <li><a href="#" class="sidebar-link">⚙️ Paramètres</a></li>
@@ -206,6 +209,37 @@
             <div class="mt-6">
                 {{ $courriers->links('pagination::bootstrap-4') }}
             </div>
+
+            <!-- Notifications -->
+<div class="mb-8">
+    <h2 class="text-lg font-bold text-gray-700 mb-2 flex items-center">
+        <span class="mr-2">🔔</span> Notifications
+        @if($notifications->count())
+            <span class="ml-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">{{ $notifications->count() }}</span>
+        @endif
+    </h2>
+    @if($notifications->count())
+        <ul class="space-y-2">
+            @foreach($notifications as $notification)
+                <li class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded flex justify-between items-center">
+                    <div>
+                        <span class="font-semibold">Nouveau courrier :</span>
+                        <span class="text-blue-700">{{ $notification->data['reference'] }}</span> - 
+                        <span>{{ $notification->data['objet'] }}</span>
+                        <span class="text-gray-500 text-xs ml-2">({{ $notification->data['created_at'] }})</span>
+                    </div>
+                    <form action="{{ route('notifications.read', $notification->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button class="text-green-600 hover:underline text-xs" type="submit">Marquer comme lu</button>
+                    </form>
+                </li>
+            @endforeach
+        </ul>
+    @else
+        <div class="text-gray-500 italic">Aucune notification.</div>
+    @endif
+</div>
             <script src="https://cdn.tailwindcss.com"></script>
         </main>
     </div>

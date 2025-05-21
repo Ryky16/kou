@@ -120,6 +120,14 @@ Route::patch('/pieces-jointes/{pieceJointe}', [PieceJointeController::class, 'up
 // Pour supprimer une pièce jointe
 Route::delete('/pieces-jointes/{pieceJointe}', [PieceJointeController::class, 'destroy'])->name('pieces_jointes.destroy');
 
+
+Route::patch('/notifications/{id}/read', function($id) {
+    $notification = Auth::user()->notifications()->findOrFail($id);
+    $notification->markAsRead();
+    return back();
+})->name('notifications.read')->middleware('auth');
+
+
 /*
 |--------------------------------------------------------------------------
 | Route pour tester l'envoi d'e-mails (désactivée)

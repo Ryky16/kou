@@ -35,17 +35,16 @@ class DashboardController extends Controller
     // Vue pour le secrétaire municipal
     public function secretaire()
     {
-        $courriers = Courrier::with(['expediteur', 'destinataire'])->paginate(10); // Charge les courriers avec leurs relations
-        return view('dashboard.secretaire', compact('courriers'));
+        $courriers = Courrier::latest()->paginate(10); // ou selon la logique métier
+        $notifications = Auth::user()->unreadNotifications;
+        return view('dashboard.secretaire', compact('courriers', 'notifications'));
     }
 
     // Vue pour l'agent
     public function agent()
     {
-        // Récupérer les courriers depuis la base de données
-        $courriers = Courrier::with(['expediteur', 'destinataire'])->orderBy('created_at', 'desc')->paginate(10);
-
-        // Retourner la vue avec les courriers
-        return view('dashboard.agent', compact('courriers'));
+        $courriers = Courrier::where('expediteur_id', Auth::id())->latest()->paginate(10);
+        $notifications = auth::user()->unreadNotifications;
+        return view('dashboard.agent', compact('courriers', 'notifications'));
     }
 }
