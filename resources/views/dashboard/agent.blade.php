@@ -228,11 +228,20 @@
                         <span>{{ $notification->data['objet'] }}</span>
                         <span class="text-gray-500 text-xs ml-2">({{ $notification->data['created_at'] }})</span>
                     </div>
-                    <form action="{{ route('notifications.read', $notification->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button class="text-green-600 hover:underline text-xs" type="submit">Marquer comme lu</button>
-                    </form>
+                    <div class="flex gap-2">
+                        <!-- Ouvrir le courrier -->
+                        <a href="{{ route('courriers.show', $notification->data['id']) }}" class="text-green-600 hover:underline text-xs px-2 py-1 border border-green-600 rounded">
+                            Ouvrir le courrier
+                        </a>
+                        <!-- Supprimer la notification -->
+                        <form action="{{ route('notifications.delete', $notification->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-600 hover:underline text-xs px-2 py-1 border border-red-600 rounded" type="submit">
+                                Supprimer la notification
+                            </button>
+                        </form>
+                    </div>
                 </li>
             @endforeach
         </ul>

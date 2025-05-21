@@ -271,4 +271,11 @@ class CourrierController extends Controller
             return back()->with('error', '❌ Une erreur est survenue : ' . $e->getMessage());
         }
     }
+
+    public function show(Courrier $courrier)
+    {
+        // On charge les relations utiles pour l'affichage
+        $courrier->load('expediteur', 'destinataire', 'service', 'piecesJointes');
+        return view('courriers.show', compact('courrier'));
+    }
 }

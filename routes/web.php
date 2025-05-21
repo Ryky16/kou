@@ -108,6 +108,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/courriers/{courrier}', [CourrierController::class, 'destroy'])->name('courriers.destroy');
     Route::post('/courriers/envoyer', [CourrierController::class, 'envoyer'])->name('courriers.envoyer');
     Route::post('/courriers/{courrier}/affecter', [CourrierController::class, 'affecter'])->name('courriers.affecter');
+
+    // Afficher le détail d'un courrier
+    Route::get('/courriers/{courrier}', [App\Http\Controllers\CourrierController::class, 'show'])->name('courriers.show');
 });
 
 // Téléchargement des pièces jointes
@@ -127,6 +130,12 @@ Route::patch('/notifications/{id}/read', function($id) {
     return back();
 })->name('notifications.read')->middleware('auth');
 
+// Supprimer une notification
+Route::delete('/notifications/{id}', function($id) {
+    $notification = auth::user()->notifications()->findOrFail($id);
+    $notification->delete();
+    return back();
+})->name('notifications.delete')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
