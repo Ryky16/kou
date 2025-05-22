@@ -113,6 +113,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/courriers/{courrier}', [App\Http\Controllers\CourrierController::class, 'show'])->name('courriers.show');
 });
 
+// Afficher le détail d'un courrier pour le secrétaire
+Route::get('/secretaire/courriers/{id}', [App\Http\Controllers\DashboardController::class, 'showCourrier'])->name('secretaire.courriers.show');
+
 // Téléchargement des pièces jointes
 Route::get('/pieces-jointes/{pieceJointe}/download', [CourrierController::class, 'download'])
     ->name('pieces-jointes.download')
@@ -136,6 +139,19 @@ Route::delete('/notifications/{id}', function($id) {
     $notification->delete();
     return back();
 })->name('notifications.delete')->middleware('auth');
+
+// Supprimer une notification pour le secrétaire
+Route::delete('/secretaire/notifications/{id}', function($id) {
+    $notification = auth::user()->notifications()->findOrFail($id);
+    $notification->delete();
+    return back();
+})->name('secretaire.notifications.delete')->middleware('auth');
+
+Route::patch('/secretaire/notifications/{id}/read', function($id) {
+    $notification = auth::user()->notifications()->findOrFail($id);
+    $notification->markAsRead();
+    return back();
+})->name('secretaire.notifications.read')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

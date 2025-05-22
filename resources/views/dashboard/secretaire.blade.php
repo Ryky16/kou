@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                     <li>
-                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
+                            <a href="{{ route('courriers.create') }}" class="sidebar-link">📌 Ajouter un Courrier</a>
                         </li>
 
                         <li>
@@ -174,7 +174,22 @@
                             </td-->
 
                             <!-- Actions -->
-                            <td class="p-4 border-r border-gray-200">
+
+                            <td class="border px-4 py-2">
+                                    @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
+                                        <form method="POST" action="{{ route('courriers.affecter', $courrier->id) }}" onsubmit="return confirm('Voulez-vous vraiment affecter ce courrier ?');">
+                                            @csrf
+                                            <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                📤 Affecter
+                                            </button>
+                                        </form>
+                                    @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'Affecté')
+                                        <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
+                                            Affectation terminée
+                                        </button>
+                                    @endif
+                                </td>
+                            <!--td class="p-4 border-r border-gray-200">
                                 @if($courrier->statut == 'En attente')
                                     <a href="{{ route('affectation.create', $courrier->id) }}" 
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
@@ -185,14 +200,14 @@
                                         Affectation terminée
                                     </button>
                                 @endif
-                            </td>
+                            </td-->
                         </tr>
                     @empty
-                        <tr>
+                        <!--tr>
                             <td colspan="6" class="text-center text-gray-500 p-4 italic">
                                 📭 Aucun courrier trouvé.
                             </td>
-                        </tr>
+                        </tr-->
                     @endforelse
                 </tbody>
             </table>
@@ -227,11 +242,18 @@
                                     <span>{{ $notification->data['objet'] }}</span>
                                     <span class="text-gray-500 text-xs ml-2">({{ $notification->data['created_at'] }})</span>
                                 </div>
-                                <form action="{{ route('notifications.read', $notification->id) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="text-green-600 hover:underline text-xs" type="submit">Marquer comme lu</button>
-                                </form>
+                                <div class="flex gap-2">
+                                    <a href="{{ route('courriers.show', ['courrier' => $notification->data['courrier_id'] ?? $notification->data['id']]) }}" class="text-green-600 hover:underline text-xs px-2 py-1 border border-green-600 rounded">
+                                        Ouvrir le courrier
+                                    </a>
+                                    <form action="{{ route('secretaire.notifications.delete', $notification->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="text-red-600 hover:underline text-xs px-2 py-1 border border-red-600 rounded" type="submit">
+                                            Supprimer la notification
+                                        </button>
+                                    </form>
+                                </div>
                             </li>
                         @endforeach
                     </ul>

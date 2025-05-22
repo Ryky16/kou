@@ -14,7 +14,7 @@
                 <nav class="flex-1 space-y-4">
                     <ul class="space-y-2">
                         <li>
-                            <a href="{{ route('courriers.index') }}" class="sidebar-link">📌 Ajouter un Courriers</a>
+                            <a href="{{ route('courriers.create') }}" class="sidebar-link">📌 Ajouter un Courriers</a>
                         </li>
                         <li>
                             <a href="#" class="sidebar-link" @click.prevent="showTable = !showTable">
@@ -230,7 +230,7 @@
                     </div>
                     <div class="flex gap-2">
                         <!-- Ouvrir le courrier -->
-                        <a href="{{ route('courriers.show', $notification->data['id']) }}" class="text-green-600 hover:underline text-xs px-2 py-1 border border-green-600 rounded">
+                        <a href="{{ route('courriers.show', ['courrier' => $notification->data['id']]) }}" class="text-green-600 hover:underline text-xs px-2 py-1 border border-green-600 rounded">
                             Ouvrir le courrier
                         </a>
                         <!-- Supprimer la notification -->

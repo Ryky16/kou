@@ -24,7 +24,7 @@
                 <ul class="menu flex space-x-4">
                     <li><a href="{{ route('bienvenue') }}" class="menu-item hover:text-gray-300">Accueil</a></li>
                     <li><a href="{{ route('login') }}" class="menu-item hover:text-gray-300">Se connecter</a></li>
-                    <li><a href="{{ route('register') }}" class="menu-item hover:text-gray-300">S'inscrire</a></li>
+                    <!--li><a href="{{ route('register') }}" class="menu-item hover:text-gray-300">S'inscrire</a></li-->
                 </ul>
             </nav>
         </div>
@@ -37,7 +37,7 @@
 
         <div class="buttons flex justify-center space-x-4">
             <a href="{{ route('login') }}" class="btn bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">🚀 Se connecter</a>
-            <a href="{{ route('register') }}" class="btn bg-gray-200 text-green-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition">➕ S'inscrire</a>
+            <!--a href="{{ route('register') }}" class="btn bg-gray-200 text-green-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition">➕ S'inscrire</a-->
         </div>
     </main>
 

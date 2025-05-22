@@ -47,4 +47,10 @@ class DashboardController extends Controller
         $notifications = auth::user()->unreadNotifications;
         return view('dashboard.agent', compact('courriers', 'notifications'));
     }
+
+    public function showCourrier($id)
+    {
+        $courrier = \App\Models\Courrier::with('expediteur', 'destinataire', 'service', 'piecesJointes')->findOrFail($id);
+        return view('courriers.show', compact('courrier'));
+    }
 }
