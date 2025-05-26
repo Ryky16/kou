@@ -153,6 +153,22 @@ Route::patch('/secretaire/notifications/{id}/read', function($id) {
     return back();
 })->name('secretaire.notifications.read')->middleware('auth');
 
+
+// Route pour archiver un courrier
+Route::patch('/courriers/{courrier}/archiver', [App\Http\Controllers\CourrierController::class, 'archiver'])
+    ->name('courriers.archive')
+    ->middleware('auth');
+
+// Route pour les archives des agents
+Route::get('/agent/archives', [App\Http\Controllers\DashboardController::class, 'archives'])
+    ->name('agent.archives')
+    ->middleware('auth');
+
+// Route pour les archives des courriers
+Route::get('/courriers/archives', [App\Http\Controllers\CourrierController::class, 'archives'])
+    ->name('courriers.archives')
+    ->middleware('auth');
+    
 /*
 |--------------------------------------------------------------------------
 | Route pour tester l'envoi d'e-mails (désactivée)
@@ -180,3 +196,6 @@ Route::patch('/secretaire/notifications/{id}/read', function($id) {
 */
 
 require __DIR__.'/auth.php';
+
+
+

@@ -288,4 +288,41 @@ class CourrierController extends Controller
         $courrier->load('expediteur', 'destinataire', 'service', 'piecesJointes');
         return view('courriers.show', compact('courrier'));
     }
+
+    public function archiver(Courrier $courrier)
+    {
+        // Vérification des droits (optionnel)
+        if (auth::user()->id !== $courrier->expediteur_id && !auth::user()->hasRole('Secretaire_Municipal')) {
+            abort(403, "Vous n'êtes pas autorisé à archiver ce courrier.");
+        }
+
+        $courrier->statut = 'archivé';
+        $courrier->save();
+
+        return redirect()->route('courriers.show', $courrier->id)
+            ->with('success', 'Le courrier a bien été archivé et sera disponible dans la section Archives.');
+    }
+
+    public function archives()
+    {
+        $user = auth::user();
+
+        // Si secrétaire : voir tous les courriers archivés
+        if ($user->hasRole('Secretaire_Municipal')) {
+            $courriers = \App\Models\Courrier::where('statut', 'archivé')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        } else {
+            // Sinon, voir seulement ses courriers archivés
+            $courriers = \App\Models\Courrier::where('statut', 'archivé')
+                ->where(function($q) use ($user) {
+                    $q->where('expediteur_id', $user->id)
+                      ->orWhere('destinataire_id', $user->id);
+                })
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        }
+
+        return view('courriers.archives', compact('courriers'));
+    }
 }

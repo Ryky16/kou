@@ -21,7 +21,7 @@
                                 📁 Gérer les Courriers
                             </a>
                         </li>
-                        <li><a href="#" class="sidebar-link">📂 Consulter les Archives</a></li>
+                        <li><a href="{{ route('courriers.archives') }}" class="sidebar-link">📂 Consulter les Archives</a></li>
                         <li><a href="#" class="sidebar-link">📊 Statistiques</a></li>
                         <li>
                             <a href="#" class="sidebar-link flex items-center justify-between">      

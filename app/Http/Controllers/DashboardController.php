@@ -53,4 +53,18 @@ class DashboardController extends Controller
         $courrier = \App\Models\Courrier::with('expediteur', 'destinataire', 'service', 'piecesJointes')->findOrFail($id);
         return view('courriers.show', compact('courrier'));
     }
+
+    // Archives pour l'agent
+    public function archives()
+    {
+        $courriers = Courrier::where('statut', 'archivé')
+            ->where(function($q) {
+                $q->where('expediteur_id', Auth::id())
+                  ->orWhere('destinataire_id', Auth::id());
+            })
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('agent.archives', compact('courriers'));
+    }
 }
