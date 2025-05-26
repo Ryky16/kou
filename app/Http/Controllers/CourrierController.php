@@ -163,8 +163,18 @@ class CourrierController extends Controller
 
             DB::commit();
 
-            return redirect()->route('courriers.index')
-                ->with('success', 'Courrier ajouté avec succès !');
+            // Redirection selon le rôle de l'utilisateur
+            $user = Auth::user();
+            if ($user->hasRole('Secretaire_Municipal')) {
+                return redirect()->route('secretaire.dashboard')
+                    ->with('success', 'Courrier ajouté avec succès !');
+            } elseif ($user->hasRole('Agent')) {
+                return redirect()->route('agent.dashboard')
+                    ->with('success', 'Courrier ajouté avec succès !');
+            } else {
+                return redirect()->route('courriers.index')
+                    ->with('success', 'Courrier ajouté avec succès !');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()
