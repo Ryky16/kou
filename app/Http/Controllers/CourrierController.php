@@ -292,15 +292,24 @@ class CourrierController extends Controller
     public function archiver(Courrier $courrier)
     {
         // Vérification des droits (optionnel)
-        if (auth::user()->id !== $courrier->expediteur_id && !auth::user()->hasRole('Secretaire_Municipal')) {
+        if (Auth::user()->id !== $courrier->expediteur_id && !Auth::user()->hasRole('Secretaire_Municipal')) {
             abort(403, "Vous n'êtes pas autorisé à archiver ce courrier.");
         }
 
         $courrier->statut = 'archivé';
         $courrier->save();
 
-        return redirect()->route('courriers.show', $courrier->id)
-            ->with('success', 'Le courrier a bien été archivé et sera disponible dans la section Archives.');
+        // Redirige vers le dashboard agent après archivage
+        if (Auth::user()->hasRole('Agent')) {
+            return redirect()->route('agent.dashboard')
+                ->with('success', 'Le courrier a bien été archivé et sera disponible dans la section Archives.');
+        } elseif (Auth::user()->hasRole('Secretaire_Municipal')) {
+            return redirect()->route('secretaire.dashboard')
+                ->with('success', 'Le courrier a bien été archivé et sera disponible dans la section Archives.');
+        } else {
+            return redirect()->route('courriers.index')
+                ->with('success', 'Le courrier a bien été archivé.');
+        }
     }
 
     public function archives()
