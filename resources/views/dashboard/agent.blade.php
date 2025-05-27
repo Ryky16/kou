@@ -104,42 +104,43 @@
                         <th class="p-4 text-left">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($courriers as $courrier)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <!-- Référence -->
-                            <td class="p-4">{{ $courrier->reference }}</td>
+                @php
+    $statutLabels = [
+        'brouillon' => ['label' => "📝 En attente d'affectation", 'class' => 'text-yellow-600'],
+        'envoyé'    => ['label' => '✔ Affecté', 'class' => 'text-green-600'],
+        'archivé'   => ['label' => '🗄️ Archivé', 'class' => 'text-gray-500'],
+    ];
+    $prioriteLabels = [
+        'normal'  => ['label' => '🟢 Normal', 'class' => 'text-green-500 font-bold'],
+        'important'=> ['label' => '🟡 Important', 'class' => 'text-yellow-500 font-bold'],
+        'urgent'   => ['label' => '🔴 Urgent', 'class' => 'text-red-500 font-bold'],
+    ];
+@endphp
 
-                            <!-- Expéditeur -->
-                            <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
-
-                            <!-- Destinataire -->
-                            <td class="p-4">
-                                @if($courrier->destinataire)
-                                    {{ $courrier->destinataire->name }}
-                                @elseif($courrier->service)
-                                    {{ $courrier->service->nom }}
-                                @elseif($courrier->email_destinataire)
-                                    {{ $courrier->email_destinataire }}
-                                @else
-                                    N/A
-                                @endif
-                            </td>
-
-                            <!-- Statut -->
-                            <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
-                                {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
-                            </td>
-
-                            <!-- Priorité -->
-                            <td class="p-4 font-bold {{ 
-                                $courrier->priorite == 'haute' ? 'text-red-500' : 
-                                ($courrier->priorite == 'moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
-                                {{ 
-                                    $courrier->priorite == 'haute' ? '🔴 Haute' : 
-                                    ($courrier->priorite == 'moyenne' ? '🟡 Moyenne' : '🟢 Basse') 
-                                }}
-                            </td>
+<tbody>
+@forelse ($courriers as $courrier)
+    <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-4">{{ $courrier->reference }}</td>
+        <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
+        <td class="p-4">
+            @if($courrier->destinataire)
+                {{ $courrier->destinataire->name }}
+            @elseif($courrier->service)
+                {{ $courrier->service->nom }}
+            @elseif($courrier->email_destinataire)
+                {{ $courrier->email_destinataire }}
+            @else
+                N/A
+            @endif
+        </td>
+        <!-- Statut -->
+        <td class="p-4 font-semibold {{ $statutLabels[$courrier->statut]['class'] ?? '' }}">
+            {{ $statutLabels[$courrier->statut]['label'] ?? ucfirst($courrier->statut) }}
+        </td>
+        <!-- Priorité -->
+        <td class="p-4 {{ $prioriteLabels[$courrier->priorite]['class'] ?? '' }}">
+            {{ $prioriteLabels[$courrier->priorite]['label'] ?? ucfirst($courrier->priorite) }}
+        </td>
 
                              <!-- Pièces jointes -->
                               <td class="border px-4 py-2">

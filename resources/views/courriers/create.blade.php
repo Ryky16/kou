@@ -200,9 +200,9 @@
                     <div class="relative">
                         <select id="priorite" name="priorite" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
-                            <option value="basse">Basse</option>
-                            <option value="moyenne" selected>Moyenne</option>
-                            <option value="haute">Haute</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="important">Important</option>
+                            <option value="urgent">Urgent</option>
                         </select>
                     </div>
                 </div>

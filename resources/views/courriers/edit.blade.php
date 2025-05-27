@@ -142,9 +142,9 @@
                     <div class="relative">
                         <select id="priorite" name="priorite" 
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
-                            <option value="basse" {{ $courrier->priorite == 'basse' ? 'selected' : '' }}>Basse</option>
-                            <option value="moyenne" {{ $courrier->priorite == 'moyenne' ? 'selected' : '' }}>Moyenne</option>
-                            <option value="haute" {{ $courrier->priorite == 'haute' ? 'selected' : '' }}>Haute</option>
+                            <option value="normal" {{ $courrier->priorite == 'normal' ? 'selected' : '' }}>Normal</option>
+                            <option value="important" {{ $courrier->priorite == 'important' ? 'selected' : '' }}>Important</option>
+                            <option value="urgent" {{ $courrier->priorite == 'urgent' ? 'selected' : '' }}>Urgent</option>
                         </select>
                     </div>
                 </div>

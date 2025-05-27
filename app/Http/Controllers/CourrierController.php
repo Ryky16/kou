@@ -103,8 +103,8 @@ class CourrierController extends Controller
             'destinataire_id' => 'required|string',
             'email_destinataire' => 'nullable|required_if:destinataire_id,autre|email',
             'description' => 'nullable|string',
-            'statut' => 'nullable|string|in:brouillon,envoyé,traité',
-            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+            'statut' => 'nullable|string|in:brouillon,envoyé,archivé',
+            'priorite' => 'nullable|string|in:normal,important,urgent',
             'pieces_jointes.*' => 'file|max:10240|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
@@ -121,7 +121,7 @@ class CourrierController extends Controller
                 'date_reception' => $validated['date_reception'],
                 'expediteur_id' => Auth::id(),
                 'statut' => $validated['statut'] ?? 'brouillon',
-                'priorite' => $validated['priorite'] ?? 'moyenne',
+                'priorite' => $validated['priorite'] ?? 'normal',
                 'created_by' => Auth::id(),
                 'destinataire_id' => null,
                 'service_id' => null,
@@ -270,7 +270,7 @@ class CourrierController extends Controller
             });
 
             // Mettre à jour le statut du courrier
-            $courrier->statut = 'Affecté';
+            $courrier->statut = 'envoyé';
             $courrier->save();
 
             return back()->with('success', '✅ Courrier affecté avec succès à ' . $courrier->email_destinataire);

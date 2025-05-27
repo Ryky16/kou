@@ -100,116 +100,126 @@
                         <th class="p-4 text-left">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($courriers as $courrier)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="p-4">{{ $courrier->reference }}</td>
-                            <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td> <!-- Affiche le nom de l'expéditeur -->
-                            <td class="p-4">
-                                @if($courrier->destinataire)
-                                    {{ $courrier->destinataire->name }}
-                                @elseif($courrier->service)
-                                    {{ $courrier->service->nom }}
-                                @elseif($courrier->email_destinataire)
-                                    {{ $courrier->email_destinataire }}
-                                @else
-                                    N/A
-                                @endif
-                            </td>
-                            <td class="p-4 font-semibold {{ $courrier->statut == 'En attente' ? 'text-yellow-600' : 'text-green-600' }}">
-                                {{ $courrier->statut == 'En attente' ? '⏳ En attente' : '✔ Affecté' }}
-                            </td>
-                            <td class="p-4 font-bold {{ 
-                                $courrier->priorite == 'Haute' ? 'text-red-500' : 
-                                ($courrier->priorite == 'Moyenne' ? 'text-yellow-500' : 'text-green-500') }}">
-                                {{ 
-                                    $courrier->priorite == 'Haute' ? '🔴 Haute' : 
-                                    ($courrier->priorite == 'Moyenne' ? '🟡 Moyenne' : '🟢 Normal') 
-                                }}
-                            </td>
+                @php
+    $statutLabels = [
+        'brouillon' => ['label' => "📝 En attente d'affectation", 'class' => 'text-yellow-600'],
+        'envoyé'    => ['label' => '✔ Affecté', 'class' => 'text-green-600'],
+        'archivé'   => ['label' => '🗄️ Archivé', 'class' => 'text-gray-500'],
+    ];
+    $prioriteLabels = [
+        'normal'  => ['label' => '🟢 Normal', 'class' => 'text-green-500 font-bold'],
+        'important'=> ['label' => '🟡 Important', 'class' => 'text-yellow-500 font-bold'],
+        'urgent'   => ['label' => '🔴 Urgent', 'class' => 'text-red-500 font-bold'],
+    ];
+@endphp
 
-                            <!-- Pièces jointes -->
+<tbody>
+@forelse ($courriers as $courrier)
+    <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-4">{{ $courrier->reference }}</td>
+        <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
+        <td class="p-4">
+            @if($courrier->destinataire)
+                {{ $courrier->destinataire->name }}
+            @elseif($courrier->service)
+                {{ $courrier->service->nom }}
+            @elseif($courrier->email_destinataire)
+                {{ $courrier->email_destinataire }}
+            @else
+                N/A
+            @endif
+        </td>
+        <!-- Statut -->
+        <td class="p-4 font-semibold {{ $statutLabels[$courrier->statut]['class'] ?? '' }}">
+            {{ $statutLabels[$courrier->statut]['label'] ?? ucfirst($courrier->statut) }}
+        </td>
+        <!-- Priorité -->
+        <td class="p-4 {{ $prioriteLabels[$courrier->priorite]['class'] ?? '' }}">
+            {{ $prioriteLabels[$courrier->priorite]['label'] ?? ucfirst($courrier->priorite) }}
+        </td>
 
-                            <td class="border px-4 py-2">
-                                    @forelse($courrier->piecesJointes as $piece)
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <a href="{{ asset('storage/' . $piece->chemin) }}" 
-                                               target="_blank" 
-                                               class="text-blue-500 hover:underline">
-                                                📥 {{ $piece->nom_original }}
-                                            </a>
-                                            @php
-                                                $url = asset('storage/' . $piece->chemin);
-                                                $officePreview = 'https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($url);
-                                                $isOffice = in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
-                                            @endphp
-                                            @if($isOffice && app()->environment('production'))
-                                                <a href="{{ $officePreview }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
-                                                    👁️ Aperçu
-                                                </a>
-                                            @elseif(in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['pdf']))
-                                                <a href="{{ $url }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
-                                                    👁️ Aperçu PDF
-                                                </a>
-                                            @endif
-                                            @if($isOffice && !app()->environment('production'))
-                                                <span class="text-yellow-600 text-xs">Aperçu Office Online disponible uniquement en ligne</span>
-                                            @endif
-                                        </div>
-                                    @empty
-                                        <span class="text-gray-500 italic">Aucun document</span>
-                                    @endforelse
-                                </td>
-                                
-                            <!--td class="p-4">
-                                @forelse($courrier->piecesJointes as $piece)
-                                    <a href="{{ asset('storage/' . $piece->chemin) }}" 
-                                       target="_blank" 
-                                       class="text-blue-500 hover:underline block">
-                                        📥 {{ $piece->nom_original }}
-                                    </a>
-                                @empty
-                                    <span class="text-gray-500 italic">Aucun document</span>
-                                @endforelse
-                            </td-->
+        <!-- Pièces jointes -->
 
-                            <!-- Actions -->
+        <td class="border px-4 py-2">
+                @forelse($courrier->piecesJointes as $piece)
+                    <div class="flex items-center gap-2 mb-1">
+                        <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                           target="_blank" 
+                           class="text-blue-500 hover:underline">
+                            📥 {{ $piece->nom_original }}
+                        </a>
+                        @php
+                            $url = asset('storage/' . $piece->chemin);
+                            $officePreview = 'https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($url);
+                            $isOffice = in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
+                        @endphp
+                        @if($isOffice && app()->environment('production'))
+                            <a href="{{ $officePreview }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                👁️ Aperçu
+                            </a>
+                        @elseif(in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['pdf']))
+                            <a href="{{ $url }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                👁️ Aperçu PDF
+                            </a>
+                        @endif
+                        @if($isOffice && !app()->environment('production'))
+                            <span class="text-yellow-600 text-xs">Aperçu Office Online disponible uniquement en ligne</span>
+                        @endif
+                    </div>
+                @empty
+                    <span class="text-gray-500 italic">Aucun document</span>
+                @endforelse
+            </td>
+            
+        <!--td class="p-4">
+            @forelse($courrier->piecesJointes as $piece)
+                <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                   target="_blank" 
+                   class="text-blue-500 hover:underline block">
+                    📥 {{ $piece->nom_original }}
+                </a>
+            @empty
+                <span class="text-gray-500 italic">Aucun document</span>
+            @forelse
+        </td-->
 
-                            <td class="border px-4 py-2">
-                                    @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
-                                        <form method="POST" action="{{ route('courriers.affecter', $courrier->id) }}" onsubmit="return confirm('Voulez-vous vraiment affecter ce courrier ?');">
-                                            @csrf
-                                            <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                                📤 Affecter
-                                            </button>
-                                        </form>
-                                    @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'Affecté')
-                                        <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
-                                            Affectation terminée
-                                        </button>
-                                    @endif
-                                </td>
-                            <!--td class="p-4 border-r border-gray-200">
-                                @if($courrier->statut == 'En attente')
-                                    <a href="{{ route('affectation.create', $courrier->id) }}" 
-                                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
-                                       ➕ Affecter
-                                    </a>
-                                @else
-                                    <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
-                                        Affectation terminée
-                                    </button>
-                                @endif
-                            </td-->
-                        </tr>
-                    @empty
-                        <!--tr>
-                            <td colspan="6" class="text-center text-gray-500 p-4 italic">
-                                📭 Aucun courrier trouvé.
-                            </td>
-                        </tr-->
-                    @endforelse
-                </tbody>
+        <!-- Actions -->
+
+        <td class="border px-4 py-2">
+                @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
+                    <form method="POST" action="{{ route('courriers.affecter', $courrier->id) }}" onsubmit="return confirm('Voulez-vous vraiment affecter ce courrier ?');">
+                        @csrf
+                        <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                            📤 Affecter
+                        </button>
+                    </form>
+                @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'Affecté')
+                    <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
+                        Affectation terminée
+                    </button>
+                @endif
+            </td>
+        <!--td class="p-4 border-r border-gray-200">
+            @if($courrier->statut == 'En attente')
+                <a href="{{ route('affectation.create', $courrier->id) }}" 
+                   class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
+                   ➕ Affecter
+                </a>
+            @else
+                <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
+                    Affectation terminée
+                </button>
+            @endif
+        </td-->
+    </tr>
+@empty
+    <!--tr>
+        <td colspan="6" class="text-center text-gray-500 p-4 italic">
+            📭 Aucun courrier trouvé.
+        </td>
+    </tr-->
+@endforelse
+</tbody>
             </table>
 
             <!-- Pagination -->
@@ -264,4 +274,7 @@
         </main>
         <script src="https://cdn.tailwindcss.com"></script>
     </div>
+
+
+
 </x-app-layout>
