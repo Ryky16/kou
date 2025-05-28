@@ -27,9 +27,9 @@ class CourrierSeeder extends Seeder
                 'type' => 'entrant',
                 'expediteur_id' => $secretaire->id, // Modifié: ne peut pas être null
                 'destinataire_id' => $agent->id,
-                'service_id' => $services->where('nom', 'Service Urbanisme')->first()->id,
+                'service_id' => $services->where('nom', 'Services Techniques Communaux')->first()->id,
                 'statut' => 'envoyé', // Modifié: doit être 'brouillon', 'envoyé' ou 'traité'
-                'priorite' => 'moyenne', // Modifié: doit être 'basse', 'moyenne' ou 'haute'
+                'priorite' => 'normal', // Modifié: doit être 'basse', 'moyenne' ou 'haute'
                 'date_reception' => now(),
                 'created_by' => $secretaire->id
             ]);
@@ -45,7 +45,7 @@ class CourrierSeeder extends Seeder
                 'destinataire_id' => $admin->id,
                 'service_id' => $services->where('nom', 'Secrétariat Municipal')->first()->id,
                 'statut' => 'envoyé',
-                'priorite' => 'haute',
+                'priorite' => 'important',
                 'date_reception' => now(),
                 'created_by' => $secretaire->id
             ]);
@@ -60,8 +60,8 @@ class CourrierSeeder extends Seeder
                 'expediteur_id' => $secretaire->id,
                 'destinataire_id' => null, // Peut être null pour les sortants
                 'service_id' => $services->where('nom', 'Service Finances')->first()->id,
-                'statut' => 'traité',
-                'priorite' => 'moyenne', // 'normale' n'existe pas dans votre enum
+                'statut' => 'archivé',
+                'priorite' => 'normal', 
                 'date_reception' => now()->subDays(2),
                 'created_by' => $secretaire->id
             ]);

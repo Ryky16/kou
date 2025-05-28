@@ -171,18 +171,6 @@
                 @endforelse
             </td>
             
-        <!--td class="p-4">
-            @forelse($courrier->piecesJointes as $piece)
-                <a href="{{ asset('storage/' . $piece->chemin) }}" 
-                   target="_blank" 
-                   class="text-blue-500 hover:underline block">
-                    📥 {{ $piece->nom_original }}
-                </a>
-            @empty
-                <span class="text-gray-500 italic">Aucun document</span>
-            @forelse
-        </td-->
-
         <!-- Actions -->
 
         <td class="border px-4 py-2">

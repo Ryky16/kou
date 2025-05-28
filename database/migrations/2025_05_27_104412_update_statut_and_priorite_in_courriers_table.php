@@ -10,14 +10,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Mettre à jour les anciennes valeurs AVANT de modifier l'ENUM
-        DB::statement("UPDATE courriers SET priorite = 'normal' WHERE priorite = 'basse'");
-        DB::statement("UPDATE courriers SET priorite = 'important' WHERE priorite = 'moyenne'");
-        DB::statement("UPDATE courriers SET priorite = 'urgent' WHERE priorite = 'haute'");
+         // Si tu avais d’anciennes valeurs genre 'basse', 'moyenne', 'haute'
+    // Tu dois d’abord t'assurer qu’elles sont transformées en les nouvelles AVANT de modifier l’ENUM
 
-        // 2. Modifier les ENUM ensuite
-        DB::statement("ALTER TABLE courriers MODIFY statut ENUM('brouillon', 'envoyé', 'archivé') DEFAULT 'brouillon'");
-        DB::statement("ALTER TABLE courriers MODIFY priorite ENUM('normal', 'important', 'urgent') DEFAULT 'normal'");
+    DB::statement("UPDATE courriers SET priorite = 'normal' WHERE priorite = 'basse'");
+    DB::statement("UPDATE courriers SET priorite = 'important' WHERE priorite = 'moyenne'");
+    DB::statement("UPDATE courriers SET priorite = 'urgent' WHERE priorite = 'haute'");
+
+    // Ensuite seulement tu modifies le champ ENUM
+    DB::statement("ALTER TABLE courriers MODIFY priorite ENUM('normal', 'important', 'urgent') DEFAULT 'normal'");
+    DB::statement("ALTER TABLE courriers MODIFY statut ENUM('brouillon', 'envoyé', 'archivé') DEFAULT 'brouillon'");
+
     }
 
     /**
@@ -25,13 +28,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // 1. Remettre les anciennes valeurs AVANT de modifier l'ENUM
-        DB::statement("UPDATE courriers SET priorite = 'basse' WHERE priorite = 'normal'");
-        DB::statement("UPDATE courriers SET priorite = 'moyenne' WHERE priorite = 'important'");
-        DB::statement("UPDATE courriers SET priorite = 'haute' WHERE priorite = 'urgent'");
+       // Reviens à l’ancienne définition ENUM
+    DB::statement("ALTER TABLE courriers MODIFY priorite ENUM('basse', 'moyenne', 'haute') DEFAULT 'moyenne'");
+    DB::statement("ALTER TABLE courriers MODIFY statut ENUM('brouillon', 'envoyé', 'traité') DEFAULT 'brouillon'");
 
-        // 2. Remettre l'ancien ENUM ensuite
-        DB::statement("ALTER TABLE courriers MODIFY statut ENUM('brouillon', 'envoyé', 'traité') DEFAULT 'brouillon'");
-        DB::statement("ALTER TABLE courriers MODIFY priorite ENUM('basse', 'moyenne', 'haute') DEFAULT 'moyenne'");
+    // Puis remets les anciennes valeurs
+    DB::statement("UPDATE courriers SET priorite = 'basse' WHERE priorite = 'normal'");
+    DB::statement("UPDATE courriers SET priorite = 'moyenne' WHERE priorite = 'important'");
+    DB::statement("UPDATE courriers SET priorite = 'haute' WHERE priorite = 'urgent'");
     }
 };
