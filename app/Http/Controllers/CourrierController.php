@@ -200,14 +200,18 @@ class CourrierController extends Controller
         $courrier = \App\Models\Courrier::findOrFail($id);
 
         $request->validate([
-            'type' => 'required',
-            'nature' => 'required',
-            'reference' => 'required',
-            'objet' => 'required',
-            'description' => 'required',
+            'type' => ['required', 'string', Rule::in(['entrant', 'sortant', 'interne'])],
+            'nature' => 'nullable|string|max:50',
+            'reference' => [
+                'required',
+                'string',
+                Rule::unique('courriers', 'reference')->ignore($courrier->id),
+            ],
+            'objet' => 'required|string|max:255',
+            'description' => 'required|string', // ou nullable|string si tu retires required dans la vue
             'date_reception' => 'nullable|date',
-            'priorite' => 'required',
-            'pieces_jointes.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:10240',
+            'priorite' => 'required|string|in:normal,important,urgent',
+            'pieces_jointes.*' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:10240',
         ]);
 
         $courrier->update([
@@ -220,22 +224,30 @@ class CourrierController extends Controller
             'priorite' => $request->priorite,
         ]);
 
-        // Ajout de nouvelles pièces jointes
+        // Ajout de nouvelles pièces jointes si présentes
         if ($request->hasFile('pieces_jointes')) {
             foreach ($request->file('pieces_jointes') as $file) {
-                $chemin = $file->store('pieces_jointes', 'public');
-                $courrier->piecesJointes()->create([
-                    'nom_original' => $file->getClientOriginalName(),
-                    'chemin' => $chemin,
-                    'mime_type' => $file->getClientMimeType(),
-                    'taille' => $file->getSize(),
-                ]);
+                if ($file) {
+                    $chemin = $file->store('pieces_jointes', 'public');
+                    $courrier->piecesJointes()->create([
+                        'nom_original' => $file->getClientOriginalName(),
+                        'chemin' => $chemin,
+                        'mime_type' => $file->getClientMimeType(),
+                        'taille' => $file->getSize(),
+                    ]);
+                }
             }
         }
 
-        // Redirection vers le dashboard agent après modification
-        return redirect()->route('agent.dashboard')
-            ->with('success', 'Courrier modifié avec succès.');
+        // Redirection selon le rôle
+        $user = Auth::user();
+        if ($user->hasRole('Secretaire_Municipal')) {
+            return redirect()->route('secretaire.dashboard')
+                ->with('success', 'Courrier modifié avec succès.');
+        } else {
+            return redirect()->route('agent.dashboard')
+                ->with('success', 'Courrier modifié avec succès.');
+        }
     }
 
     public function destroy($id)
