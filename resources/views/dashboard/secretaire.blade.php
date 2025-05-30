@@ -181,7 +181,7 @@
                             📤 Affecter
                         </button>
                     </form>
-                @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'Affecté')
+                @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'envoyé')
                     <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
                         Affectation terminée
                     </button>

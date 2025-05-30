@@ -45,7 +45,7 @@ class AffectationController extends Controller
 
             // Affecter l'adresse e-mail au courrier
             $courrier->email_destinataire = $request->email_destinataire;
-            $courrier->statut = 'Affecté'; // Mettre à jour le statut
+            $courrier->statut = 'envoyé'; // Mettre à jour le statut
             $courrier->save();
 
             // Enregistrer l'affectation
@@ -67,6 +67,7 @@ class AffectationController extends Controller
                 $message->to($request->email_destinataire)
                         ->subject($details['title']);
             });
+            Log::info('Email envoyé à ' . $request->email_destinataire);
 
             return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {

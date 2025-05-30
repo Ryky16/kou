@@ -108,21 +108,18 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
     const destinataireSelect = document.getElementById('destinataire_id');
     const emailField = document.getElementById('email-destinataire');
+    const emailInput = document.getElementById('email_destinataire');
 
     if (destinataireSelect && emailField) {
         destinataireSelect.addEventListener('change', function() {
-            // Afficher seulement pour "autre administration"
             if (this.value === 'autre') {
                 emailField.style.display = 'block';
-                // Rendre le champ obligatoire
-                document.getElementById('email_destinataire').required = true;
+                emailInput.required = true;
             } else {
                 emailField.style.display = 'none';
-                document.getElementById('email_destinataire').required = false;
+                emailInput.required = false;
             }
         });
-        
-        // Déclencher au chargement
         destinataireSelect.dispatchEvent(new Event('change'));
     }
 });
@@ -181,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const selectDestinataire = document.getElementById('destinataire_id');
     const emailField = document.getElementById('email-destinataire');
@@ -192,6 +190,19 @@ document.addEventListener('DOMContentLoaded', function () {
             emailField.style.display = 'block';
         } else {
             emailField.style.display = 'none';
+        }
+    });
+});
+*/
+
+document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('destinataire_id');
+    const emailDiv = document.getElementById('email-destinataire');
+    select.addEventListener('change', function () {
+        if (select.value) {
+            emailDiv.style.display = 'block';
+        } else {
+            emailDiv.style.display = 'none';
         }
     });
 });

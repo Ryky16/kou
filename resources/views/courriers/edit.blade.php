@@ -123,7 +123,8 @@
                         <span class="mr-2">📅</span> Date de réception
                     </label>
                     <div class="relative">
-                        <input type="date" id="date_reception" name="date_reception" value="{{ $courrier->date_reception }}"
+                        <input type="date" id="date_reception" name="date_reception"
+                            value="{{ $courrier->date_reception ? \Illuminate\Support\Carbon::parse($courrier->date_reception)->format('Y-m-d') : '' }}"
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                     </div>
                 </div>

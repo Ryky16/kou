@@ -187,7 +187,7 @@
                             class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500">
                             <option value="brouillon">Brouillon</option>
                             <option value="envoyé">Envoyé</option>
-                            <option value="traité">Traité</option>
+                            <option value="archivé">Archivé</option>
                         </select>
                     </div>
                 </div>

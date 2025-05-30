@@ -101,7 +101,7 @@ class CourrierController extends Controller
             'objet' => 'required|string|max:255',
             'date_reception' => 'required|date',
             'destinataire_id' => 'required|string',
-            'email_destinataire' => 'nullable|required_if:destinataire_id,autre|email',
+            'email_destinataire' => 'required|email', // Toujours requis si un destinataire est choisi
             'description' => 'nullable|string',
             'statut' => 'nullable|string|in:brouillon,envoyé,archivé',
             'priorite' => 'nullable|string|in:normal,important,urgent',
@@ -208,7 +208,7 @@ class CourrierController extends Controller
                 Rule::unique('courriers', 'reference')->ignore($courrier->id),
             ],
             'objet' => 'required|string|max:255',
-            'description' => 'required|string', // ou nullable|string si tu retires required dans la vue
+            'description' => 'required|string',
             'date_reception' => 'nullable|date',
             'priorite' => 'required|string|in:normal,important,urgent',
             'pieces_jointes.*' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:10240',
@@ -262,6 +262,8 @@ class CourrierController extends Controller
 
     public function affecter(Courrier $courrier)
     {
+        Log::info('Méthode affecter appelée pour le courrier ID: ' . $courrier->id);
+
         try {
             // Vérifier si le courrier a une adresse e-mail de destinataire
             if (!$courrier->email_destinataire) {
