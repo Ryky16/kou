@@ -328,7 +328,7 @@ class CourrierController extends Controller
 
     public function archives()
     {
-        $user = auth::user();
+        $user = Auth::user();
 
         // Si secrétaire : voir tous les courriers archivés
         if ($user->hasRole('Secretaire_Municipal')) {
