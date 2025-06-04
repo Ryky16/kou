@@ -129,13 +129,19 @@ class CourrierController extends Controller
             ];
 
             // Gestion spécifique du destinataire
-            if ($validated['destinataire_id'] === 'autre') {
+            /*if ($validated['destinataire_id'] === 'autre') {
                 $courrierData['email_destinataire'] = $validated['email_destinataire'];
             } elseif (str_starts_with($validated['destinataire_id'], 'service_')) {
                 $courrierData['service_id'] = str_replace('service_', '', $validated['destinataire_id']);
             } else {
                 $courrierData['destinataire_id'] = $validated['destinataire_id'];
-            }
+            }*/
+
+            $courrierData['email_destinataire'] = $validated['email_destinataire'];
+            $courrierData['destinataire_id'] = null;
+            $courrierData['service_id'] = null;
+
+
 
             // Enregistrement du courrier
             $courrier = Courrier::create($courrierData);
