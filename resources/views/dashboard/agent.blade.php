@@ -67,15 +67,16 @@
             <div class="flex justify-between gap-6 mb-12">
                 <div class="stat-card bg-blue-100 border-l-4 border-blue-500 p-4 rounded shadow w-full text-center">
                     <h2 class="font-semibold text-gray-700">📥 Courriers Ajoutés</h2>
-                    <p class="text-xl font-bold text-blue-700">120</p>
+                    <p class="text-xl font-bold text-blue-700">{{ $totalCourriers }}</p>
+                    <!--p class="text-xl font-bold text-blue-700">120</p-->
                 </div>
                 <div class="stat-card bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded shadow w-full text-center">
                     <h2 class="font-semibold text-gray-700">📌 Courriers Affectés</h2>
-                    <p class="text-xl font-bold text-yellow-700">85</p>
+                    <p class="text-xl font-bold text-yellow-700">{{ $totalAffectes }}</p>
                 </div>
                 <div class="stat-card bg-red-100 border-l-4 border-red-500 p-4 rounded shadow w-full text-center">
                     <h2 class="font-semibold text-gray-700">⏳ En Attente</h2>
-                    <p class="text-xl font-bold text-red-700">35</p>
+                    <p class="text-xl font-bold text-red-700">{{ $totalEnAttente }}</p>
                 </div>
             </div>
 

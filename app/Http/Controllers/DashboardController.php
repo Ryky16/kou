@@ -37,7 +37,18 @@ class DashboardController extends Controller
     {
         $courriers = Courrier::latest()->paginate(10); // ou selon la logique métier
         $notifications = Auth::user()->unreadNotifications;
-        return view('dashboard.secretaire', compact('courriers', 'notifications'));
+        
+        $totalCourriers = Courrier::count();
+        $courriersAffectes = Courrier::where('statut', 'envoyé')->count();
+        $courriersEnAttente = Courrier::where('statut', 'brouillon')->count();
+       
+    return view('dashboard.secretaire', 
+        compact('courriers', 
+                'notifications', 
+                'totalCourriers',
+                'courriersAffectes',
+                'courriersEnAttente'
+                ));
     }
 
     // Vue pour l'agent
@@ -45,7 +56,17 @@ class DashboardController extends Controller
     {
         $courriers = Courrier::where('expediteur_id', Auth::id())->latest()->paginate(10);
         $notifications = auth::user()->unreadNotifications;
-        return view('dashboard.agent', compact('courriers', 'notifications'));
+
+         // Statistiques globales (pas seulement pour l'agent)
+    $totalCourriers = Courrier::count();
+    $totalAffectes = Courrier::where('statut', 'envoyé')->count();
+    $totalEnAttente = Courrier::where('statut', 'brouillon')->count();
+
+        return view('dashboard.agent', compact('courriers', 
+                    'notifications', 
+                    'totalCourriers',
+                    'totalAffectes',
+                    'totalEnAttente'));
     }
 
     public function showCourrier($id)
