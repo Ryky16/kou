@@ -67,7 +67,7 @@
             <!-- Statistiques principales -->
             <div class="flex justify-between gap-6 mb-12">
                 <div class="stat-card bg-green-100 border-l-4 border-green-500 p-4 rounded shadow w-full text-center">
-                    <h2 class="font-semibold text-gray-700">📥 Courriers Reçus</h2>
+                    <h2 class="font-semibold text-gray-700">📥 Courriers Ajoutés</h2>
                     <p class="text-xl font-bold text-green-700">95</p>
                 </div>
                 <div class="stat-card bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded shadow w-full text-center">

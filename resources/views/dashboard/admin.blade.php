@@ -90,7 +90,7 @@
             <!-- Statistiques avec espace suffisant en dessous -->
             <div class="flex justify-between gap-6 mb-12">
                 <div class="stat-card bg-white border border-gray-200">
-                    <h2>📥 Courriers Reçus</h2>
+                    <h2>📥 Courriers Ajoutés</h2>
                     <p>120</p>
                 </div>
                 <div class="stat-card bg-white border border-gray-200">
@@ -102,7 +102,7 @@
                     <p>30</p>
                 </div>
                 <div class="stat-card bg-white border border-gray-200">
-                    <h2>📑 Total Courriers</h2>
+                    <h2>📑 Total Des Courriers</h2>
                     <p>235</p>
                 </div>
             </div>
