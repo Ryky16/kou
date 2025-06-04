@@ -38,7 +38,7 @@
             </div>
 
             <div class="text-center pb-5 sidebar-footer mt-auto">
-                <p class="text-sm text-gray-300">© 2025 Mairie Ziguinchor</p>
+                <p class="text-sm">Mairie Ziguinchor<br> © 2025</p>
             </div>
         </aside>
 
