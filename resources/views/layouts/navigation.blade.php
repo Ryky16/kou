@@ -92,8 +92,5 @@
         </div>
     </div>
 
-    <x-nav-link :href="route('statistiques.index')" :active="request()->routeIs('statistiques.index')">
     
-</x-nav-link>
-
 </nav>
