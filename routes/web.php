@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PieceJointeController;
+use App\Http\Controllers\StatistiqueController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +140,7 @@ Route::middleware(['auth'])->group(function () {
 | Notifications
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth'])->group(function () {
     // Notifications générales
     Route::patch('/notifications/{id}/read', function ($id) {
@@ -164,4 +167,14 @@ Route::middleware(['auth'])->group(function () {
         $notification->delete();
         return back();
     })->name('secretaire.notifications.delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Statistiques 
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
 });
