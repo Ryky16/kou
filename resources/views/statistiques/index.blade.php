@@ -37,7 +37,7 @@
     <!-- 📆 Courriers par mois -->
     <div class="w-full lg:w-1/2">
         <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">
-            📆 Courriers par mois
+            📆 Courriers de ce mois
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
