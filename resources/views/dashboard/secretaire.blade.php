@@ -58,12 +58,16 @@
                 Tableau de Bord Secrétaire Municipal
             </h1>
 
-            <!-- Moteur de recherche (à connecter avec un controller plus tard) -->
+            <!-- Moteur de recherche -->
             <div class="mb-6">
-                <form method="GET" action="{{ route('secretaire.dashboard') }}" class="mb-6">
+                <form method="GET" action="{{ route('agent.dashboard') }}" class="mb-6 flex">
                     <input type="text" name="q" value="{{ request('q') }}"
-                        class="w-full p-3 rounded-md shadow-sm border border-gray-300"
+                        class="w-full p-3 rounded-l-md shadow-sm border border-gray-300 focus:outline-none"
                         placeholder="🔍 Rechercher un courrier par référence, expéditeur, date, destinataire...">
+                    <button type="submit"
+                        class="px-5 bg-blue-600 text-white font-semibold rounded-r-md hover:bg-blue-700 transition flex items-center">
+                        🔍
+                    </button>
                 </form>
             </div>
 
