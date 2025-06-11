@@ -33,40 +33,78 @@ class DashboardController extends Controller
     }
 
     // Vue pour le secrétaire municipal
-    public function secretaire()
+    public function secretaire(Request $request)
     {
-        $courriers = Courrier::latest()->paginate(10); // ou selon la logique métier
+        $query = Courrier::with(['expediteur', 'destinataire', 'service', 'piecesJointes']);
+
+        if ($search = $request->input('q')) {
+            $query->where(function($q) use ($search) {
+                $q->where('reference', 'like', "%$search%")
+                  ->orWhere('objet', 'like', "%$search%")
+                  ->orWhereDate('date_reception', $search)
+                  ->orWhereHas('expediteur', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%$search%")
+                         ->orWhere('email', 'like', "%$search%");
+                  })
+                  ->orWhereHas('destinataire', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%$search%")
+                         ->orWhere('email', 'like', "%$search%");
+                  })
+                  ->orWhereHas('service', function($q2) use ($search) {
+                      $q2->where('nom', 'like', "%$search%");
+                  })
+                  ->orWhere('email_destinataire', 'like', "%$search%");
+            });
+        }
+
+        $courriers = $query->latest()->paginate(10);
         $notifications = Auth::user()->unreadNotifications;
-        
         $totalCourriers = Courrier::count();
         $courriersAffectes = Courrier::where('statut', 'envoyé')->count();
         $courriersEnAttente = Courrier::where('statut', 'brouillon')->count();
        
-    return view('dashboard.secretaire', 
-        compact('courriers', 
-                'notifications', 
-                'totalCourriers',
-                'courriersAffectes',
-                'courriersEnAttente'
-                ));
+        return view('dashboard.secretaire', 
+            compact('courriers', 
+                    'notifications', 
+                    'totalCourriers',
+                    'courriersAffectes',
+                    'courriersEnAttente'
+                    ));
     }
 
     // Vue pour l'agent
-    public function agent()
+    public function agent(Request $request)
     {
-        $courriers = Courrier::where('expediteur_id', Auth::id())->latest()->paginate(10);
-        $notifications = auth::user()->unreadNotifications;
+        $query = Courrier::with(['expediteur', 'destinataire', 'service', 'piecesJointes'])
+            ->where('expediteur_id', Auth::id());
 
-         // Statistiques globales (pas seulement pour l'agent)
-    $totalCourriers = Courrier::count();
-    $totalAffectes = Courrier::where('statut', 'envoyé')->count();
-    $totalEnAttente = Courrier::where('statut', 'brouillon')->count();
+        if ($search = $request->input('q')) {
+            $query->where(function($q) use ($search) {
+                $q->where('reference', 'like', "%$search%")
+                  ->orWhere('objet', 'like', "%$search%")
+                  ->orWhereDate('date_reception', $search)
+                  ->orWhereHas('expediteur', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%$search%")
+                         ->orWhere('email', 'like', "%$search%");
+                  })
+                  ->orWhereHas('destinataire', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%$search%")
+                         ->orWhere('email', 'like', "%$search%");
+                  })
+                  ->orWhereHas('service', function($q2) use ($search) {
+                      $q2->where('nom', 'like', "%$search%");
+                  })
+                  ->orWhere('email_destinataire', 'like', "%$search%");
+            });
+        }
 
-        return view('dashboard.agent', compact('courriers', 
-                    'notifications', 
-                    'totalCourriers',
-                    'totalAffectes',
-                    'totalEnAttente'));
+        $courriers = $query->latest()->paginate(10);
+        $notifications = Auth::user()->unreadNotifications;
+        $totalCourriers = Courrier::count();
+        $totalAffectes = Courrier::where('statut', 'envoyé')->count();
+        $totalEnAttente = Courrier::where('statut', 'brouillon')->count();
+
+        return view('dashboard.agent', compact('courriers', 'notifications', 'totalCourriers', 'totalAffectes', 'totalEnAttente'));
     }
 
     public function showCourrier($id)

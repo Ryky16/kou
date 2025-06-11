@@ -32,7 +32,7 @@
                                 <!--span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">3</span-->
                             </a>
                         </li>
-                        <li><a href="#" class="sidebar-link">⚙️ Paramètres</a></li>
+                        <!--li><a href="#" class="sidebar-link">⚙️ Paramètres</a></li-->
                     </ul>
                 </nav>
             </div>
@@ -58,10 +58,11 @@
             </h1>
 
             <!-- Moteur de recherche -->
-            <div class="mb-6">
-                <input type="text" class="w-full p-3 rounded-md shadow-sm border border-gray-300" 
-                    placeholder="🔍 Rechercher un courrier par référence, expéditeur, date...">
-            </div>
+            <form method="GET" action="{{ route('agent.dashboard') }}" class="mb-6">
+                <input type="text" name="q" value="{{ request('q') }}"
+                    class="w-full p-3 rounded-md shadow-sm border border-gray-300"
+                    placeholder="🔍 Rechercher un courrier par référence, expéditeur, date, destinataire...">
+            </form>
 
             <!-- Statistiques principales -->
             <div class="flex justify-between gap-6 mb-12">

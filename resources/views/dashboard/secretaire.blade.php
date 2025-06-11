@@ -33,7 +33,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li><a href="#" class="sidebar-link">⚙️ Paramètres</a></li>
+                        <!--li><a href="#" class="sidebar-link">⚙️ Paramètres</a></li-->
                     </ul>
                 </nav>
             </div>
@@ -60,8 +60,11 @@
 
             <!-- Moteur de recherche (à connecter avec un controller plus tard) -->
             <div class="mb-6">
-                <input type="text" class="w-full p-3 rounded-md shadow-sm border border-gray-300" 
-                    placeholder="🔍 Rechercher un courrier par référence, expéditeur, date...">
+                <form method="GET" action="{{ route('secretaire.dashboard') }}" class="mb-6">
+                    <input type="text" name="q" value="{{ request('q') }}"
+                        class="w-full p-3 rounded-md shadow-sm border border-gray-300"
+                        placeholder="🔍 Rechercher un courrier par référence, expéditeur, date, destinataire...">
+                </form>
             </div>
 
             <!-- Statistiques principales -->
