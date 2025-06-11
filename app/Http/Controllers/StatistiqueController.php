@@ -17,7 +17,8 @@ class StatistiqueController extends Controller
     {
         $weeklyStats = $this->statistiqueService->getWeeklyStats();
         $monthlyStats = $this->statistiqueService->getMonthlyStats();
+        $totalCourriers = $this->statistiqueService->getTotalCourriers();
 
-        return view('statistiques.index', compact('weeklyStats', 'monthlyStats'));
+        return view('statistiques.index', compact('weeklyStats', 'monthlyStats', 'totalCourriers'));
     }
 }

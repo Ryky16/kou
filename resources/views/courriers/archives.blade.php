@@ -38,7 +38,9 @@
                                 <th class="p-4 text-left border-r border-gray-300 w-1/4">Objet</th>
                                 <th class="p-4 text-left border-r border-gray-300 w-1/4">Expéditeur</th>
                                 <th class="p-4 text-left border-r border-gray-300 w-1/4">Destinataire</th>
+                                <th class="p-4 text-left border-r border-gray-300 w-1/5">Pièces jointes</th>
                                 <th class="p-4 text-left border-r border-gray-300 w-1/5">Date</th>
+                                
                                 <th class="p-4 text-left w-1/6">Actions</th>
                             </tr>
                         </thead>
@@ -59,6 +61,39 @@
                                             <span class="text-gray-400 italic">N/A</span>
                                         @endif
                                     </td>
+
+                                 <!-- Pièces jointes -->
+                              <td class="border px-4 py-2">
+                                    @forelse($courrier->piecesJointes as $piece)
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                                               target="_blank" 
+                                               class="text-blue-500 hover:underline">
+                                                📥 {{ $piece->nom_original }}
+                                            </a>
+                                            @php
+                                                $url = asset('storage/' . $piece->chemin);
+                                                $officePreview = 'https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($url);
+                                                $isOffice = in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
+                                            @endphp
+                                            @if($isOffice && app()->environment('production'))
+                                                <a href="{{ $officePreview }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                                    👁️ Aperçu
+                                                </a>
+                                            @elseif(in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['pdf']))
+                                                <a href="{{ $url }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                                    👁️ Aperçu PDF
+                                                </a>
+                                            @endif
+                                            @if($isOffice && !app()->environment('production'))
+                                                <span class="text-yellow-600 text-xs">Aperçu Office Online disponible uniquement en ligne</span>
+                                            @endif
+                                        </div>
+                                    @empty
+                                        <span class="text-gray-500 italic">Aucun document</span>
+                                    @endforelse
+                                </td>
+
                                     <td class="p-4 border-r border-gray-200">{{ \Carbon\Carbon::parse($courrier->date_reception)->format('d/m/Y') }}</td>
                                     <td class="p-4">
                                         <a href="{{ route('courriers.show', $courrier->id) }}"

@@ -36,4 +36,9 @@ class StatistiqueService
                 ];
             });
     }
+
+    public function getTotalCourriers()
+    {
+        return Courrier::count();
+    }
 }

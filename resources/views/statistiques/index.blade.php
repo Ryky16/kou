@@ -16,51 +16,36 @@
                     📊 Statistiques des courriers
                 </h1>
 
-                <!-- 📊 Bloc double aligné horizontalement -->
-<div class="flex flex-col lg:flex-row gap-10 mb-16">
-    <!-- 📅 Courriers par semaine -->
-    <div class="w-full lg:w-1/2">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">
-            📅 Courriers par semaine
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            @foreach($weeklyStats as $week)
-                <div class="bg-blue-100 border-l-4 border-blue-500 p-4 rounded shadow text-center">
-                    <h3 class="font-semibold text-gray-700 text-lg">{{ $week['label'] }}</h3>
-                    <p class="text-xl font-bold text-blue-700 mt-2">{{ $week['total'] }}</p>
+                <!-- Cartes principales -->
+                <div class="flex flex-col md:flex-row gap-6 mb-12">
+                    <!-- Total courriers -->
+                    <div class="stat-card bg-blue-100 border-l-4 border-blue-500 p-6 rounded shadow w-full text-center flex flex-col items-center">
+                        <span class="text-4xl mb-2">📬</span>
+                        <h2 class="font-semibold text-gray-700 mb-2">Total des courriers</h2>
+                        <p class="text-3xl font-bold text-blue-700 mb-1">{{ $totalCourriers }}</p>
+                        <span class="text-xs text-gray-500">Tous les courriers enregistrés</span>
+                    </div>
+                    <!-- Courriers par semaine (somme) -->
+                    <div class="stat-card bg-yellow-100 border-l-4 border-yellow-500 p-6 rounded shadow w-full text-center flex flex-col items-center">
+                        <span class="text-4xl mb-2">📅</span>
+                        <h2 class="font-semibold text-gray-700 mb-2">Courriers cette semaine</h2>
+                        <p class="text-3xl font-bold text-yellow-700 mb-1">
+                            {{ collect($weeklyStats)->sum('total') }}
+                        </p>
+                        <span class="text-xs text-gray-500">Total sur la semaine en cours</span>
+                    </div>
+                    <!-- Courriers ce mois -->
+                    <div class="stat-card bg-green-100 border-l-4 border-green-500 p-6 rounded shadow w-full text-center flex flex-col items-center">
+                        <span class="text-4xl mb-2">📆</span>
+                        <h2 class="font-semibold text-gray-700 mb-2">Courriers ce mois</h2>
+                        <p class="text-3xl font-bold text-green-700 mb-1">
+                            {{ collect($monthlyStats)->last()['total'] ?? 0 }}
+                        </p>
+                        <span class="text-xs text-gray-500">Total du mois en cours</span>
+                    </div>
                 </div>
-            @endforeach
-        </div>
-    </div>
-
-    <!-- 📆 Courriers par mois -->
-    <div class="w-full lg:w-1/2">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">
-            📆 Courriers de ce mois
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            @foreach($monthlyStats as $month)
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded shadow text-center">
-                    <h3 class="font-semibold text-gray-700 text-lg">
-                        {{ \Carbon\Carbon::parse($month['label'])->translatedFormat('F Y') }}
-                    </h3>
-                    <p class="text-xl font-bold text-yellow-700 mt-2">{{ $month['total'] }}</p>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-
+            </div>
         </div>
         <script src="https://cdn.tailwindcss.com"></script>
     </div>
 </x-app-layout>
-
-
-
-
-
-
-   
