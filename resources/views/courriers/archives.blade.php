@@ -31,26 +31,25 @@
                 <div class="text-gray-400 italic text-center text-lg py-12">Aucun courrier archivé pour le moment.</div>
             @else
                 <div class="overflow-x-auto rounded-lg">
-                    <table class="min-w-full table-fixed border border-gray-300 shadow-sm">
-                        <thead>
-                            <tr class="bg-gradient-to-r from-green-100 to-green-200 text-green-900 uppercase text-sm tracking-wider">
-                                <th class="p-4 text-left border-r border-gray-300 w-1/4">Référence</th>
-                                <th class="p-4 text-left border-r border-gray-300 w-1/4">Objet</th>
-                                <th class="p-4 text-left border-r border-gray-300 w-1/4">Expéditeur</th>
-                                <th class="p-4 text-left border-r border-gray-300 w-1/4">Destinataire</th>
-                                <th class="p-4 text-left border-r border-gray-300 w-1/5">Pièces jointes</th>
-                                <th class="p-4 text-left border-r border-gray-300 w-1/5">Date</th>
-                                
-                                <th class="p-4 text-left w-1/6">Actions</th>
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 min-w-[900px] text-sm">
+                        <thead class="bg-gray-100">
+                            <tr class="border border-gray-200">
+                                <th class="p-4 text-left border border-gray-200 min-w-[140px]">Référence</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[180px]">Objet</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[160px]">Expéditeur</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[160px]">Destinataire</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[180px]">Pièces jointes</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[110px]">Date</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[110px]">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($courriers as $courrier)
-                                <tr class="border-b hover:bg-green-50 transition duration-150 text-sm">
-                                    <td class="p-4 border-r border-gray-200 font-mono font-bold text-green-700 break-words">{{ $courrier->reference }}</td>
-                                    <td class="p-4 border-r border-gray-200 break-words">{{ $courrier->objet }}</td>
-                                    <td class="p-4 border-r border-gray-200 break-words">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
-                                    <td class="p-4 border-r border-gray-200 break-words">
+                                <tr class="border-b border-gray-200 hover:bg-green-50 transition duration-150">
+                                    <td class="p-4 border border-gray-200 font-mono font-bold text-green-700 break-words whitespace-normal">{{ $courrier->reference }}</td>
+                                    <td class="p-4 border border-gray-200 break-words whitespace-normal">{{ $courrier->objet }}</td>
+                                    <td class="p-4 border border-gray-200 break-words whitespace-normal">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
+                                    <td class="p-4 border border-gray-200 break-words whitespace-normal">
                                         @if($courrier->destinataire)
                                             {{ $courrier->destinataire->name }}
                                         @elseif($courrier->service)
@@ -61,41 +60,39 @@
                                             <span class="text-gray-400 italic">N/A</span>
                                         @endif
                                     </td>
-
-                                 <!-- Pièces jointes -->
-                              <td class="border px-4 py-2">
-                                    @forelse($courrier->piecesJointes as $piece)
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <a href="{{ asset('storage/' . $piece->chemin) }}" 
-                                               target="_blank" 
-                                               class="text-blue-500 hover:underline">
-                                                📥 {{ $piece->nom_original }}
-                                            </a>
-                                            @php
-                                                $url = asset('storage/' . $piece->chemin);
-                                                $officePreview = 'https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($url);
-                                                $isOffice = in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
-                                            @endphp
-                                            @if($isOffice && app()->environment('production'))
-                                                <a href="{{ $officePreview }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
-                                                    👁️ Aperçu
+                                    <!-- Pièces jointes -->
+                                    <td class="p-4 border border-gray-200 break-words whitespace-normal">
+                                        @forelse($courrier->piecesJointes as $piece)
+                                            <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                                <a href="{{ asset('storage/' . $piece->chemin) }}" 
+                                                   target="_blank" 
+                                                   class="text-blue-500 hover:underline break-all">
+                                                    📥 {{ $piece->nom_original }}
                                                 </a>
-                                            @elseif(in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['pdf']))
-                                                <a href="{{ $url }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
-                                                    👁️ Aperçu PDF
-                                                </a>
-                                            @endif
-                                            @if($isOffice && !app()->environment('production'))
-                                                <span class="text-yellow-600 text-xs">Aperçu Office Online disponible uniquement en ligne</span>
-                                            @endif
-                                        </div>
-                                    @empty
-                                        <span class="text-gray-500 italic">Aucun document</span>
-                                    @endforelse
-                                </td>
-
-                                    <td class="p-4 border-r border-gray-200">{{ \Carbon\Carbon::parse($courrier->date_reception)->format('d/m/Y') }}</td>
-                                    <td class="p-4">
+                                                @php
+                                                    $url = asset('storage/' . $piece->chemin);
+                                                    $officePreview = 'https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($url);
+                                                    $isOffice = in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
+                                                @endphp
+                                                @if($isOffice && app()->environment('production'))
+                                                    <a href="{{ $officePreview }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                                        👁️ Aperçu
+                                                    </a>
+                                                @elseif(in_array(strtolower(pathinfo($piece->nom_original, PATHINFO_EXTENSION)), ['pdf']))
+                                                    <a href="{{ $url }}" target="_blank" class="text-green-600 hover:underline text-xs font-semibold">
+                                                        👁️ Aperçu PDF
+                                                    </a>
+                                                @endif
+                                                @if($isOffice && !app()->environment('production'))
+                                                    <span class="text-yellow-600 text-xs">Aperçu Office Online disponible uniquement en ligne</span>
+                                                @endif
+                                            </div>
+                                        @empty
+                                            <span class="text-gray-500 italic">Aucun document</span>
+                                        @endforelse
+                                    </td>
+                                    <td class="p-4 border border-gray-200 whitespace-nowrap">{{ \Carbon\Carbon::parse($courrier->date_reception)->format('d/m/Y') }}</td>
+                                    <td class="p-4 border border-gray-200 whitespace-nowrap">
                                         <a href="{{ route('courriers.show', $courrier->id) }}"
                                            class="inline-block px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 hover:scale-105 transition font-semibold">
                                             👁️ Voir
