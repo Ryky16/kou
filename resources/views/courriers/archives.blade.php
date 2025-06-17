@@ -35,8 +35,8 @@
                         <thead class="bg-gray-100">
                             <tr class="border border-gray-200">
                                 <th class="p-4 text-left border border-gray-200 min-w-[140px]">Référence</th>
-                                <th class="p-4 text-left border border-gray-200 min-w-[180px]">Objet</th>
-                                <th class="p-4 text-left border border-gray-200 min-w-[160px]">Expéditeur</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[140px]">Objet</th>
+                                <th class="p-4 text-left border border-gray-200 min-w-[130px]">Expéditeur</th>
                                 <th class="p-4 text-left border border-gray-200 min-w-[160px]">Destinataire</th>
                                 <th class="p-4 text-left border border-gray-200 min-w-[180px]">Pièces jointes</th>
                                 <th class="p-4 text-left border border-gray-200 min-w-[110px]">Date</th>

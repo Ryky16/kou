@@ -101,13 +101,13 @@
     @endif
                 <thead class="bg-gray-100">
                     <tr class="border border-gray-200">
-                        <th class="p-4 text-left">Référence</th>
-                        <th class="p-4 text-left">Expéditeur</th>
-                        <th class="p-4 text-left">Destinataire</th>
-                        <th class="p-4 text-left">Statut</th>
-                        <th class="p-4 text-left">Priorité</th>
-                        <th class="p-4 text-left">Pièces jointes</th>
-                        <th class="p-4 text-left">Actions</th>
+                        <th class="p-4 text-left border border-gray-200">Référence</th>
+                        <th class="p-4 text-left border border-gray-200">Expéditeur</th>
+                        <th class="p-4 text-left border border-gray-200">Destinataire</th>
+                        <th class="p-4 text-left border border-gray-200">Statut</th>
+                        <th class="p-4 text-left border border-gray-200">Priorité</th>
+                        <th class="p-4 text-left border border-gray-200">Pièces jointes</th>
+                        <th class="p-4 text-left border border-gray-200">Actions</th>
                     </tr>
                 </thead>
                 @php
@@ -126,9 +126,9 @@
 <tbody>
 @forelse ($courriers as $courrier)
     <tr class="border-b border-gray-200 hover:bg-gray-50">
-        <td class="p-4">{{ $courrier->reference }}</td>
-        <td class="p-4">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
-        <td class="p-4">
+        <td class="p-4 border border-gray-200">{{ $courrier->reference }}</td>
+        <td class="p-4 border border-gray-200">{{ $courrier->expediteur->name ?? 'N/A' }}</td>
+        <td class="p-4 border border-gray-200">
             @if($courrier->destinataire)
                 {{ $courrier->destinataire->name }}
             @elseif($courrier->service)
