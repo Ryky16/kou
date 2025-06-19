@@ -43,7 +43,7 @@
 
     <!-- Footer -->
     <footer class="footer bg-gray-800 text-white py-4 text-center">
-        <p>&copy; 2025 Mairie de Ziguinchor - Tous droits réservés</p>
+        <p> Mairie de Ziguinchor - Tous droits réservés - 2025 &copy;</p>
     </footer>
 </body>
 </html>
