@@ -46,6 +46,44 @@
                 </div>
             </div>
         </div>
+
+    <!-- Filtrage par année -->
+<div class="mb-6 flex justify-end">
+    <form method="GET" action="{{ route('statistiques.index') }}" class="flex items-center gap-2">
+        <label for="year" class="text-sm font-medium text-gray-700">Filtrer par année :</label>
+        <select name="year" id="year" onchange="this.form.submit()" class="px-3 py-2 rounded border border-gray-300">
+            @foreach ($availableYears as $availableYear)
+                <option value="{{ $availableYear }}" {{ $year == $availableYear ? 'selected' : '' }}>
+                    {{ $availableYear }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+</div>
+
+<!-- Graphique des courriers par mois -->
+<div class="bg-white p-6 rounded shadow mb-12">
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4 text-center">
+        📈 Évolution mensuelle des courriers - {{ $year }}
+    </h2>
+    <!-- Injecter les données dans une balise HTML -->
+    <div 
+        id="chart-wrapper" 
+        class="relative" 
+        style="height:350px;" 
+        data-chart='@json($chartData)'
+        data-year="{{ $year }}"
+    >
+
+    <div class="relative" style="height:350px;">
+        <canvas id="courrierChart"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/chart.js') }}"></script>
         <script src="https://cdn.tailwindcss.com"></script>
     </div>
 </x-app-layout>
+     
