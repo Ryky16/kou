@@ -182,18 +182,18 @@
 
         <td class="border px-4 py-2">
                 @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
-                    <form method="POST" action="{{ route('courriers.affecter', $courrier->id) }}" onsubmit="return confirm('Voulez-vous vraiment affecter ce courrier ?');">
-                        @csrf
-                        <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                            📤 Affecter
-                        </button>
-                    </form>
-                @elseif(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'envoyé')
+        <button
+    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+    onclick="openAffectationModal({{ $courrier->id }}, '{{ addslashes($courrier->reference) }}')">
+    📤 Affecter
+</button>
+                @else
                     <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
                         Affectation terminée
                     </button>
                 @endif
             </td>
+
         <!--td class="p-4 border-r border-gray-200">
             @if($courrier->statut == 'En attente')
                 <a href="{{ route('affectation.create', $courrier->id) }}" 
@@ -214,7 +214,74 @@
         </td>
     </tr-->
 @endforelse
-</tbody>
+
+       <!-- Modal global à la fin de la vue -->
+<div id="affectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+        <h3 class="text-2xl font-bold text-green-600 mb-4">📤 Affecter un courrier</h3>
+        <form id="affectForm" method="POST" action="{{ route('affectation.store') }}">
+            @csrf
+            <input type="hidden" name="courrier_id" id="courrier_id">
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Référence</label>
+                <div id="courrier_reference" class="bg-gray-100 p-2 rounded"></div>
+            </div>
+
+            <!-- Destinataire -->
+            <div class="mb-4">
+                <label for="destinataire_id" class="block text-gray-700 font-bold flex items-center">
+                    <span class="mr-2">📤</span> Destinataire
+                </label>
+                <div class="relative">
+                    <select id="destinataire_id" name="destinataire_id"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
+                        <option value="">-- Sélectionnez un destinataire --</option>
+                        <optgroup label="Agents">
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}" data-email="{{ $agent->email }}">{{ $agent->name }}</option>
+                            @endforeach
+                        </optgroup>
+                        <optgroup label="Services">
+                            @foreach($services as $service)
+                                <option value="service_{{ $service->id }}" data-email="{{ $service->email }}">{{ $service->nom }}</option>
+                            @endforeach
+                        </optgroup>
+                        <optgroup label="Externe">
+                            <option value="autre">Partenaires</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Email du destinataire -->
+            <div class="mb-4" id="email-destinataire" style="display: none;">
+                <label for="email_destinataire" class="block text-gray-700 font-bold flex items-center">
+                    <span class="mr-2">📧</span> Email du destinataire
+                </label>
+                <div class="relative">
+                    <input type="email" id="email_destinataire" name="email_destinataire"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
+                        placeholder="Ex : destinataire@gmail.com">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="observation" class="block font-semibold mb-1">Observation</label>
+                <textarea name="observation" id="observation" rows="3"
+                          class="w-full border rounded p-2"
+                          placeholder="Ajoutez une observation (facultatif)"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button type="button" class="px-4 py-2 bg-gray-300 rounded" onclick="closeAffectationModal()">Annuler</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Envoyer 📩</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
             </table>
 
             <!-- Pagination -->
@@ -267,9 +334,7 @@
                 @endif
             </div>
         </main>
+        <script src="{{ asset('js/script.js') }}"></script>
         <script src="https://cdn.tailwindcss.com"></script>
     </div>
-
-
-
 </x-app-layout>

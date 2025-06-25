@@ -133,50 +133,6 @@
     </div>
 </div>
                 
-<!-- Destinataire -->
-<div class="mb-4">
-    <label for="destinataire_id" class="block text-gray-700 font-bold flex items-center">
-        <span class="mr-2">📤</span> Destinataire
-    </label>
-    <div class="relative">
-        <select id="destinataire_id" name="destinataire_id" 
-            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" required>
-            <option value="">-- Sélectionnez un destinataire --</option>
-            
-            <!-- Section Agents -->
-            <optgroup label="Agents">
-                @foreach($agents as $agent)
-                    <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                @endforeach
-            </optgroup>
-            
-            <!-- Section Services -->
-            <optgroup label="Services">
-                @foreach($services as $service)
-                    <option value="service_{{ $service->id }}">{{ $service->nom }}</option>
-                @endforeach
-            </optgroup>
-            
-            <!-- Option externe -->
-             <optgroup label="Externe">
-            <option value="autre">Partenaires</option>
-            </optgroup>
-        </select>
-    </div>
-</div>
-               
-<!-- Email du destinataire externe -->
-<div class="mb-4" id="email-destinataire" style="display: none;">
-    <label for="email_destinataire" class="block text-gray-700 font-bold flex items-center">
-        <span class="mr-2">📧</span> Email du destinataire
-    </label>
-    <div class="relative">
-        <input type="email" id="email_destinataire" name="email_destinataire" 
-            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-500 focus:border-green-500" 
-            placeholder="Ex : destinataire@gmail.com">
-    </div>
-</div>
-
                 <!-- Statut -->
                 <div class="mb-4">
                     <label for="statut" class="block text-gray-700 font-bold flex items-center">

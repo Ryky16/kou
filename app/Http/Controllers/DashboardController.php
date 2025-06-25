@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Courrier;
+use App\Models\User;
+use App\Models\Service;
 
 class DashboardController extends Controller
 {
@@ -63,13 +65,21 @@ class DashboardController extends Controller
         $courriersAffectes = Courrier::where('statut', 'envoyé')->count();
         $courriersEnAttente = Courrier::where('statut', 'brouillon')->count();
        
-        return view('dashboard.secretaire', 
-            compact('courriers', 
-                    'notifications', 
-                    'totalCourriers',
-                    'courriersAffectes',
-                    'courriersEnAttente'
-                    ));
+        $agents = User::whereHas('role', function ($query) {
+            $query->where('name', 'Agent');
+        })->get();
+
+        $services = Service::all();
+
+        return view('dashboard.secretaire', compact(
+            'courriers', 
+            'notifications', 
+            'totalCourriers',
+            'courriersAffectes',
+            'courriersEnAttente',
+            'agents',
+            'services'
+            ));
     }
 
     // Vue pour l'agent
@@ -124,6 +134,6 @@ class DashboardController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('agent.archives', compact('courriers'));
+        return view('dashboard.agent', compact('courriers'));
     }
 }

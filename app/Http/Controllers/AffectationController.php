@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\CourrierAffecte;
+use Carbon\Carbon;
 
 class AffectationController extends Controller
 {
@@ -34,18 +35,26 @@ class AffectationController extends Controller
     {
         $request->validate([
             'courrier_id' => 'required|exists:courriers,id',
-            'destinataire_type' => 'required|in:agent,service,email',
-            'destinataire_id' => 'nullable|integer',
-            'email_destinataire' => 'required|email', // Adresse e-mail obligatoire
+            'destinataire_id' => 'required|string',
+            'email_destinataire' => 'required|email',
             'observation' => 'nullable|string|max:1000',
         ]);
 
         try {
             $courrier = Courrier::findOrFail($request->courrier_id);
 
-            // Affecter l'adresse e-mail au courrier
+            if (str_starts_with($request->destinataire_id, 'service_')) {
+                $courrier->service_id = str_replace('service_', '', $request->destinataire_id);
+                $courrier->destinataire_id = null;
+            } elseif ($request->destinataire_id === 'autre') {
+                $courrier->service_id = null;
+                $courrier->destinataire_id = null;
+            } else {
+                $courrier->destinataire_id = $request->destinataire_id;
+                $courrier->service_id = null;
+            }
             $courrier->email_destinataire = $request->email_destinataire;
-            $courrier->statut = 'envoyé'; // Mettre à jour le statut
+            $courrier->statut = 'envoyé';
             $courrier->save();
 
             // Enregistrer l'affectation
@@ -58,18 +67,27 @@ class AffectationController extends Controller
             ]);
 
             // Envoyer un e-mail au destinataire
-            $details = [
-                'title' => '📩 Nouveau Courrier Affecté',
-                'body' => "Un nouveau courrier vous a été affecté.\n\nRéférence : {$courrier->reference}\nObjet : {$courrier->objet}\n\nMerci de vérifier votre boîte de réception pour plus de détails."
-            ];
+            $body = "📩 Nouveau Courrier Affecté\n\nBonjour,\n\nUn nouveau courrier vous a été affecté par le Secrétaire Municipal de la Mairie de Ziguinchor. Voici les détails :\n\n";
+            $body .= "Référence : {$courrier->reference}\n";
+            $body .= "Objet : {$courrier->objet}\n";
+            $body .= "Contenu : {$courrier->contenu}\n";
+            $body .= "Date de réception : " . ($courrier->date_reception ? Carbon::parse($courrier->date_reception)->format('d/m/Y') : '-') . "\n";
+            $body .= "📎 Merci de vérifier les pièces jointes pour plus de détails.\n\nCordialement,\n\nSecrétaire Municipal\nMairie de Ziguinchor";
 
-            Mail::raw($details['body'], function ($message) use ($details, $request) {
+            Mail::send([], [], function ($message) use ($request, $body, $courrier) {
                 $message->to($request->email_destinataire)
-                        ->subject($details['title']);
+                        ->subject('📩 Nouveau Courrier Affecté')
+                        ->html(nl2br($body)); 
+                foreach ($courrier->piecesJointes as $piece) {
+                    $message->attach(storage_path('app/public/' . $piece->chemin), [
+                        'as' => $piece->nom_original,
+                        'mime' => $piece->mime_type,
+                    ]);
+                }
             });
             Log::info('Email envoyé à ' . $request->email_destinataire);
 
-            return redirect()->route('courriers.index')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
+            return redirect()->route('secretaire.dashboard')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
             // Journaliser l'erreur
             Log::error('Erreur lors de l\'affectation : ' . $e->getMessage());

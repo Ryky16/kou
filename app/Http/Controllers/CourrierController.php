@@ -100,8 +100,6 @@ class CourrierController extends Controller
             'reference' => 'required|string|unique:courriers,reference',
             'objet' => 'required|string|max:255',
             'date_reception' => 'required|date',
-            'destinataire_id' => 'required|string',
-            'email_destinataire' => 'required|email', // Toujours requis si un destinataire est choisi
             'description' => 'nullable|string',
             'statut' => 'nullable|string|in:brouillon,envoyé,archivé',
             'priorite' => 'nullable|string|in:normal,important,urgent',
@@ -127,21 +125,6 @@ class CourrierController extends Controller
                 'service_id' => null,
                 'email_destinataire' => null,
             ];
-
-            // Gestion spécifique du destinataire
-            /*if ($validated['destinataire_id'] === 'autre') {
-                $courrierData['email_destinataire'] = $validated['email_destinataire'];
-            } elseif (str_starts_with($validated['destinataire_id'], 'service_')) {
-                $courrierData['service_id'] = str_replace('service_', '', $validated['destinataire_id']);
-            } else {
-                $courrierData['destinataire_id'] = $validated['destinataire_id'];
-            }*/
-
-            $courrierData['email_destinataire'] = $validated['email_destinataire'];
-            $courrierData['destinataire_id'] = null;
-            $courrierData['service_id'] = null;
-
-
 
             // Enregistrement du courrier
             $courrier = Courrier::create($courrierData);
@@ -230,6 +213,8 @@ class CourrierController extends Controller
             'priorite' => $request->priorite,
         ]);
 
+        $courrierData['service_id'] = null;
+        
         // Ajout de nouvelles pièces jointes si présentes
         if ($request->hasFile('pieces_jointes')) {
             foreach ($request->file('pieces_jointes') as $file) {

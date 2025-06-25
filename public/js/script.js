@@ -89,17 +89,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 📬 Destinataire : afficher champ email si "autre"
+    // 📬 Destinataire : afficher champ email et pré-remplir si possible
     const destinataireSelect = document.getElementById('destinataire_id');
     const emailField = document.getElementById('email-destinataire');
     const emailInput = document.getElementById('email_destinataire');
 
     if (destinataireSelect && emailField && emailInput) {
         destinataireSelect.addEventListener('change', function () {
-            emailField.style.display = (this.value === 'autre') ? 'block' : 'none';
-            emailInput.required = (this.value === 'autre');
+            const selected = this.options[this.selectedIndex];
+            if (this.value) {
+                emailField.style.display = 'block';
+                // Pré-remplit si possible, mais TOUJOURS éditable
+                // Pour agent ou service, pré-remplit, pour partenaire (autre), vide
+                if (this.value === 'autre') {
+                    emailInput.value = '';
+                } else {
+                    emailInput.value = selected.getAttribute('data-email') || '';
+                }
+                emailInput.required = true;
+                setTimeout(() => { emailInput.focus(); emailInput.setSelectionRange(emailInput.value.length, emailInput.value.length); }, 0);
+            } else {
+                emailField.style.display = 'none';
+                emailInput.value = '';
+                emailInput.required = false;
+            }
         });
-        destinataireSelect.dispatchEvent(new Event('change')); // init au chargement
+        destinataireSelect.dispatchEvent(new Event('change'));
     }
 
     // 📤 Type de destinataire : agent, service ou email
@@ -143,4 +158,32 @@ document.addEventListener("DOMContentLoaded", function () {
             emailDiv.style.display = this.value ? 'block' : 'none';
         });
     }
+});
+
+// Place ces fonctions EN DEHORS du DOMContentLoaded !
+function openAffectationModal(id, ref) {
+    document.getElementById('courrier_id').value = id;
+    document.getElementById('courrier_reference').textContent = ref;
+    document.getElementById('affectModal').classList.remove('hidden');
+}
+
+function closeAffectationModal() {
+    document.getElementById('affectModal').classList.add('hidden');
+    document.getElementById('affectForm').reset();
+}
+
+function hideGroups() {
+    ['agents_group', 'services_group', 'email_group'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('destinataire_type').addEventListener('change', function () {
+        hideGroups();
+        const val = this.value;
+        if (val === 'agent') document.getElementById('agents_group').classList.remove('hidden');
+        else if (val === 'service') document.getElementById('services_group').classList.remove('hidden');
+        else if (val === 'email') document.getElementById('email_group').classList.remove('hidden');
+    });
 });
