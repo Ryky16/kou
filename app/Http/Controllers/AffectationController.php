@@ -40,10 +40,29 @@ class AffectationController extends Controller
             'observation' => 'nullable|string|max:1000',
         ]);
 
+        /*if (empty($request->email_destinataire) || !filter_var($request->email_destinataire, FILTER_VALIDATE_EMAIL)) {
+            return back()->with('error', '❌ Adresse e-mail invalide ou manquante.');
+        }*/
+
         try {
             $courrier = Courrier::findOrFail($request->courrier_id);
 
-            if (str_starts_with($request->destinataire_id, 'service_')) {
+            $userId = null;
+
+             // Gérer les différents types de destinataires
+        if (str_starts_with($request->destinataire_id, 'service_')) {
+            $courrier->service_id = str_replace('service_', '', $request->destinataire_id);
+            $courrier->destinataire_id = null;
+        } elseif ($request->destinataire_id === 'autre') {
+            $courrier->service_id = null;
+            $courrier->destinataire_id = null;
+        } else {
+            $courrier->destinataire_id = $request->destinataire_id;
+            $courrier->service_id = null;
+            $userId = $request->destinataire_id; // uniquement pour les agents
+        }
+
+            /*if (str_starts_with($request->destinataire_id, 'service_')) {
                 $courrier->service_id = str_replace('service_', '', $request->destinataire_id);
                 $courrier->destinataire_id = null;
             } elseif ($request->destinataire_id === 'autre') {
@@ -53,6 +72,8 @@ class AffectationController extends Controller
                 $courrier->destinataire_id = $request->destinataire_id;
                 $courrier->service_id = null;
             }
+*/
+
             $courrier->email_destinataire = $request->email_destinataire;
             $courrier->statut = 'envoyé';
             $courrier->save();
@@ -60,7 +81,7 @@ class AffectationController extends Controller
             // Enregistrer l'affectation
             Affectation::create([
                 'courrier_id' => $courrier->id,
-                'user_id' => $request->destinataire_id ?? null,
+                'user_id' => is_numeric($request->destinataire_id) ? $request->destinataire_id : null,
                 'statut' => 'non_lu',
                 'created_by' => Auth::id(),
                 'observation' => $request->observation,
@@ -86,13 +107,14 @@ class AffectationController extends Controller
                 }
             });
             Log::info('Email envoyé à ' . $request->email_destinataire);
+            //Log::channel('daily')->info("Courrier ID {$courrier->id} affecté à {$request->email_destinataire} par utilisateur ID " . Auth::id());
 
             return redirect()->route('secretaire.dashboard')->with('success', '✅ Courrier affecté avec succès à ' . $request->email_destinataire);
         } catch (\Exception $e) {
             // Journaliser l'erreur
             Log::error('Erreur lors de l\'affectation : ' . $e->getMessage());
 
-            return back()->with('error', '❌ Une erreur est survenue : ' . $e->getMessage());
+            return back()->with('error', '❌ Une erreur est survenue lors de l’envoi : ' . $e->getMessage());
         }
     }
 }

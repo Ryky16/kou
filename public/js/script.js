@@ -97,24 +97,27 @@ document.addEventListener("DOMContentLoaded", function () {
     if (destinataireSelect && emailField && emailInput) {
         destinataireSelect.addEventListener('change', function () {
             const selected = this.options[this.selectedIndex];
-            if (this.value) {
-                emailField.style.display = 'block';
-                // Pré-remplit si possible, mais TOUJOURS éditable
-                // Pour agent ou service, pré-remplit, pour partenaire (autre), vide
+            if (this.value !== '') {
+                emailField.classList.remove('hidden');
                 if (this.value === 'autre') {
                     emailInput.value = '';
                 } else {
                     emailInput.value = selected.getAttribute('data-email') || '';
                 }
                 emailInput.required = true;
-                setTimeout(() => { emailInput.focus(); emailInput.setSelectionRange(emailInput.value.length, emailInput.value.length); }, 0);
+                emailInput.focus();
             } else {
-                emailField.style.display = 'none';
+                emailField.classList.add('hidden');
                 emailInput.value = '';
                 emailInput.required = false;
             }
         });
-        destinataireSelect.dispatchEvent(new Event('change'));
+
+        // Afficher le champ si une valeur est déjà sélectionnée au chargement
+        if (destinataireSelect.value !== '') {
+            emailField.classList.remove('hidden');
+            emailInput.required = true;
+        }
     }
 
     // 📤 Type de destinataire : agent, service ou email

@@ -220,8 +220,8 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
         <h3 class="text-2xl font-bold text-green-600 mb-4">📤 Affecter un courrier</h3>
         <form id="affectForm" method="POST" action="{{ route('affectation.store') }}">
-            @csrf
-            <input type="hidden" name="courrier_id" id="courrier_id">
+    @csrf
+    <input type="hidden" name="courrier_id" id="courrier_id">
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Référence</label>
@@ -255,7 +255,7 @@
             </div>
 
             <!-- Email du destinataire -->
-            <div class="mb-4" id="email-destinataire" style="display: none;">
+            <div class="mb-4 hidden" id="email-destinataire">
                 <label for="email_destinataire" class="block text-gray-700 font-bold flex items-center">
                     <span class="mr-2">📧</span> Email du destinataire
                 </label>
