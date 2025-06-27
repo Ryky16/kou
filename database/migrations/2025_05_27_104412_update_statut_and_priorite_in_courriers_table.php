@@ -21,11 +21,14 @@ return new class extends Migration
     {
         // ✅ ÉTAPE 1 : on rend la colonne temporairement permissive
         DB::statement("ALTER TABLE courriers MODIFY priorite VARCHAR(20)");
+        DB::statement("ALTER TABLE courriers MODIFY statut VARCHAR(20)");
 
         // ✅ ÉTAPE 2 : remettre les anciennes valeurs
         DB::statement("UPDATE courriers SET priorite = 'basse' WHERE priorite = 'normal'");
         DB::statement("UPDATE courriers SET priorite = 'moyenne' WHERE priorite = 'important'");
         DB::statement("UPDATE courriers SET priorite = 'haute' WHERE priorite = 'urgent'");
+        // Remettre les valeurs 'archivé' à 'traité'
+        DB::statement("UPDATE courriers SET statut = 'traité' WHERE statut = 'archivé'");
 
         // ✅ ÉTAPE 3 : remettre l’ENUM d’origine
         DB::statement("ALTER TABLE courriers MODIFY priorite ENUM('basse', 'moyenne', 'haute') DEFAULT 'moyenne'");
