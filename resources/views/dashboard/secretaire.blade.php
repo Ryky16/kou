@@ -184,7 +184,7 @@
                 @if(Auth::user()->hasRole('Secretaire_Municipal') && $courrier->statut == 'brouillon')
         <button
     class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-    onclick="openAffectationModal({{ $courrier->id }}, '{{ addslashes($courrier->reference) }}')">
+    onclick="openAffectationModal('{{ $courrier->id }}', '{{ addslashes($courrier->reference) }}')">
     📤 Affecter
 </button>
                 @else
