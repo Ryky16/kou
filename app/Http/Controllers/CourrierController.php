@@ -244,6 +244,12 @@ class CourrierController extends Controller
     public function destroy($id)
     {
         $courrier = \App\Models\Courrier::findOrFail($id);
+
+        // Empêcher la suppression si le courrier est archivé
+        if ($courrier->statut === 'archivé') {
+            return back()->with('error', 'Impossible de supprimer un courrier archivé.');
+        }
+
         $courrier->delete();
 
         // Redirige vers le dashboard agent avec un message de succès
