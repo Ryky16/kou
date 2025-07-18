@@ -100,7 +100,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/courriers/envoyer', [CourrierController::class, 'envoyer'])->name('courriers.envoyer');
     Route::post('/courriers/{courrier}/affecter', [CourrierController::class, 'affecter'])->name('courriers.affecter');
-    Route::patch('/courriers/{courrier}/archiver', [CourrierController::class, 'archiver'])->name('courriers.archive');
+    Route::post('/courriers/{courrier}/archiver', [\App\Http\Controllers\CourrierController::class, 'archiver'])
+        ->name('courriers.archiver');
     Route::get('/courriers/archives', [CourrierController::class, 'archives'])->name('courriers.archives');
     Route::get('/courriers/{courrier}/edit', [CourrierController::class, 'edit'])->name('courriers.edit');
     Route::get('/courriers/{courrier}', [CourrierController::class, 'show'])->name('courriers.show');

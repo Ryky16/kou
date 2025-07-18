@@ -193,6 +193,15 @@
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                         ✏️ Modifier
                                     </a>
+                                    <!-- Bouton Archiver -->
+                                    <form action="{{ route('courriers.archiver', $courrier->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                                                onclick="return confirm('Voulez-vous vraiment archiver ce courrier ?')">
+                                            🗄️ Archiver
+                                        </button>
+                                    </form>
                                     <!-- Bouton Supprimer -->
                                     <form action="{{ route('courriers.destroy', $courrier->id) }}" method="POST" class="inline">
                                         @csrf
