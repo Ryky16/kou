@@ -99,6 +99,11 @@
             {{ session('success') }}
         </div>
     @endif
+    @if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
                 <thead class="bg-gray-100">
                     <tr class="border border-gray-200">
                         <th class="p-4 text-left border border-gray-200">Référence</th>
@@ -182,13 +187,21 @@
 
                             <!-- Actions -->
                             <td class="border px-4 py-2">
-                                @if(Auth::user()->hasRole('Agent') || Auth::user()->id === $courrier->expediteur_id)
+                                @if((Auth::user()->hasRole('Agent') || Auth::user()->id === $courrier->expediteur_id) && $courrier->statut !== 'archivé')
                                     <!-- Bouton Modifier -->
                                     <a href="{{ route('courriers.edit', $courrier->id) }}" 
                                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                         ✏️ Modifier
                                     </a>
-
+                                    <!-- Bouton Archiver -->
+                                    <form action="{{ route('courriers.archiver', $courrier->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                                                onclick="return confirm('Voulez-vous vraiment archiver ce courrier ?')">
+                                            🗄️ Archiver
+                                        </button>
+                                    </form>
                                     <!-- Bouton Supprimer -->
                                     <form action="{{ route('courriers.destroy', $courrier->id) }}" method="POST" class="inline">
                                         @csrf
@@ -199,6 +212,8 @@
                                                 🗑️ Supprimer
                                         </button>
                                     </form>
+                                @elseif($courrier->statut == 'archivé')
+                                    <span class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">Archivé</span>
                                 @endif
                             </td>
                         </tr>
