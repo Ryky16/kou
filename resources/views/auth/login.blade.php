@@ -63,9 +63,9 @@
 
             <!-- Lien vers inscription -->
             <p class="mt-4 text-center text-sm text-gray-600">
-                Pas encore inscrit ? 
+                <!--Pas encore inscrit ? -->
                 <a href="{{ route('register') }}" class="text-green-600 hover:underline">
-                    ➕ Créer un compte
+                   <!-- ➕ Créer un compte-->
                 </a>
             </p>
         </form>
