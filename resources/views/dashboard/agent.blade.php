@@ -27,7 +27,7 @@
                             <a href="#" class="sidebar-link flex items-center justify-between">      
                                 🔔 Notifications
                                 <span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">
-                        {{ $notifications->count() }}
+                          {{ $notifications->count() }}
                             </span>
                                 <!--span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs">3</span-->
                             </a>
