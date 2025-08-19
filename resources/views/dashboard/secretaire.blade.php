@@ -187,6 +187,16 @@
     onclick="openAffectationModal('{{ $courrier->id }}', '{{ addslashes($courrier->reference) }}')">
     📤 Affecter
 </button>
+        <!-- Bouton Archiver -->
+                                    <form action="{{ route('courriers.archiver', $courrier->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                                                onclick="return confirm('Voulez-vous vraiment archiver ce courrier ?')">
+                                            🗄️ Archiver
+                                        </button>
+                                    </form>
+                                    
                 @else
                     <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded cursor-not-allowed">
                         Affectation terminée
@@ -280,7 +290,7 @@
         </form>
     </div>
 </div>
-
+                                
 
             </table>
 
