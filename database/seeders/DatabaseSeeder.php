@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'secretaire@gmail.com'],
             [
                 'name' => 'Secrétaire Municipal',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('password@2'),
                 'role_id' => 2
             ]
         );
